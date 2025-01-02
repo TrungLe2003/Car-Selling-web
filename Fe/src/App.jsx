@@ -1,22 +1,39 @@
 //library
-import { useState } from "react";
 import { Route, Routes } from "react-router-dom";
 // component
-import SignInPage from "./component/SignInPage";
-import SignUpPage from "./component/SignUpPage";
+import Footer from "./components/footer";
+import Header from "./components/header"
+import NotFoundPage from './components/notFoundPage';
+import LoginPage from "./components/loginPage";
+import RegisterPage from "./components/registerPage";
+import ProfilePage from "./components/profilePage";
+import HomePage from "./components/homePage";
+import IntroducePage from "./components/introducePage";
+import ContactPage from "./components/contactPage";
+import NewsPage from "./components/newsPage";
+import CategoryPage from "./components/categoryPage";
 //
 import "./App.css";
 
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
-    <>
-      <Routes>
-        <Route path="/register" element={<SignUpPage></SignUpPage>}></Route>
-        <Route path="/logIn" element={<SignInPage></SignInPage>}></Route>
-      </Routes>
-    </>
+    <div className="container">
+      <header><Header/></header>
+      <main>
+        <Routes>
+          <Route path="/" element={<HomePage/>}/>
+          <Route path='/login' element={<LoginPage/>}/>
+          <Route path='/register' element={<RegisterPage/>}/>
+          <Route path='/profile' element={<ProfilePage/>}/>
+          <Route path='/category' element={<CategoryPage/>}/>
+          <Route path='/news' element={<NewsPage/>}/>
+          <Route path='/contact' element={<ContactPage/>}/>
+          <Route path='/introduce' element={<IntroducePage/>}/>
+          <Route path='*' element={<NotFoundPage/>}/>
+        </Routes>
+      </main>
+      <footer><Footer/></footer>
+    </div>
   );
 }
 
