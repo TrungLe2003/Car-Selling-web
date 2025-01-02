@@ -2,12 +2,13 @@
 import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
-import RootRouter from "./Router/index.js";
+import dotenv from "dotenv";
+dotenv.config();
+//
+import RootRouter from "./routes/index.js";
 
 await mongoose
-  .connect(
-    "mongodb+srv://TrungLe2003:Trungcrazy2003@carsellingweb.amr1k.mongodb.net/CarSellingWeb"
-  )
+  .connect(process.env.MONGO_URL)
   .then(() => {
     console.log("Connected database!");
   });
@@ -23,6 +24,6 @@ app.get("", (req, res) => {
 
 app.use("/api", RootRouter);
 
-app.listen(8081, () => {
+app.listen(process.env.PORT || 8080, () => {
   console.log("This is Car Selling Project");
 });
