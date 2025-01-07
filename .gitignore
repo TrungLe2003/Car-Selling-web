@@ -1,0 +1,2 @@
+# Bỏ qua node_modules cho cả frontend và backend
+node_modules/
