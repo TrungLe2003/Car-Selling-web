@@ -5,9 +5,9 @@ import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 dotenv.config();
 const SECRET_KEY = process.env.SECRET_KEY;
-cloudinary.config({ 
-  cloud_name: 'dxkokrlhr', 
-  api_key: '494724485678384', 
+cloudinary.config({
+  cloud_name: 'dxkokrlhr',
+  api_key: '494724485678384',
   api_secret: 'KWRTFbpOnBzDtbcx7xsipZUnVKM'
 });
 const storage = multer.memoryStorage();
@@ -18,7 +18,7 @@ import UserModel from "../models/UserModel.js";
 const UserController = {
   register: async (req, res) => {
     try {
-      const {email, username, password, confirmPassword} = req.body;
+      const { email, username, password, confirmPassword } = req.body;
       // Validate
       // if (!email || email.length < 6) {
       //   return res
@@ -31,10 +31,10 @@ const UserController = {
       //     .send({ message: "Password must be at least 6 characters." });
       // };
       // Tìm email đã tồn tại
-      const existedEmail = await UserModel.findOne({email});
+      const existedEmail = await UserModel.findOne({ email });
       if (existedEmail) throw new Error('Email đã tồn tại!');
       // Tìm username đã tồn tại
-      const existedUsername = await UserModel.findOne({username});
+      const existedUsername = await UserModel.findOne({ username });
       if (existedUsername) throw new Error('Username đã tồn tại!');
       // Kiểm tra mật khẩu nhập lại
       if (confirmPassword !== password) throw new Error('Mật khẩu nhập lại không đúng!');
@@ -47,22 +47,22 @@ const UserController = {
       const salt = bcrypt.genSaltSync(10);
       const hashedPassword = bcrypt.hashSync(password, salt);
       const newUser = await UserModel.create({
-          email,
-          username,
-          fullname: '',
-          dateOfBirth: '',
-          address: '',
-          phoneNumber: '',
-          password: hashedPassword,
-          salt,
-          avatar: 'https://res.cloudinary.com/dxkokrlhr/image/upload/v1732884464/uj1miv0g9t5hduvbfvlg.png',
-          role,
-          createdAt: new Date(),
-          updatedAt: new Date(),
+        email,
+        username,
+        fullname: '',
+        dateOfBirth: '',
+        address: '',
+        phoneNumber: '',
+        password: hashedPassword,
+        salt,
+        avatar: 'https://res.cloudinary.com/dxkokrlhr/image/upload/v1732884464/uj1miv0g9t5hduvbfvlg.png',
+        role,
+        createdAt: new Date(),
+        updatedAt: new Date(),
       });
       res.status(201).send({
-          message: 'Đăng ký thành công!',
-          data: newUser,
+        message: 'Đăng ký thành công!',
+        data: newUser,
       });
     } catch (error) {
       res.status(401).send({
@@ -75,7 +75,7 @@ const UserController = {
     try {
       const { email, password } = req.body;
       // Tìm user qua email nhập vào
-      const findUser = await UserModel.findOne({email});
+      const findUser = await UserModel.findOne({ email });
       if (!findUser) throw new Error('Email không đúng!');
       // Đối chiếu mật khẩu
       const comparePassword = bcrypt.compareSync(password, findUser.password);
@@ -87,10 +87,10 @@ const UserController = {
       delete getUser.salt;
       delete getUser.password;
       const accessToken = jwt.sign(getUser, SECRET_KEY, {
-          expiresIn: 60 * 60 * 24
+        expiresIn: 60 * 60 * 24
       });
       const refreshToken = jwt.sign(getUser, SECRET_KEY, {
-          expiresIn: 60 * 60 * 24 * 7
+        expiresIn: 60 * 60 * 24 * 7
       });
       req.getUser = {
         ...getUser,
@@ -98,8 +98,8 @@ const UserController = {
         refreshToken
       };
       res.status(200).send({
-          message: 'Đăng nhập thành công!',
-          data: req.getUser
+        message: 'Đăng nhập thành công!',
+        data: req.getUser
       });
     } catch (error) {
       res.status(401).send({
@@ -108,6 +108,62 @@ const UserController = {
       });
     }
   },
+
+  /////////////////////
+
+  getListUser: async (req, res) => {
+    try {
+      const listusers = await UserModel.find();
+      res.status(200).send({
+        message: 'Successful',
+        data: listusers
+      })
+    } catch (error) {
+      res.status(500).send({
+        message: error.message,
+        data: null,
+      });
+    }
+  },
+
+  ////////////
+
+  getUser: async (req, res) => {
+    try {
+      const { id } = req.params;
+      const user = await UserModel.findById(id);
+      res.status(200).send({
+        message: 'Successful',
+        data: user
+      })
+    } catch (error) {
+      res.status(500).send({
+        message: error.message,
+        data: null,
+      });
+    }
+  },
+
+  ///////
+
+  modifyUser: async (req, res) => {
+    try {
+      const { id } = req.params;
+      const dataUpdate = req.body;
+      const updateData = await UserModel.findByIdAndUpdate(id, dataUpdate);
+      res.status(201).send({
+        message: 'Successful!',
+        data: updateData
+      })
+    } catch (error) {
+      res.status(500).send({
+        message: error.message,
+        data: null
+      })
+    }
+  }
+
 };
+
 
 export default UserController;
