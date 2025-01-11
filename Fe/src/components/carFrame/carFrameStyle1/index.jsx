@@ -10,10 +10,10 @@ const CarFrame1 = () => {
   return (
     //viết tên loằng ngoằng để không trùng cái đã có
     <div className="CarFrameComponent1">
-      <div className="container1">
+      <div className="carImg">
         <img src="./public/imgs/carDetailPage/carDetail1.png" alt="" />
       </div>
-      <div className="container2">
+      <div className="carInfo">
         <div className="state">Mới</div>
         <div className="nameCar">Mitsubishi Xpander 1.5 AT Premium 2022</div>
         <div className="Price">

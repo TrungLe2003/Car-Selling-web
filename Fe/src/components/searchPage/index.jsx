@@ -127,7 +127,7 @@ const SearchPage = () => {
               <CarFrame1></CarFrame1>
             </div>
           ) : (
-            <div>Không có xe nào</div>
+            <div>Bạn tìm xe gì</div>
           )}
         </div>
       </div>
