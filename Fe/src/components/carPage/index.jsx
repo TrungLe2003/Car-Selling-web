@@ -184,6 +184,9 @@ const CarDetailPage = () => {
         <div>
           <div className="frameRight">
             <h3>Thông tin về xe</h3>
+            <p>
+              Giá: <span>100.000 vnđ</span>
+            </p>
             <div className="line"></div>
             <div className="section section1">
               <h4>Tổng quan</h4>
@@ -240,7 +243,7 @@ const CarDetailPage = () => {
                   <div className="text">77/6000</div>
                 </div>
                 <div className="row">
-                  <div className="title">Động cơ</div>
+                  <div className="title">Năng lượng</div>
                   <div className="text">Xăng</div>
                 </div>
               </div>
