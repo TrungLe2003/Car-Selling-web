@@ -54,7 +54,7 @@ const CarController = {
       const car = await CarModel.findById(id);
       res.status(200).send({
         message: "Successful",
-        data: user,
+        data: car,
       });
     } catch (error) {
       res.status(500).send({
