@@ -63,6 +63,20 @@ const CarController = {
       });
     }
   },
+  getListCar: async (req, res) => {
+    try {
+      const listcar = await CarModel.find();
+      res.status(200).send({
+        message: "Successful",
+        data: car,
+      });
+    } catch (error) {
+      res.status(500).send({
+        message: error.message,
+        data: null,
+      });
+    }
+  },
 };
 
 export default CarController;
