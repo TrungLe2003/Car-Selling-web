@@ -1,9 +1,25 @@
 div.CarDetailPage {
 }
 
-div.CarDetailPage h1 {
+div.CarDetailPage div.frame0 {
   margin: 40px 60px 20px 60px;
 }
+
+div.CarDetailPage div.frame0 h1 {
+}
+
+div.CarDetailPage div.frame0 h1 span {
+  font-weight: 500;
+  color: rgb(82, 82, 228);
+}
+
+div.CarDetailPage div.frame0 div.brand {
+  opacity: 0.6;
+  font-weight: 600;
+  font-size: 18px;
+  margin-left: 200px;
+}
+
 /* imgReviewCar */
 div.CarDetailPage div.imgReviewCar {
   display: flex;

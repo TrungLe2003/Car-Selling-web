@@ -5,27 +5,39 @@ const carSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  carImg: String,
+  carImg: {
+    type: [String],
+  },
   carPrice: {
     type: Number,
     required: true,
-    min: 1
+    min: 1,
   },
   color: String,
   version: String,
-  ODO: String, //odograph: máy ghi quãng đường của ô tô
+  ODO: Number, //odograph: máy ghi quãng đường của ô tô
+  sitChairs: Number,
   year: Number,
   origin: String, //xuất xứ
-  gearBox: { type: String, enum: ["Tự động", "Số sàn"], default: "Tự động" }, //Hộp số
+  gearBox: {
+    type: String,
+    enum: ["Số tự động", "Số sàn"],
+    default: "Số tự động",
+  }, //Hộp số
   driveSystem: String, //Hệ dẫn động,
   torque: String, //Momen xoắn,
   engine: String, //Động cơ
   horsePower: String, //mã lực
   power: String, //năng lượng
-  //   idProvider: {
-  //     type: mongoose.Schema.Types.ObjectId,
-  //     ref: '',
-  //   },
+  brand: String,
+  describe: String, //miêu tả
+  state: { type: String, enum: ["Mới", "Cũ"], default: "Mới" },
+  idProvider: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "users",
+    required: true,
+  },
+  createdAt: { type: Date, default: Date.now },
 });
 
 const CarModel = mongoose.model("cars", carSchema);

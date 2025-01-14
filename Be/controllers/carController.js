@@ -10,48 +10,86 @@ cloudinary.config({
   api_secret: "KWRTFbpOnBzDtbcx7xsipZUnVKM",
 });
 const storage = multer.memoryStorage();
-const upload = multer({ storage: storage });
+const uploadImgCar = multer({ storage: storage }).array("carImg", 5); // CHo phép tối đa 5 ảnh
+
+// Hàm upload ảnh lên Cloudinary sử dụng Promise (sử dụn cho Api đăng tải xe)
+const uploadToCloudinary = (file) => {
+  return new Promise((resolve, reject) => {
+    const uploadStream = cloudinary.uploader.upload_stream(
+      {
+        resource_type: "image",
+      },
+      (error, result) => {
+        if (error) reject(error);
+        else resolve(result.secure_url);
+      }
+    );
+    uploadStream.end(file.buffer);
+  });
+};
 
 const CarController = {
-  createCar: async (req, res) => {
-    try {
-      const { carName, carPrice } = req.body;
-      const checkCar = await CarModel.find({});
-      let gearBox;
-      if (checkCar.length === 0) {
-        gearBox = "Tự động";
+  createCar: [
+    uploadImgCar,
+    async (req, res) => {
+      try {
+        const { carName, carPrice } = req.body;
+        const { idUser } = req.user;
+
+        if (!carName) throw new Error("Cần nhập tên xe");
+        if (!carPrice) throw new Error("Cần nhập giá xe");
+
+        // Tải lên Cloudinary và lấy URL
+        const files = req.files;
+        if (!files || files.length === 0) {
+          return res
+            .status(400)
+            .send({ message: "Chưa có file ảnh nào được tải lên" });
+        }
+
+        // Duyệt qua tất cả các ảnh và tải lên Cloudinary
+        const imageUrls = await Promise.all(files.map(uploadToCloudinary));
+
+        // Tạo xe mới trong database
+        const newCar = await CarModel.create({
+          carName,
+          carPrice,
+          carImg: imageUrls,
+          color: req.body.color,
+          version: req.body.version,
+          ODO: req.body.ODO, //odograph: máy ghi quãng đường của ô tô
+          year: req.body.year,
+          origin: req.body.origin,
+          gearBox: req.body.gearBox, //Hộp số
+          driveSystem: req.body.driveSystem, //Hệ dẫn động,
+          torque: req.body.torque, //Momen xoắn,
+          engine: req.body.engine, //Động cơ
+          horsePower: req.body.horsePower, //Mã lực
+          power: req.body.power, //năng lượng
+          brand: req.body.brand,
+          describe: req.body.describe,
+          state: req.body.state, //trạng thái: cũ/mới
+          color: req.body.color,
+          sitChairs: req.body.sitChairs,
+          idProvider: idUser,
+        });
+
+        res.status(201).send({
+          message: "Tạo xe thành công!",
+          data: newCar,
+        });
+      } catch (error) {
+        res.status(500).send({
+          message: error.message,
+          data: null,
+        });
       }
-      const newCar = await CarModel.create({
-        carName,
-        carPrice,
-        carImg: "",
-        color: "",
-        version: "",
-        ODO: "",
-        year: "",
-        origin: "",
-        gearBox,
-        driveSystem: "",
-        torque: "",
-        engine: "",
-        horsePower: "",
-        power: "",
-      });
-      res.status(201).send({
-        message: "Tạo xe thành công!",
-        data: newCar,
-      });
-    } catch (error) {
-      res.status(401).send({
-        message: error.message,
-        data: null,
-      });
-    }
-  },
-  getCar: async (req, res) => {
+    },
+  ],
+  getCarById: async (req, res) => {
     try {
       const { id } = req.params;
-      const car = await CarModel.findById(id);
+      const car = await CarModel.findById(id).populate("idProvider");
       res.status(200).send({
         message: "Successful",
         data: car,
@@ -65,10 +103,10 @@ const CarController = {
   },
   getListCar: async (req, res) => {
     try {
-      const listcar = await CarModel.find();
+      const listCar = await CarModel.find();
       res.status(200).send({
         message: "Successful",
-        data: car,
+        data: listCar,
       });
     } catch (error) {
       res.status(500).send({
@@ -80,3 +118,9 @@ const CarController = {
 };
 
 export default CarController;
+
+//Giải thích code:
+/*
+I) Api create xe
+
+*/
