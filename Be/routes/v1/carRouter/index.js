@@ -9,7 +9,8 @@ CarRouter.post(
   UserMiddleware.checkRoleProvider,
   CarController.createCar
 );
-CarRouter.get("/:id", CarController.getCarById);
-CarRouter.get("/car", CarController.getListCar);
+CarRouter.get("/car/:idCar", CarController.getCarById);
+CarRouter.get("", CarController.getListCar);
+CarRouter.get("/brand", CarController.findCarsByBrand);
 
 export default CarRouter;

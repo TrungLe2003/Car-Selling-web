@@ -88,8 +88,8 @@ const CarController = {
   ],
   getCarById: async (req, res) => {
     try {
-      const { id } = req.params;
-      const car = await CarModel.findById(id).populate("idProvider");
+      const { idCar } = req.params;
+      const car = await CarModel.findById(idCar).populate("idProvider");
       res.status(200).send({
         message: "Successful",
         data: car,
@@ -101,12 +101,48 @@ const CarController = {
       });
     }
   },
+  //api lấy tất cả xe (có limit)
   getListCar: async (req, res) => {
     try {
-      const listCar = await CarModel.find();
+      const { limit } = req.query;
+      const dataLimit = parseInt(limit) || 0;
+      const listCar = await CarModel.find().limit(dataLimit);
       res.status(200).send({
         message: "Successful",
         data: listCar,
+      });
+    } catch (error) {
+      res.status(500).send({
+        message: error.message,
+        data: null,
+      });
+    }
+  },
+  //Lấy xe theo brand
+  findCarsByBrand: async (req, res) => {
+    try {
+      const { brand, limit } = req.query;
+      const dataLimit = parseInt(limit) || 0;
+
+      if (!brand) {
+        return res.status(400).send({
+          message: "Thiếu thông tin brand",
+          data: null,
+        });
+      }
+      const cars = await CarModel.find({
+        brand: { $regex: brand, $options: "i" }, // Regex không phân biệt hoa thường
+      }).limit(dataLimit);
+
+      if (!cars.length) {
+        return res.status(404).send({
+          message: "Không tìm thấy xe với brand được cung cấp",
+          data: [],
+        });
+      }
+      res.status(200).send({
+        message: `Tìm thấy ${cars.length} xe theo brand '${brand}'`,
+        data: cars,
       });
     } catch (error) {
       res.status(500).send({
