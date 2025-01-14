@@ -1,0 +1,36 @@
+
+.newsOverview {
+    background-color: white;
+    padding: 50px 200px;
+}
+
+.newsOverview .grListNews {
+    margin: 50px 0;
+}
+
+.newsOverview .grListNews .listNews {
+    display: flex;
+    gap: 30px;
+    margin-top: 20px;
+}
+
+.newsOverview .grListNews .listNews .news {
+    flex: 1;
+    cursor: pointer;
+}
+
+.newsOverview .grListNews .listNews .news img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    opacity: 0.75;
+    transition: all 0.5s ease;
+}
+
+.newsOverview .grListNews .listNews .news:hover img {
+    opacity: 1;
+}
+
+.newsOverview .grListNews .listNews .news h4 {
+    margin-top: 5px;
+}
