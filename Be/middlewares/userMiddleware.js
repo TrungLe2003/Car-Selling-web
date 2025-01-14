@@ -49,7 +49,7 @@ const UserMiddleware = {
       });
     }
   },
-  //Api check xem có phải provider không
+  //Api check xem có phải provider không (qua token)
   checkRoleProvider: async (req, res, next) => {
     const token = req.headers["authorization"]?.split(" ")[1];
     if (!token) throw new Error("No token provided");
@@ -60,7 +60,7 @@ const UserMiddleware = {
       if (role !== "PROVIDER") throw new Error("Bạn chưa phải nhà cung cấp");
       req.user = {
         idUser: decoded._id,
-      };
+      }; //truyền id của người dùng (có api sẽ cần)
 
       next();
     } catch (error) {

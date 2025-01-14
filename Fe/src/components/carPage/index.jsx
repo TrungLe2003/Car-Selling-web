@@ -28,7 +28,7 @@ const CarDetailPage = () => {
     const fetchCarData = async () => {
       try {
         const carResponse = await axios.get(
-          `http://localhost:8080/api/v1/cars/${idCar}`
+          `http://localhost:8080/api/v1/cars/car/${idCar}`
         );
         setCarData(carResponse.data.data);
         console.log(carData);
