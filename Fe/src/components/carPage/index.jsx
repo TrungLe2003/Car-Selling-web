@@ -7,26 +7,39 @@ import ShareIcon from "../../icons/carDetailPage/shareIcon";
 import HeartIcon from "../../icons/carDetailPage/Heart";
 import LikedIcon from "../../icons/carDetailPage/Liked";
 //react
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import axios from "axios";
 //css
 import "./style.css";
 
 //Chưa thêm phần vote sao cho xe
 const CarDetailPage = () => {
-  const [crrImg, setCrrImg] = useState(0);
+  const [crrImg, setCrrImg] = useState(0); //hình ảnh to (ảnh hiện tại)
   const [btnLikeProduct, setBtnLikeProduct] = useState(false);
   const [userName, setUserName] = useState(null);
   const [email, setEmail] = useState(null);
   const [phoneNumber, setPhoneNumber] = useState(null);
   const [comment, setComment] = useState(null);
+  //dữ liệu xe
+  const { idCar } = useParams();
+  const [carData, setCarData] = useState(null);
+  useEffect(() => {
+    const fetchCarData = async () => {
+      try {
+        const carResponse = await axios.get(
+          `http://localhost:8080/api/v1/cars/car/${idCar}`
+        );
+        setCarData(carResponse.data.data);
+        console.log(carData);
+      } catch (error) {
+        console.error("Error fetching car data:", error.message);
+      }
+    };
+    fetchCarData();
+  }, [idCar]);
 
-  const listImgRv = [
-    "./public/imgs/carDetailPage/carDetail1.png",
-    "./public/imgs/carDetailPage/carDetail2.png",
-    "./public/imgs/carDetailPage/carDetail3.png",
-    "./public/imgs/carDetailPage/carDetail4.png",
-    "./public/imgs/carDetailPage/carDetail5.png",
-  ];
+  const listImgRv = carData?.carImg;
 
   //hàm chuyển ảnh
   const nextRVImg = () => {
@@ -45,9 +58,18 @@ const CarDetailPage = () => {
     }
   };
 
+  if (!carData) {
+    return <div>...Loading</div>;
+  }
+
   return (
     <div className="CarDetailPage">
-      <h1 className="nameCar">Mitsubishi Xpander 1.5 AT Premium 2022</h1>
+      <div className="frame0">
+        <h1 className="nameCar">
+          {carData.carName} <span>({carData.state})</span>
+        </h1>
+        <div className="brand">- {carData.brand} -</div>
+      </div>
       <div className="imgReviewCar Frame1">
         <div className="mainImgRV">
           <img src={listImgRv[crrImg]} alt="Car Detail" />
@@ -88,33 +110,17 @@ const CarDetailPage = () => {
           </div>
           <div className="section2 section">
             <h2>Miêu tả</h2>
-            <div className="text">
-              Mitsubishi Xpander 2022 mang đến trải nghiệm lái tốt hơn và thoải
-              mái hơn trên mọi hành trình nhờ sự nâng cấp đáng giá ở các chi
-              tiết vận hành: Hệ thống treo cứng cáp và ổn định hơn với sự gia
-              tăng kích thước của bộ giảm xóc, kích thước phuộc, van bên trong
-              và lò xo phuộc trước, sau cũng được điều chỉnh nhằm tối đa hóa
-              hiệu quả của hệ thống treo; kết hợp với khung xe RISE cấu tạo bởi
-              thép siêu cường càng làm tăng thêm tính vững chắc của xe khi di
-              chuyển; hộp số tinh chỉnh để phù hợp với nhu cầu sử dụng của khách
-              hàng; tăng cường vật liệu cách âm; trang bị hiện đại hơn với phanh
-              tay điện tử, giữ phanh tự động; tiện nghi hơn với bệ tì tay hàng
-              ghế trước tích hợp ngăn chứa khăn giấy, cổng sạc USB cho 2 hàng
-              ghế, ghế da với vật liệu giảm hấp thụ nhiệt.{" "}
-            </div>
+            <div className="text">{carData.describe}</div>
           </div>
           <div className="section3 section">
             <h2>Thông tin người bán</h2>
             <div className="DealerInfo">
               <div className="item dealerNameAndAva">
                 <div className="ava">
-                  <img
-                    src="./public/imgs/carDetailPage/carDetail1.png"
-                    alt=""
-                  />
+                  <img src={carData.idProvider.avatar} alt="" />
                 </div>
                 <div className="name">
-                  <div className="text">TrungLe</div>
+                  <div className="text">{carData.idProvider.username}</div>
                   <div className="role">Người bán</div>
                 </div>
               </div>
@@ -124,7 +130,9 @@ const CarDetailPage = () => {
                 <div className="icon">
                   <PhoneIcon></PhoneIcon>
                 </div>
-                <div className="phoneNumber">000-000-000</div>
+                <div className="phoneNumber">
+                  {carData.idProvider.phoneNumber}
+                </div>
               </div>
               <div className="line"></div>
 
@@ -132,7 +140,7 @@ const CarDetailPage = () => {
                 <div className="icon">
                   <EmailIcon></EmailIcon>
                 </div>
-                <div className="email">trungle.kqt@gmail.com</div>
+                <div className="email">{carData.idProvider.email}</div>
               </div>
             </div>
           </div>
@@ -185,7 +193,7 @@ const CarDetailPage = () => {
           <div className="frameRight">
             <h3>Thông tin về xe</h3>
             <p>
-              Giá: <span>100.000 vnđ</span>
+              Giá: <span>{carData.carPrice.toLocaleString()} vnđ</span>
             </p>
             <div className="line"></div>
             <div className="section section1">
@@ -193,27 +201,27 @@ const CarDetailPage = () => {
               <div className="content">
                 <div className="row">
                   <div className="title">Phiên bản</div>
-                  <div className="text">1.5 AT Premium</div>
+                  <div className="text">{carData.version}</div>
                 </div>
                 <div className="row">
                   <div className="title">Màu</div>
-                  <div className="text">Nâu</div>
+                  <div className="text">Cập nhật</div>
                 </div>
                 <div className="row">
                   <div className="title">Số ghế</div>
-                  <div className="text">7</div>
+                  <div className="text">Cập nhật</div>
                 </div>
                 <div className="row">
                   <div className="title">ODO</div>
-                  <div className="text">35.000km</div>
+                  <div className="text">{carData.ODO.toLocaleString()}km</div>
                 </div>
                 <div className="row">
                   <div className="title">Năm sản xuất</div>
-                  <div className="text">2022</div>
+                  <div className="text">{carData.year}</div>
                 </div>
                 <div className="row">
                   <div className="title">Xuất xứ</div>
-                  <div className="text">Nhật</div>
+                  <div className="text">{carData.origin}</div>
                 </div>
               </div>
             </div>
@@ -224,27 +232,27 @@ const CarDetailPage = () => {
               <div className="content">
                 <div className="row">
                   <div className="title">Hộp số</div>
-                  <div className="text">Tự động</div>
+                  <div className="text">{carData.gearBox}</div>
                 </div>
                 <div className="row">
                   <div className="title">Hệ dẫn động</div>
-                  <div className="text">Cầu trước</div>
+                  <div className="text">{carData.driveSystem}</div>
                 </div>
                 <div className="row">
                   <div className="title">Momen xoắn</div>
-                  <div className="text">141/4000</div>
+                  <div className="text">{carData.torque}</div>
                 </div>
                 <div className="row">
                   <div className="title">Động cơ</div>
-                  <div className="text">MIVEC 1.5</div>
+                  <div className="text">{carData.engine}</div>
                 </div>
                 <div className="row">
                   <div className="title">Mã lực</div>
-                  <div className="text">77/6000</div>
+                  <div className="text">{carData.horsePower}</div>
                 </div>
                 <div className="row">
                   <div className="title">Năng lượng</div>
-                  <div className="text">Xăng</div>
+                  <div className="text">{carData.power}</div>
                 </div>
               </div>
             </div>
