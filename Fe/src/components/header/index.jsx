@@ -39,7 +39,7 @@ const Header = () => {
                     <img src={LogoBlack} alt="" onClick={() => navigate('/')} className='logoBlack'/>
                 </div>
                 <div className='gr2'>
-                    <h5 onClick={() => navigate('/category')}>Sản phẩm</h5>
+                    <h5 onClick={() => navigate('/search')}>Sản phẩm</h5>
                     <h5 onClick={() => navigate('/news')}>Tin tức</h5>
                     <h5 onClick={() => navigate('/contact')}>Liên hệ</h5>
                     <h5 onClick={() => navigate('/introduce')}>Giới thiệu</h5>
