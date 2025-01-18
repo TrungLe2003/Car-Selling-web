@@ -12,6 +12,8 @@ import HomePage from "./components/homePage";
 import IntroducePage from "./components/introducePage";
 import ContactPage from "./components/contactPage";
 import CategoryPage from "./components/categoryPage";
+import PageWithAllCar from "./components/categoryPage/PageWithAllCar";
+import PageWithCarByBrand from "./components/categoryPage/PageWithCarByBrand";
 import NewsPage from "./components/newsPage";
 import NewsOverview from "./components/newsPage/newsOverview";
 import NewsCarNews from "./components/newsPage/newsCarNews";
@@ -31,18 +33,21 @@ function App() {
       <main>
         <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route path="/admin" element={<AdminPage />}/>
+          <Route path="/admin" element={<AdminPage />} />
           <Route path="/car/:idCar" element={<CarDetailPage />} />
           <Route path="/search" element={<SearchPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/profile" element={<ProfilePage />} />
-          <Route path="/category" element={<CategoryPage />} />
+          <Route path="/cars" element={<CategoryPage />}>
+            <Route path="all" element={<PageWithAllCar />}></Route>
+            <Route path="brand/:brand" element={<PageWithCarByBrand />}></Route>
+          </Route>
           <Route path="/news" element={<NewsPage />}>
-            <Route path="" element={<NewsOverview/>}/>
-            <Route path="carNews" element={<NewsCarNews/>}/>
-            <Route path="marketNews" element={<NewsMarketNews/>}/>
-            <Route path="exploreCars" element={<NewsExploreCars/>}/>
+            <Route path="" element={<NewsOverview />} />
+            <Route path="carNews" element={<NewsCarNews />} />
+            <Route path="marketNews" element={<NewsMarketNews />} />
+            <Route path="exploreCars" element={<NewsExploreCars />} />
           </Route>
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/introduce" element={<IntroducePage />} />
