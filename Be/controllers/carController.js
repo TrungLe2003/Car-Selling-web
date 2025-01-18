@@ -104,12 +104,17 @@ const CarController = {
   //api lấy tất cả xe (có limit)
   getListCar: async (req, res) => {
     try {
-      const { limit } = req.query;
-      const dataLimit = parseInt(limit) || 0;
-      const listCar = await CarModel.find().limit(dataLimit);
+      const { limit, page } = req.query;
+      const dataLimit = parseInt(limit) || 9;
+      const pageNumber = parseInt(page) || 1;
+      const skip = (pageNumber - 1) * dataLimit; // Số lượng xe cần bỏ qua
+      const listCar = await CarModel.find().skip(skip).limit(dataLimit);
+      const totalCars = await CarModel.countDocuments({});
       res.status(200).send({
         message: "Successful",
         data: listCar,
+        totalPages: Math.ceil(totalCars / dataLimit), // Tổng số trang
+        currentPage: pageNumber, // Trang hiện tại
       });
     } catch (error) {
       res.status(500).send({
