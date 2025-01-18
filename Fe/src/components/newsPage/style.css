@@ -92,6 +92,10 @@
     gap: 15px;
 }
 
+.newsPage .list .news .rightNews > h4 {
+    cursor: auto;
+}
+
 .newsPage .list .news .rightNews .row {
     display: flex;
     align-items: center;
@@ -123,7 +127,8 @@
     display: flex;
     gap: 5px;
     padding: 10px;
-    border-left: 1px solid #E9EAF0;
+    border-left: 1px solid #EEEEEE;
+    cursor: pointer;
     transition: 0.5s ease;
 }
 
@@ -137,7 +142,6 @@
 }
 
 .newsPage .list .news .rightNews .groupReadMore .readMore:hover {
-    cursor: pointer;
     background-color: #3563E9;
     color: #FFFFFF;
 }
