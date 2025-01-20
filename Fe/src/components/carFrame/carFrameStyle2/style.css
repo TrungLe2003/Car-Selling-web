@@ -1,7 +1,7 @@
 div.CarFrameComponent2 {
   width: 362px;
   height: 511px;
-  border: 1px solid black;
+  border: 1px solid rgb(206, 199, 199);
   padding: 10px;
   display: flex;
   flex-direction: column;
@@ -42,10 +42,6 @@ div.CarFrameComponent2 div.carInfo div.nameCar {
   transition: 0.5s;
 }
 
-div.CarFrameComponent2:hover div.carInfo div.nameCar {
-  color: rgb(45, 221, 221);
-}
-
 div.CarFrameComponent2 div.carInfo div.Price {
   font-size: 14px;
   font-weight: 600;
@@ -79,5 +75,19 @@ div.CarFrameComponent2 div.carInfo div.parameter div.parameterFrame {
 }
 
 div.CarFrameComponent2 div.carInfo div.line {
-  border: 1px solid black;
+  border: 1px solid rgb(206, 199, 199);
+}
+
+div.CarFrameComponent2 div.carInfo div.toDetailPage {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: end;
+  gap: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+div.CarFrameComponent2 div.carInfo div.toDetailPage:hover {
+  color: red;
 }

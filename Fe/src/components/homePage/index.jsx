@@ -31,7 +31,7 @@ const HomePage = () => {
           >
             Drive Of Your Life
           </p>
-          <div className="redirectToCategory" onClick={() => nav(`/search`)}>
+          <div className="redirectToCategory" onClick={() => nav(`/allCars`)}>
             <h3>Tìm kiếm chiếc xe yêu thích của bạn</h3>
             <ArrowRightIcon
               style={{ width: "40px", height: "40px", fill: "none" }}
