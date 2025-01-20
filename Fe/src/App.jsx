@@ -45,9 +45,9 @@ function App() {
             <Route path="" element={<AdminOverview />} />
             <Route path="users" element={<AdminUsers />} />
             <Route path="cars" element={<AdminCars />} />
-            <Route path="news" element={<AdminNews />} >
-              <Route path="" element={<TotalNews/>}/>
-              <Route path="addNews" element={<AddNews/>}/>
+            <Route path="news" element={<AdminNews />}>
+              <Route path="" element={<TotalNews />} />
+              <Route path="addNews" element={<AddNews />} />
             </Route>
             <Route path="comments" element={<AdminComments />} />
           </Route>
@@ -57,10 +57,7 @@ function App() {
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/category" element={<CategoryPage />} />
-          <Route path="/cars" element={<CategoryPage />}>
-            <Route path="all" element={<PageWithAllCar />}></Route>
-            <Route path="brand/:brand" element={<PageWithCarByBrand />}></Route>
-          </Route>
+          <Route path="/allCars" element={<CategoryPage />}></Route>
           <Route path="/news/details" element={<NewsDetailPage />} />
           <Route path="/news" element={<NewsPage />}>
             <Route path="" element={<NewsOverview />} />

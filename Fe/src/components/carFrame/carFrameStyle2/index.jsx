@@ -6,6 +6,7 @@ import CalendarIcon from "../../../icons/CarFrame/CarlendarIcon";
 import EnergyIcon from "../../../icons/CarFrame/EnergyIcon";
 import SittingChairIcon from "../../../icons/CarFrame/SittingChair";
 import WheelIcon from "../../../icons/CarFrame/Wheelcon";
+import IconRight from "../../../icons/categoryPage/IconRight";
 //css
 import "./style.css";
 const CarFrame2 = ({ car }) => {
@@ -42,11 +43,14 @@ const CarFrame2 = ({ car }) => {
           </div>
           <div className="parameterFrame">
             <SittingChairIcon></SittingChairIcon>
-            <div className="title">7</div>
+            <div className="title">{car.sitChairs}</div>
           </div>
         </div>
         <div className="line"></div>
-        <div className="votingStar">Phần đánh giá đang cập nhật</div>
+        <div className="toDetailPage" onClick={() => nav(`/car/${car._id}`)}>
+          Chi tiết xe{" "}
+          <IconRight style={{ width: "15", height: "15" }}></IconRight>{" "}
+        </div>
       </div>
     </div>
   );
