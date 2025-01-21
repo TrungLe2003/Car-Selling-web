@@ -1,0 +1,24 @@
+.form{
+    margin: 10px 0px;
+}
+.avatar{
+    display: flex;
+    justify-content: center;
+}
+.avatar img{
+  width: 200px;
+  height: 200px;
+  border-radius: 120px;
+  /* margin-right: 180px; */
+  /* display: flex;
+  justify-content: center; */
+  /* margin-left: 36%; */
+}
+.text p {
+  font-size: 20px;
+  font-family: "Nunito", sans-serif;
+  margin: 20px;
+  display: flex;
+  justify-content: center;
+  /* margin-right: 220px; */
+}

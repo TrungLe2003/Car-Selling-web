@@ -5,6 +5,7 @@ div.allCarPage {
   gap: 30px;
 }
 
+/* container1 */
 div.allCarPage div.container1 {
   display: flex;
   flex-direction: column;
@@ -13,29 +14,62 @@ div.allCarPage div.container1 {
   border-bottom: 2px solid rgb(184, 184, 184);
 }
 
-div.allCarPage div.container1 div.sortsCarByBrand,
-div.allCarPage div.container1 div.section2 {
+/* ô tìm xe theo tên */
+div.allCarPage div.container1 div.searchCarFrame {
+  height: 40px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+div.allCarPage div.container1 div.searchCarFrame input.FindCar {
+  background-color: inherit;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+  border: 2px solid blue;
+  width: 100%;
+  padding: 10px 20px;
+  outline: none;
+  font-weight: 600;
+}
+
+div.allCarPage div.container1 div.searchCarFrame input.FindCar:focus {
+  color: blue;
+}
+
+div.allCarPage div.container1 div.searchCarFrame button {
+  background-color: blue;
+  cursor: pointer;
+  border: none;
+  height: 39px;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 39px;
+}
+
+div.allCarPage div.container1 div.section {
   display: flex;
   flex-direction: row;
   gap: 18px;
 }
 
-div.allCarPage div.container1 div.sortsCarByBrand div.title,
-div.allCarPage div.container1 div.section2 div.title {
+div.allCarPage div.container1 div.section div.title {
   color: rgb(68, 68, 212);
   font-weight: 600;
   font-size: 18px;
+  width: 150px;
 }
 
-div.allCarPage div.sortsCarByBrand div.brandList,
-div.allCarPage div.container1 div.section2 div.stateList {
+div.allCarPage div.container1 div.section div.list {
   display: flex;
   flex-direction: row;
   gap: 10px;
 }
-
-div.allCarPage div.sortsCarByBrand div.brandList div,
-div.allCarPage div.container1 div.section2 div.stateList div {
+div.allCarPage div.container1 div.section div.list div {
   padding-right: 10px;
   border-right: 2px solid #8a8787;
   display: flex;
@@ -46,51 +80,16 @@ div.allCarPage div.container1 div.section2 div.stateList div {
   transition: 0.3s;
 }
 
-div.allCarPage div.sortsCarByBrand div.brandList div:hover,
-div.allCarPage div.section2 div.stateList div:hover {
-  color: rgb(233, 65, 65);
+div.allCarPage div.section div.list div:hover {
+  color: rgb(0, 45, 243);
   opacity: 1;
 }
 
-div.allCarPage div.container1 div.section3 {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+div.allCarPage div.section div.list div.item.active {
+  color: red;
 }
 
-div.allCarPage div.container1 div.section3 div.toSearchPageFrame {
-  display: flex;
-  flex-direction: row;
-  border: 2px solid black;
-  padding: 5px;
-  gap: 10px;
-  border-radius: 10px;
-  align-items: center;
-  min-width: 130px;
-  transition: min-width 0.5s ease-in-out;
-  overflow: hidden;
-  font-weight: 600;
-}
-
-div.allCarPage div.container1 div.section3 div.toSearchPageFrame:hover {
-  min-width: 180px;
-  border: 2px solid #5be239;
-  color: #5be239;
-}
-
-div.allCarPage div.container1 div.section3 div.toSearchPageFrame svg {
-  position: absolute;
-  opacity: 0;
-  transform: translateX(150px);
-  transition: opacity 0.2s ease-in-out, transform 0.5s ease-in-out;
-}
-
-div.allCarPage div.container1 div.section3 div.toSearchPageFrame:hover svg {
-  opacity: 1;
-  transform: translateX(130px);
-}
-
-div.allCarPage div.container1 div.section3 div.compareBtn {
+/* div.allCarPage div.container1 div.section3 div.compareBtn {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -100,10 +99,10 @@ div.allCarPage div.container1 div.section3 div.compareBtn {
   gap: 10px;
   border-radius: 20px;
   font-weight: 600;
-}
+} */
 
 /* To hide the checkbox */
-div.allCarPage div.container1 div.section3 #checkboxInput {
+/* div.allCarPage div.container1 div.section3 #checkboxInput {
   display: none;
 }
 
@@ -153,3 +152,38 @@ div.allCarPage
 }
 
 /* container2 */
+div.PageWithAllCar {
+}
+
+div.PageWithAllCar h3 {
+  margin-bottom: 30px;
+}
+
+div.PageWithAllCar h3 span {
+  color: rgb(72, 72, 214);
+}
+
+div.PageWithAllCar div.listCar {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-column-gap: 0px;
+  grid-row-gap: 35px;
+  width: 1250px;
+}
+
+div.PageWithAllCar div.pagination {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin-top: 40px;
+  gap: 10px;
+}
+
+div.PageWithAllCar div.pagination button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: inherit;
+  padding: 5px;
+}

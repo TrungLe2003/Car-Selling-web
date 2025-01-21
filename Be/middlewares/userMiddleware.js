@@ -70,6 +70,35 @@ const UserMiddleware = {
       });
     }
   },
+
+    modifyUser: async (req, res, next) => {
+        const accessToken = req.headers.authorization.split(' ')[1];
+        console.log(accessToken);
+        if (!accessToken) {
+            res.status(400).send({
+                message: 'Permisson denined!',
+                data: null
+            });
+        } else {
+            // jwt.verify(accessToken, SECRET_KEY, (err, decoded) => {
+            //     if (err) {
+            //         res.status(401).send({
+            //             message: err.message,
+            //             data: null
+            //         });
+            //     } else {
+            //         req.user = decoded;
+            //         return next();
+            //     }
+            // }); 
+           const decoded = jwt.verify(accessToken, SECRET_KEY);
+            req.user = {
+                _id: decoded._id
+            }
+           next()
+        }  
+    }
+
 };
 
 export default UserMiddleware;

@@ -205,11 +205,11 @@ const CarDetailPage = () => {
                 </div>
                 <div className="row">
                   <div className="title">Màu</div>
-                  <div className="text">Cập nhật</div>
+                  <div className="text">{carData.color}</div>
                 </div>
                 <div className="row">
                   <div className="title">Số ghế</div>
-                  <div className="text">Cập nhật</div>
+                  <div className="text">{carData.sitChairs}</div>
                 </div>
                 <div className="row">
                   <div className="title">ODO</div>
