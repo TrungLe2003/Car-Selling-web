@@ -25,9 +25,8 @@ import NewsOverview from "./components/newsPage/newsOverview";
 import NewsCarNews from "./components/newsPage/newsCarNews";
 import NewsMarketNews from "./components/newsPage/newsMarketNews";
 import NewsExploreCars from "./components/newsPage/newsExploreCars";
-import PageWithAllCar from "./components/categoryPage/PageWithAllCar";
-import PageWithCarByBrand from "./components/categoryPage/PageWithCarByBrand";
 import CarDetailPage from "./components/carPage";
+import PostingCarInfoPage from "./components/postingCarInfoPage";
 import SearchPage from "./components/searchPage";
 //
 import "./App.css";
@@ -52,6 +51,7 @@ function App() {
             <Route path="comments" element={<AdminComments />} />
           </Route>
           <Route path="/car/:idCar" element={<CarDetailPage />} />
+          <Route path="/postingCar" element={<PostingCarInfoPage />} />
           <Route path="/search" element={<SearchPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />

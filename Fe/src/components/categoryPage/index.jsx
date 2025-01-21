@@ -13,10 +13,10 @@ import "./style.css";
 
 const CategoryPage = () => {
   const nav = useNavigate();
-  const [allCarsData, setAllCarsData] = useState(null);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [allCarsData, setAllCarsData] = useState(null); // lấy data xe
+  const [currentPage, setCurrentPage] = useState(1); //ptrang
   const [totalPages, setTotalPages] = useState(1);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState(""); //tìm xe bằng tên
   const [selectedPrice, setSelectedPrice] = useState("");
   const priceRanges = [
     { label: "Tất cả", min: 0, max: Infinity },
@@ -26,7 +26,7 @@ const CategoryPage = () => {
     { label: "2 tỉ - 3 tỉ", min: 2000000000, max: 3000000000 },
     { label: "3 tỉ - 4 tỉ", min: 3000000000, max: 4000000000 },
     { label: "4 tỉ - 5 tỉ", min: 4000000000, max: 5000000000 },
-  ];
+  ]; //Bảng quy đổi
   const [filters, setFilters] = useState({
     brand: "",
     state: "",
@@ -34,12 +34,13 @@ const CategoryPage = () => {
     year: "",
     price: "",
   });
-  const carsPerPage = 9;
+  const carsPerPage = 9; // limit
   const fetchAllCarsData = async () => {
     const queryParams = new URLSearchParams({
+      //color=...&year=....
       limit: carsPerPage,
       page: currentPage,
-      carName: searchQuery,
+      // carName: searchQuery,
       ...filters,
     }).toString();
     try {
@@ -62,10 +63,12 @@ const CategoryPage = () => {
     Khi mà chọn filter giá (key = "price") -> đối chiếu giá trị đổi ra số (vdu: 500tr -> 500000000) bằng priceRanges
   */
   const updateFilter = (key, value) => {
+    //
+    setSearchQuery("");
     const newFilters = { ...filters };
     if (key === "price") {
       const selectedRange = priceRanges.find(
-        (range) => range.label === value.trim()
+        (range) => range.label === value.trim() //
       );
       if (selectedRange) {
         newFilters.minPrice = selectedRange.min; //thêm vô filter

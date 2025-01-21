@@ -1,0 +1,119 @@
+.PostingCarInfoPage {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin: 50px 200px;
+}
+
+.PostingCarInfoPage .title {
+  display: flex;
+  justify-content: center;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #eeeeee;
+}
+
+.PostingCarInfoPage .content {
+  height: 427.2px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.PostingCarInfoPage .content .left {
+  width: 530px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.PostingCarInfoPage .content .left .gr {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.PostingCarInfoPage .content .left .gr label {
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 5px;
+  cursor: pointer;
+}
+
+.PostingCarInfoPage .content .left .gr input {
+  height: 40px;
+  font-size: 14px;
+  outline: none;
+  border: 1px solid #00000080;
+  border-radius: 5px;
+  padding: 0 10px;
+  background-color: transparent;
+}
+
+.PostingCarInfoPage .content .left .gr textarea {
+  width: 530px;
+  height: 100px;
+  resize: none;
+  font-size: 14px;
+  outline: none;
+  border: 1px solid #00000080;
+  border-radius: 5px;
+  padding: 10px 10px;
+  background-color: transparent;
+}
+
+.PostingCarInfoPage .content .left .gr input:focus,
+.PostingCarInfoPage .content .left .gr textarea:focus {
+  border: 1px solid #3563e9;
+  transition: all 0.5s ease;
+  background-color: #00000020;
+}
+
+.PostingCarInfoPage .content .left .gr button {
+  width: 100%;
+  height: 40px;
+  font-size: 14px;
+  font-weight: bold;
+  color: #ffffff;
+  background-color: #3563e9;
+  border: none;
+  border-radius: 10px;
+  opacity: 0.5;
+  cursor: pointer;
+  transition: all 0.5s ease;
+}
+
+.PostingCarInfoPage .content .left .gr button:hover {
+  opacity: 1;
+}
+
+.PostingCarInfoPage .content .right {
+  width: 530px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #00000020;
+  border-radius: 10px;
+}
+
+.PostingCarInfoPage .content .right .contentRight .item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+.PostingCarInfoPage .content .right .contentRight .item .grIcon {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.PostingCarInfoPage .content .right .contentRight .item > h4 {
+  color: #3563e9;
+  cursor: pointer;
+}
+
+.PostingCarInfoPage .content .right .contentRight .item > h4:hover {
+  opacity: 0.5;
+}
