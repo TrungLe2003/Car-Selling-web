@@ -5,5 +5,7 @@ const UserRouter = Router();
 
 UserRouter.post("/register", UserMiddleware.validateRegister, UserController.register);
 UserRouter.post("/login", UserMiddleware.validateLogin, UserController.login);
+UserRouter.get("/:id", UserController.getUser);
+UserRouter.put("/modify/:id", UserController.modifyUser);
 
 export default UserRouter;

@@ -12,6 +12,7 @@ import LogoutIcon from '../../icons/header/LogoutIcon'
 //
 import './style.css';
 
+
 const Header = () => {
     const navigate = useNavigate();
     const store = useContext(Store);
@@ -19,6 +20,7 @@ const Header = () => {
         store.setCurrentUser(null)
         navigate('/');
     };
+
     return (
         <div className='header'>
             <div className='gr1'>
@@ -47,9 +49,9 @@ const Header = () => {
                         <img src={store.currentUser.avatar} alt="" />
                     </div>
                     <div className='dropdown'>
-                        <div className='grProfile' onClick={() => navigate('/profile')}>
+                            <div className='grProfile' onClick={() => navigate('/profile/account/' + store.currentUser._id)}>
                             <p className='profileIcon'><ProfileIcon /></p>
-                            <p className='profile'>Profile</p>
+                                <p className='profile'>Profile</p>
                         </div>
                         <div className='grLogout' onClick={handleClick}>
                             <p className='logoutIcon'><LogoutIcon /></p>
