@@ -12,13 +12,15 @@ import AddImg from '/public/imgs/addImg.png'
 import './style.css';
 
 const AddNews = () => {
+    // navigate
+    const navigate = useNavigate();
+    // store lấy accessToken crrUser
     const store = useContext(Store);
     const accessToken = store.currentUser.accessToken;
-    const quillRef = useRef(null);
+    // state cập nhật nội dung khi thay đổi (change)
     const [value, setValue] = useState('');
     const [formData, setFormData] = useState({
         title: '',
-        // content: '',
         isCategory: '',
         file: null
     });
@@ -36,6 +38,8 @@ const AddNews = () => {
             [e.target.name]: e.target.value,
         });
     };
+    // react-quill
+    const quillRef = useRef(null);
     const modules = {
         toolbar: [
           [{ header: [1, 2, 3, 4, 5, false] }],
@@ -43,8 +47,8 @@ const AddNews = () => {
           ['link', 'image', 'code-block'],
         ]
     };
-    console.log(value, formData);
-    
+    // submit
+    const [isStatus, setIsStatus] = useState('');
     const handleSubmit = async (e) => {
         e.preventDefault();
         const payloadFormData = new FormData();
@@ -52,6 +56,7 @@ const AddNews = () => {
             payloadFormData.append(key, formData[key]);
         };
         payloadFormData.append('content', value);
+        payloadFormData.append('isStatus', isStatus);
         try {
             const response = await axios.post(`http://localhost:8080/api/v1/news/create-news`, payloadFormData,
             {
@@ -61,11 +66,7 @@ const AddNews = () => {
                 },
             });
             alert(response.data.message);
-            // {
-            //     const response1 = await axios.get('http://localhost:8080/api/v1/cars')
-            //     const data = response1.data.data.filter((item) => item.isActive)
-            //     store.setAllCar(data);
-            // }
+            navigate('/admin/news');
         } catch (error) {
             alert(error.response.data.message);
         }
@@ -90,9 +91,9 @@ const AddNews = () => {
                                 <label htmlFor="isCategory">Danh mục</label>
                                 <select name="isCategory" id="isCategory" value={formData.isCategory} onChange={handleChange}>
                                     <option value="" disabled>---------- Chọn danh mục ----------</option>
-                                    <option value="Tin xe" >Tin xe</option>
-                                    <option value="Tin thị trường" >Tin thị trường</option>
-                                    <option value="Khám phá xe" >Khám phá xe</option>
+                                    <option value="carNews" >Tin xe</option>
+                                    <option value="marketNews" >Tin thị trường</option>
+                                    <option value="explore" >Khám phá</option>
                                 </select>
                             </div>
                         </div>
@@ -110,9 +111,9 @@ const AddNews = () => {
                 <div className='right'>
                     <h5>Xuất bản</h5>
                     <div className='grButton'>
-                        <button type='submit' onClick={handleSubmit}>Xuất bản</button>
-                        <button>Lưu nháp</button>
-                        <button>Bỏ vào thùng rác</button>
+                        <button type='submit' onMouseEnter={() => setIsStatus('Đã xuất bản')} onClick={handleSubmit}>Xuất bản</button>
+                        <button type='submit' onMouseEnter={() => setIsStatus('Bản nháp')} onClick={handleSubmit}>Lưu nháp</button>
+                        <button type='submit' onMouseEnter={() => setIsStatus('Thùng rác')} onClick={handleSubmit}>Bỏ vào thùng rác</button>
                     </div>
                 </div>
             </div>
