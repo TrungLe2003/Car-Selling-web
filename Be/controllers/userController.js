@@ -5,13 +5,12 @@ import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 dotenv.config();
 const SECRET_KEY = process.env.SECRET_KEY;
-cloudinary.config({
-  cloud_name: 'dxkokrlhr',
-  api_key: '494724485678384',
-  api_secret: 'KWRTFbpOnBzDtbcx7xsipZUnVKM'
-});
+const getCloudinaryConfig = JSON.parse(process.env.CLOUD_DAINARY_CONFIG);
+cloudinary.config(getCloudinaryConfig);
 const storage = multer.memoryStorage();
-const upload = multer({ storage: storage });
+const upload = multer({
+  storage: storage
+});
 //
 import UserModel from "../models/UserModel.js";
 
@@ -146,22 +145,61 @@ const UserController = {
 
   ///////
 
-  modifyUser: async (req, res) => {
-    try {
-      const { id } = req.params;
-      const dataUpdate = req.body;
-      const updateData = await UserModel.findByIdAndUpdate(id, dataUpdate);
-      res.status(201).send({
-        message: 'Successful!',
-        data: updateData
-      })
-    } catch (error) {
-      res.status(500).send({
-        message: error.message,
-        data: null
-      })
+  modifyUser:  [
+    ///avatar
+    upload.single('avatar'),
+
+    async (req, res) => {
+      try {
+        //verify token
+        // const user = req.user;
+        const { id } = req.params;
+        const { username, fullname, phoneNumber, address, dateOfBirth, role } = req.body;
+        // if (id !== user._id) throw new Error('Permisson denined!');
+        const crrUser = await UserModel.findById(id);
+
+        ////avatar 
+        const avatar = req.file;
+        if (avatar) {
+          // handle upload
+          const dataUrl = `data:${avatar.mimetype};base64,${avatar.buffer.toString('base64')}`;
+          const uploaded = await cloudinary.uploader.upload(dataUrl, {
+            resource_type: 'auto'
+          });
+          crrUser.avatar = uploaded.url;
+        }
+
+        if (username) {
+          crrUser.username = username;
+        }
+        if (fullname) {
+          crrUser.fullname = fullname;
+        }
+        if (phoneNumber) {
+          crrUser.phoneNumber = phoneNumber;
+        }
+        if (address) {
+          crrUser.address = address;
+        }
+        if (dateOfBirth) {
+          crrUser.dateOfBirth = dateOfBirth;
+        }
+        
+
+        await crrUser.save();
+
+        res.status(201).send({
+          message: 'Update successful!',
+          data: crrUser
+        })
+      } catch (error) {
+        res.status(500).send({
+          message: error.message,
+          data: null
+        })
+      }
     }
-  }
+  ]
 
 };
 
