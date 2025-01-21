@@ -15,7 +15,7 @@ const NewsPage = () => {
                 <nav className='menu'>
                     <NavLink className={activeLink} to='carNews'>Tin xe</NavLink>
                     <NavLink className={activeLink} to='marketNews'>Tin thị trường</NavLink>
-                    <NavLink className={activeLink} to='exploreCars'>Khám phá xe</NavLink>
+                    <NavLink className={activeLink} to='explore'>Khám phá</NavLink>
                 </nav>
             </div>
             <Outlet />

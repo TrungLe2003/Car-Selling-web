@@ -11,12 +11,11 @@ const newsSchema = new mongoose.Schema({
     img: String,
     isCategory: {
         type: String,
-        enum: ["Tin xe", "Tin thị trường", "Khám phá xe"],
+        enum: ["carNews", "marketNews", "explore"],
     },
     isStatus: {
         type: String,
         enum: ["Đã xuất bản", "Bản nháp", "Thùng rác"],
-        default: "Đã xuất bản",
     },
     createdAt: Date,
     updatedAt: Date,
