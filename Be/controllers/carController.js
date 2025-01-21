@@ -104,12 +104,30 @@ const CarController = {
   //api lấy tất cả xe (có limit)
   getListCar: async (req, res) => {
     try {
-      const { limit } = req.query;
-      const dataLimit = parseInt(limit) || 0;
-      const listCar = await CarModel.find().limit(dataLimit);
+      const { limit, page, brand, state, color, year, minPrice, maxPrice } =
+        req.query;
+      const dataLimit = parseInt(limit) || 9;
+      const pageNumber = parseInt(page) || 1;
+      const skip = (pageNumber - 1) * dataLimit;
+      // console.log("Min Price:", minPrice, "Max Price:", maxPrice);
+
+      const filters = {};
+      if (brand) filters.brand = { $regex: brand, $options: "i" }; //áp các điều kiện vô filter - k phân biệt hoa thường
+      if (state) filters.state = state;
+      if (color) filters.color = color;
+      if (year) filters.year = parseInt(year);
+      if (minPrice && maxPrice) {
+        filters.carPrice = { $gte: Number(minPrice), $lte: Number(maxPrice) };
+      }
+
+      const listCar = await CarModel.find(filters).skip(skip).limit(dataLimit);
+      const totalCars = await CarModel.countDocuments(filters);
+
       res.status(200).send({
         message: "Successful",
         data: listCar,
+        totalPages: Math.ceil(totalCars / dataLimit),
+        currentPage: pageNumber,
       });
     } catch (error) {
       res.status(500).send({
@@ -151,6 +169,53 @@ const CarController = {
       });
     }
   },
+  //hàm thêm lại ghế ngồi (trước đăng lên thiếu)
+  updateCarColors: async (req, res) => {
+    try {
+      const result = await CarModel.updateMany(
+        { sitChairs: { $exists: false } }, // chỉ up cái nào cần
+        { $set: { sitChairs: 7 } } // Set chỗ ngồi
+      );
+
+      res.status(200).send({
+        message: "sitChairs updated successfully for all cars",
+        modifiedCount: result.modifiedCount, // Number of documents modified
+      });
+    } catch (error) {
+      res.status(500).send({
+        message: "Error updating car sitChairs",
+        error: error.message,
+      });
+    }
+  },
+  searchingCar: async (req, res) => {
+    const { carName, limit, page } = req.query;
+    const dataLimit = parseInt(limit) || 9;
+    const pageNumber = parseInt(page) || 1;
+    const skip = (pageNumber - 1) * dataLimit;
+    try {
+      const regex = new RegExp(carName, "i"); //k pbiet hoa thường
+      const cars = await CarModel.find({ carName: regex })
+        .limit(dataLimit)
+        .skip(skip);
+      const totalCars = await CarModel.countDocuments({ carName: regex }); //hàm này cần điều kiện truy vấn (ở đây là carName)
+      res.status(200).send({
+        message: "Xe bạn tìm",
+        data: cars,
+        totalPages: Math.ceil(totalCars / dataLimit),
+      });
+    } catch (error) {
+      res.status(500).send({
+        message: error.message,
+      });
+    }
+  },
 };
 
 export default CarController;
+
+//Giải thích code:
+/*
+I) Api create xe
+
+*/
