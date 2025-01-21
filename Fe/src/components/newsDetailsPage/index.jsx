@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import moment from 'moment';
 import axios from 'axios';
@@ -10,11 +10,18 @@ import CommentIcon from '../../icons/newsDetailsPage/CommentIcon'
 import './style.css';
 
 const NewsDetailPage = () => {
-    const [news, setNews] = useState([]);
+    const navigate = useNavigate();
+    const { id } = useParams();
+    const [news, setNews] = useState({});
+    const [listNews, setListNews] = useState([]);    
     const queryNews = async () => {
         try {
-            const response = await axios.get('http://localhost:8080/api/v1/news/678b69e94a1a331d6056749d');
-            const data = response.data.data;
+            const queryNews = await axios.get(`http://localhost:8080/api/v1/news/${id}`);
+            const data = queryNews.data.data;
+            if (data) {
+                const queryListNews = await axios.get(`http://localhost:8080/api/v1/news/published?limit=4&isCategory=${data.isCategory}`);
+                setListNews(queryListNews.data.data);
+            };
             setNews(data);
         } catch (error) {
             alert(error.response.data.message);
@@ -22,16 +29,18 @@ const NewsDetailPage = () => {
     };
     useEffect(() => {
         queryNews();
-    }, []);
+    }, [id]);
     return (
         <div className='newsDetailsPage'>
             <div className='left'>
                 <h2>{news.title}</h2>
                 <div className='row'>
-                    <div className='author'>
-                        <img src={news.avatarAuthor} alt="" />
-                        <h5>{news.usernameAuthor}</h5>
+                    {news.author
+                    ? <div className='author'>
+                        <img src={news.author.avatar} alt="" />
+                        <h5>{news.author.username}</h5>
                     </div>
+                    : ''}
                     <p className='time'>{moment(news.createdAt).format('HH:mm, DD/MM/YYYY')}</p>
                 </div>
                 <div className='content' dangerouslySetInnerHTML={{ __html: news.content }}></div>
@@ -76,8 +85,8 @@ const NewsDetailPage = () => {
             <div className='right'>
                 <h3>Cùng danh mục</h3>
                 <div className='listSameCategory'>
-                    {listCarNews.map((item) => {
-                        return <div className='item'>
+                    {listNews.map((item) => {
+                        return <div className='item' onClick={() => navigate(`/news/details/${item._id}`)}>
                             <div className='leftItem'>
                                 <img src={item.img} alt="" />
                             </div>
@@ -85,7 +94,7 @@ const NewsDetailPage = () => {
                                 <div className='background'></div>
                                 <div className='content'>
                                     <h5>{item.title}</h5>
-                                    <p>13:00, 13/01/2025</p>
+                                    <p>{moment(item.createdAt).format('HH:mm, DD/MM/YYYY')}</p>
                                 </div>
                             </div>
                         </div>
