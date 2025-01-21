@@ -4,7 +4,7 @@ import UserMiddleware from "../../../middlewares/userMiddleware.js";
 const CarRouter = Router();
 
 //Thêm xe mới (đã là provider - role: 'PROVIDER')
-CarRouter.post(/create-car",
+CarRouter.post("/create-car",
   UserMiddleware.checkRoleProvider,
   CarController.createCar
 );
