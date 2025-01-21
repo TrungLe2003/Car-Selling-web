@@ -22,9 +22,7 @@ import CategoryPage from "./components/categoryPage";
 import NewsDetailPage from "./components/newsDetailsPage";
 import NewsPage from "./components/newsPage";
 import NewsOverview from "./components/newsPage/newsOverview";
-import NewsCarNews from "./components/newsPage/newsCarNews";
-import NewsMarketNews from "./components/newsPage/newsMarketNews";
-import NewsExploreCars from "./components/newsPage/newsExploreCars";
+import NewsCategory from "./components/newsPage/newsCategory";
 import PageWithAllCar from "./components/categoryPage/PageWithAllCar";
 import PageWithCarByBrand from "./components/categoryPage/PageWithCarByBrand";
 import CarDetailPage from "./components/carPage";
@@ -58,12 +56,10 @@ function App() {
           <Route path='/profile/:activepage/:userId' element={<ProfilePage />} />
           <Route path="/category" element={<CategoryPage />} />
           <Route path="/allCars" element={<CategoryPage />}></Route>
-          <Route path="/news/details" element={<NewsDetailPage />} />
+          <Route path="/news/details/:id" element={<NewsDetailPage />} />
           <Route path="/news" element={<NewsPage />}>
             <Route path="" element={<NewsOverview />} />
-            <Route path="carNews" element={<NewsCarNews />} />
-            <Route path="marketNews" element={<NewsMarketNews />} />
-            <Route path="exploreCars" element={<NewsExploreCars />} />
+            <Route path=":isCategory" element={<NewsCategory />} />
           </Route>
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/introduce" element={<IntroducePage />} />
