@@ -11,9 +11,9 @@ import ProfileIcon from "../../icons/header/ProfileIcon";
 import LogoutIcon from "../../icons/header/LogoutIcon";
 //
 import "./style.css";
-
+    
 const Header = () => {
-  const navigate = useNavigate();
+const navigate = useNavigate();
   const store = useContext(Store);
   const handleClick = () => {
     store.setCurrentUser(null);
@@ -61,7 +61,7 @@ const Header = () => {
           />
         </div>
         <div className="gr2">
-          <h5 onClick={() => navigate("/allCars")}>Sản phẩm</h5>
+          <h5 onClick={() => navigate("/cars/all")}>Sản phẩm</h5>
           <h5 onClick={() => navigate("/news")}>Tin tức</h5>
           <h5 onClick={() => navigate("/contact")}>Liên hệ</h5>
           <h5 onClick={() => navigate("/introduce")}>Giới thiệu</h5>
@@ -86,7 +86,7 @@ const Header = () => {
                 <img src={store.currentUser.avatar} alt="" />
               </div>
               <div className="dropdown">
-                <div className="grProfile" onClick={() => navigate("/profile")}>
+                <div className='grProfile' onClick={() => navigate('/profile/account/' + store.currentUser._id)}>
                   <p className="profileIcon">
                     <ProfileIcon />
                   </p>
