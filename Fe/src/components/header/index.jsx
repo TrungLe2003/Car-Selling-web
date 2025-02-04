@@ -11,9 +11,9 @@ import ProfileIcon from "../../icons/header/ProfileIcon";
 import LogoutIcon from "../../icons/header/LogoutIcon";
 //
 import "./style.css";
-    
+
 const Header = () => {
-const navigate = useNavigate();
+  const navigate = useNavigate();
   const store = useContext(Store);
   const handleClick = () => {
     store.setCurrentUser(null);
@@ -86,7 +86,12 @@ const navigate = useNavigate();
                 <img src={store.currentUser.avatar} alt="" />
               </div>
               <div className="dropdown">
-                <div className='grProfile' onClick={() => navigate('/profile/account/' + store.currentUser._id)}>
+                <div
+                  className="grProfile"
+                  onClick={() =>
+                    navigate("/profile/account/" + store.currentUser._id)
+                  }
+                >
                   <p className="profileIcon">
                     <ProfileIcon />
                   </p>

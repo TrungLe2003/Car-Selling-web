@@ -120,8 +120,8 @@ const CarController = {
         filters.carPrice = { $gte: Number(minPrice), $lte: Number(maxPrice) };
       }
 
-      const listCar = await CarModel.find(filters).skip(skip).limit(dataLimit);
-      const totalCars = await CarModel.countDocuments(filters);
+      const listCar = await CarModel.find(filters).skip(skip).limit(dataLimit); //find({color : color})
+      const totalCars = await CarModel.countDocuments(filters); //Đếm những phần tử thỏa mãn đk
 
       res.status(200).send({
         message: "Successful",
