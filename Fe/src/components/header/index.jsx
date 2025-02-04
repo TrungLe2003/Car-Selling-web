@@ -61,7 +61,7 @@ const navigate = useNavigate();
           />
         </div>
         <div className="gr2">
-          <h5 onClick={() => navigate("/cars/all")}>Sản phẩm</h5>
+          <h5 onClick={() => navigate("/allCars")}>Sản phẩm</h5>
           <h5 onClick={() => navigate("/news")}>Tin tức</h5>
           <h5 onClick={() => navigate("/contact")}>Liên hệ</h5>
           <h5 onClick={() => navigate("/introduce")}>Giới thiệu</h5>
