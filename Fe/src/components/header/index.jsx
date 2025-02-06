@@ -11,6 +11,7 @@ import ProfileIcon from "../../icons/header/ProfileIcon";
 import LogoutIcon from "../../icons/header/LogoutIcon";
 //
 import "./style.css";
+
 import axios from 'axios';
 
 
@@ -106,7 +107,12 @@ const Header = () => {
                 <img src={userData?.avatar ? userData?.avatar : store.currentUser.avatar} class="avatar-img" alt="" />
               </div>
               <div className="dropdown">
-                <div className='grProfile' onClick={() => navigate('/profile/account/' + store.currentUser._id)}>
+                <div
+                  className="grProfile"
+                  onClick={() =>
+                    navigate("/profile/account/" + store.currentUser._id)
+                  }
+                >
                   <p className="profileIcon">
                     <ProfileIcon />
                   </p>
