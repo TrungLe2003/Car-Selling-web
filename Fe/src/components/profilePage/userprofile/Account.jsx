@@ -42,7 +42,7 @@ const Account = () => {
     }
     return null
   }
-  
+
   return (
     <div className='account'>
       <div className="form">
