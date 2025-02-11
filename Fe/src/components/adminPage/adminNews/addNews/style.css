@@ -8,7 +8,7 @@
     background-color: #F7F7F7;
 }
 
-.addNews .form {
+.addNews .formAddNews {
     display: flex;
     gap: 30px;
     margin-top: 20px;
@@ -16,14 +16,14 @@
     border-top: 1px solid #EEEEEE;
 }
 
-.addNews .form .left {
+.addNews .formAddNews .left {
     flex: 1;
     display: flex;
     flex-direction: column;
     gap: 30px;
 }
 
-.addNews .form .left .section1 {
+.addNews .formAddNews .left .section1 {
     display: flex;
     align-items: center;
     gap: 20px;
@@ -32,7 +32,7 @@
     background-color: #F7F7F7;
 }
 
-.addNews .form .left .section1 .grImg {
+.addNews .formAddNews .left .section1 .grImg {
     width: 301.6px;
     height: 151.6px;
     position: relative;
@@ -40,12 +40,12 @@
     border: 1px solid #EEEEEE;
 }
 
-.addNews .form .left .section1 .grImg > input {
+.addNews .formAddNews .left .section1 .grImg > input {
     width: 0.1px;
     height: 0.1px;
 }
 
-.addNews .form .left .section1 .grImg img {
+.addNews .formAddNews .left .section1 .grImg img {
     width: 300px;
     height: 150px;
     object-fit: cover;
@@ -56,24 +56,24 @@
     cursor: pointer;
 }
 
-.addNews .form .left .section1 .titleAndCategory {
+.addNews .formAddNews .left .section1 .titleAndCategory {
     flex: 1;
     display: flex;
     flex-direction: column;
     gap: 20px;
 }
 
-.addNews .form .left .section1 .titleAndCategory .col {
+.addNews .formAddNews .left .section1 .titleAndCategory .col {
     display: flex;
     flex-direction: column;
     gap: 5px;
 }
 
-.addNews .form .left .section1 .titleAndCategory .col label {
+.addNews .formAddNews .left .section1 .titleAndCategory .col label {
     cursor: pointer;
 }
 
-.addNews .form .left .section1 .titleAndCategory .col input {
+.addNews .formAddNews .left .section1 .titleAndCategory .col input {
     height: 41.6px;
     font-size: 20px;
     font-weight: bold;
@@ -84,11 +84,11 @@
     transition: all 0.5s ease;
 }
 
-.addNews .form .left .section1 .titleAndCategory .col input:focus {
+.addNews .formAddNews .left .section1 .titleAndCategory .col input:focus {
     border: 1px solid #3563E9;
 }
 
-.addNews .form .left .section1 .titleAndCategory .col select {
+.addNews .formAddNews .left .section1 .titleAndCategory .col select {
     width: fit-content;
     height: 36.8px;
     padding: 0 35px 0 15px;
@@ -103,19 +103,19 @@
     transition: all 0.5s ease;
 }
 
-.addNews .form .left .section1 .titleAndCategory .col select:focus  {
+.addNews .formAddNews .left .section1 .titleAndCategory .col select:focus  {
     border: 1px solid #3563E9;
 }
 
-.addNews .form .left .section2 {
+.addNews .formAddNews .left .section2 {
     background-color: #FFFFFF;
 }
 
-.addNews .form .left .section2 .quill {
+.addNews .formAddNews .left .section2 .quill {
     height: 709px;
 }
 
-.addNews .form .left .section2 .ql-container {
+.addNews .formAddNews .left .section2 .ql-container {
     height: 667.4px;
 }
 
@@ -133,16 +133,22 @@
 }
 
 .addNews .right .grButton {
+    width: 250px;
     padding: 20px;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: repeat(2, 1fr);
-    grid-column-gap: 20px;
-    grid-row-gap: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
-.addNews .right .grButton button:nth-child(1) { grid-area: 1 / 1 / 2 / 2; color: #FFFFFF; background-color: #3563E9; border: 1px solid #3563E9; }
-.addNews .right .grButton button:nth-child(2) { grid-area: 1 / 2 / 2 / 3; color: #3563E9; background-color: #EEEEEE; border: 1px solid #3563E9; }
-.addNews .right .grButton button:nth-child(3) { grid-area: 2 / 1 / 3 / 3; color: #FFFFFF; background-color: #DB2719; border: 1px solid #DB2719; }
+.addNews .right .grButton button:nth-child(1) {
+    color: #FFFFFF;
+    background-color: #3563E9;
+    border: 1px solid #3563E9;
+}
+.addNews .right .grButton button:nth-child(2) {
+    color: #3563E9;
+    background-color: #EEEEEE;
+    border: 1px solid #3563E9;
+}
 
 .addNews .right .grButton button {
     font-size: 14px;
