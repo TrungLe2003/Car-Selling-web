@@ -8,18 +8,13 @@ import './style.css';
 const NewsOverview = () => {
     const [listCarNews, setListCarNews] = useState([]);
     const [listMarketNews, setListMarketNews] = useState([]);
-    const [listExploreCars, setListExploreCars] = useState([]);
-    console.log(listCarNews);
-    
+    const [listExplore, setListExplore] = useState([]);
     const queryAllNews = async () => {
         try {
-            const response = await axios.get('http://localhost:8080/api/v1/news/published');
-            const dataListCarNews = response.data.data.filter((item) => item.isCategory === 'carNews').slice(0,3);
-            const dataListMarketNews = response.data.data.filter((item) => item.isCategory === 'marketNews').slice(0,3);
-            const dataListExploreCars = response.data.data.filter((item) => item.isCategory === 'explore').slice(0,3);
-            setListCarNews(dataListCarNews);
-            setListMarketNews(dataListMarketNews);
-            setListExploreCars(dataListExploreCars);
+            const response = await axios.get('http://localhost:8080/api/v1/news/the3LatestNewsPerCategory');
+            setListCarNews(response.data.dataListCarNews);
+            setListMarketNews(response.data.dataListMarketNews);
+            setListExplore(response.data.dataListExplore);
         } catch (error) {
             alert(error.response.data.message);
         }
@@ -65,9 +60,9 @@ const NewsOverview = () => {
                 </div>
             </div>
             <div className='grListNews'>
-                <h2>Khám phá xe</h2>
+                <h2>Khám phá</h2>
                 <div className='listNews'>
-                    {listExploreCars.map((news, index) => {
+                    {listExplore.map((news, index) => {
                         return <div key={index + 1} className={`news news${index + 1}`} onClick={() => navigate(`/news/details/${news._id}`)}>
                             <img src={news.img} alt="" />
                             <div className='content'>

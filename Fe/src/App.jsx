@@ -10,7 +10,9 @@ import AdminCars from "./components/adminPage/adminCars";
 import AdminNews from "./components/adminPage/adminNews";
 import AdminComments from "./components/adminPage/adminComments";
 import TotalNews from "./components/adminPage/adminNews/totalNews";
+import TotalNewsByStatus from './components/adminPage/adminNews/totalNews/byStatus';
 import AddNews from "./components/adminPage/adminNews/addNews";
+import EditNews from "./components/adminPage/adminNews/editNews";
 import NotFoundPage from "./components/notFoundPage";
 import LoginPage from "./components/loginPage";
 import RegisterPage from "./components/registerPage";
@@ -22,10 +24,7 @@ import CategoryPage from "./components/categoryPage";
 import NewsDetailPage from "./components/newsDetailsPage";
 import NewsPage from "./components/newsPage";
 import NewsOverview from "./components/newsPage/newsOverview";
-// import NewsCarNews from "./components/newsPage/newsCarNews";
-// import NewsMarketNews from "./components/newsPage/newsMarketNews";
-// import NewsExploreCars from "./components/newsPage/newsExploreCars";
-import NewsCategory from "./components/newsPage/newsCategory";
+import NewsByCategory from "./components/newsPage/newsByCategory";
 // import PageWithAllCar from "./components/categoryPage/PageWithAllCar";
 // import PageWithCarByBrand from "./components/categoryPage/PageWithCarByBrand";
 import CarDetailPage from "./components/carPage";
@@ -50,8 +49,11 @@ function App() {
             <Route path="users" element={<AdminUsers />} />
             <Route path="cars" element={<AdminCars />} />
             <Route path="news" element={<AdminNews />}>
-              <Route path="" element={<TotalNews />} />
+              <Route path="" element={<TotalNews />} >
+                <Route path=":isStatus" element={<TotalNewsByStatus />} />
+              </Route>
               <Route path="addNews" element={<AddNews />} />
+              <Route path="editNews" element={<EditNews />} />
             </Route>
             <Route path="comments" element={<AdminComments />} />
           </Route>
@@ -72,7 +74,7 @@ function App() {
           <Route path="/news/details/:id" element={<NewsDetailPage />} />
           <Route path="/news" element={<NewsPage />}>
             <Route path="" element={<NewsOverview />} />
-            <Route path=":isCategory" element={<NewsCategory />} />
+            <Route path=":isCategory" element={<NewsByCategory />} />
           </Route>
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/introduce" element={<IntroducePage />} />

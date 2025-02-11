@@ -21,10 +21,11 @@ const upload = multer({
 import NewsModel from "../models/NewsModel.js";
 
 const newsController = {
+    // Tạo tin mới
     createNews: [upload.single('file'), async (req, res) => {
         try {
             const currentUser = req.currentUser;
-            const {title, content, isCategory, isStatus} = req.body;
+            const {title, subTitle, content, isCategory, isStatus} = req.body;
             const file = req.file;
             if (!file) throw new Error('Chưa lựa chọn ảnh!');
             const dataUrl = `data:${file.mimetype};base64,${file.buffer.toString('base64')}`;
@@ -36,6 +37,7 @@ const newsController = {
             const newNews = await NewsModel.create({
                 author: currentUser._id,
                 title,
+                subTitle,
                 content,
                 img: result.secure_url,
                 isCategory,
@@ -43,21 +45,15 @@ const newsController = {
                 createdAt: new Date(),
                 updatedAt: new Date(),
             });
-            if (isStatus === 'Đã xuất bản') {
+            if (isStatus === 'published') {
                 res.status(201).send({
                     message: 'Đăng bài viết mới thành công!',
                     data: newNews,
                 });
             };
-            if (isStatus === 'Bản nháp') {
+            if (isStatus === 'draft') {
                 res.status(201).send({
                     message: 'Đã lưu bản nháp!',
-                    data: newNews,
-                });
-            };
-            if (isStatus === 'Thùng rác') {
-                res.status(201).send({
-                    message: 'Đã bỏ vào thùng rác!',
                     data: newNews,
                 });
             };
@@ -68,7 +64,7 @@ const newsController = {
             });
         }
     }],
-    getAllNews: async (req, res) => {
+    get: async (req, res) => {
         try {
             const {isCategory, limit} = req.query;
             const dataLimit = parseInt(limit) || 0;
@@ -100,32 +96,59 @@ const newsController = {
             });
         }
     },
-    getAllNewsPublished: async (req, res) => {
+    // Đếm số tin theo trạng thái
+    countNews: async (req, res) => {
         try {
-            const {isCategory, limit} = req.query;
-            const dataLimit = parseInt(limit) || 0;
-            if (isCategory) {
-                const result = await NewsModel.find({
-                    isCategory: isCategory,
-                    isStatus: 'Đã xuất bản'
-                })
-                .limit(dataLimit)
-                .sort({createdAt: -1})
-                .populate('author', 'username avatar');
-                res.status(200).send({
-                    message: 'Lấy thông tin tất cả bài viết theo danh mục thành công!',
-                    data: result,
-                });
-            } else {
-                const result = await NewsModel.find({
-                    isStatus: 'Đã xuất bản'
-                })
+            const totalNews = await NewsModel.find({}, '-content')
+            const publishedNews = await NewsModel.find({isStatus: 'published'}, '-content')
+            const draftNews = await NewsModel.find({isStatus: 'draft'}, '-content')
+            res.status(200).send({
+                message: 'Lấy thông tin tất cả bài viết thành công!',
+                totalNews: totalNews.length,
+                publishedNews: publishedNews.length,
+                draftNews: draftNews.length,
+            });
+        } catch (error) {
+            res.status(403).send({
+                message: error.message,
+                data: null,
+            });
+        }
+    },
+    // Lấy tất cả tin hoặc tin theo trạng thái
+    getAllNews: async (req, res) => {
+        try {
+            const {limit, currentPage, isStatus} = req.query;
+            const dataLimit = parseInt(limit);
+            const pageNumber = parseInt(currentPage) || 1;
+            const skip = (pageNumber - 1) * dataLimit;
+            if (isStatus === 'all') {
+                const totalNews = await NewsModel.find({}, '-content')
+                const result = await NewsModel.find({}, '-content')
+                .skip(skip)
                 .limit(dataLimit)
                 .sort({createdAt: -1})
                 .populate('author', 'username avatar');
                 res.status(200).send({
                     message: 'Lấy thông tin tất cả bài viết thành công!',
                     data: result,
+                    totalPages: Math.ceil(totalNews.length / dataLimit),
+                });
+            } else {
+                const totalNews = await NewsModel.find({
+                    isStatus: isStatus
+                }, '-content')
+                const result = await NewsModel.find({
+                    isStatus: isStatus
+                }, '-content')
+                .skip(skip)
+                .limit(dataLimit)
+                .sort({createdAt: -1})
+                .populate('author', 'username avatar');
+                res.status(200).send({
+                    message: 'Lấy thông tin tất cả bài viết theo trạng thái thành công!',
+                    data: result,
+                    totalPages: Math.ceil(totalNews.length / dataLimit),
                 });
             }
         } catch (error) {
@@ -135,6 +158,62 @@ const newsController = {
             });
         }
     },
+    // Lấy 3 tin mới nhất mỗi danh mục
+    getThe3LatestNewsPerCategory: async (req, res) => {
+        try {
+            const result = await NewsModel.find({
+                isStatus: 'published'
+            }, '-content')
+            .sort({createdAt: -1})
+            .populate('author', 'username avatar');
+            const listCarNews = result.filter((item) => item.isCategory === 'carNews').slice(0,3);
+            const listMarketNews = result.filter((item) => item.isCategory === 'marketNews').slice(0,3);
+            const listExplore = result.filter((item) => item.isCategory === 'explore').slice(0,3);
+            res.status(200).send({
+                message: 'Lấy thông tin 3 bài viết mới nhất mỗi danh mục thành công!',
+                dataListCarNews: listCarNews,
+                dataListMarketNews: listMarketNews,
+                dataListExplore: listExplore,
+            });
+        } catch (error) {
+            res.status(403).send({
+                message: error.message,
+                data: null,
+            });
+        }
+    },
+    // Lấy tất cả tin đã xuất bản theo danh mục
+    getAllNewsPublishedByCategory: async (req, res) => {
+        try {
+            const {isCategory, limit, currentPage} = req.query;
+            const dataLimit = parseInt(limit) || 4;
+            const pageNumber = parseInt(currentPage) || 1;
+            const skip = (pageNumber - 1) * dataLimit;
+            const totalNews = await NewsModel.find({
+                isCategory: isCategory,
+                isStatus: 'published'
+            }, '-content')
+            const result = await NewsModel.find({
+                isCategory: isCategory,
+                isStatus: 'published'
+            }, '-content')
+            .skip(skip)
+            .limit(dataLimit)
+            .sort({createdAt: -1})
+            .populate('author', 'username avatar');
+            res.status(200).send({
+                message: 'Lấy thông tin tất cả bài viết theo danh mục thành công!',
+                data: result,
+                totalPages: Math.ceil(totalNews.length / dataLimit),
+            });
+        } catch (error) {
+            res.status(403).send({
+                message: error.message,
+                data: null,
+            });
+        }
+    },
+    // Lấy tin theo id
     getNewsById: async (req, res) => {
         try {
             const {id} = req.params;
@@ -151,6 +230,21 @@ const newsController = {
             });
         }
     },
+    // Xóa tin
+    deleteNewsById: async (req, res) => {
+        try {
+            const {id} = req.params;
+            const findByIdAndDelete = await NewsModel.findByIdAndDelete(id)
+            res.status(200).send({
+                message: 'Xóa tin thành công!',
+            });
+        } catch (error) {
+            res.status(403).send({
+                message: error.message,
+                data: null,
+            });
+        }
+    }
 }
 
 export default newsController

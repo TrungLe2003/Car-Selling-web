@@ -79,6 +79,7 @@
 }
 
 .newsDetailsPage .left .grComment .oldComment .listOldComment .comment .rightComment {
+    width: 100%;
     display: flex;
     flex-direction: column;
     gap: 5px;
@@ -98,6 +99,8 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
+    padding-top: 20px;
+    border-top: 1px solid #EEEEEE;
 }
 
 .newsDetailsPage .left .grComment .newComment textarea {
@@ -135,6 +138,7 @@
 }
 
 .newsDetailsPage .right {
+    width: 391.6px;
     height: fit-content;
     display: flex;
     flex-direction: column;

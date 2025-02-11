@@ -3,9 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import axios from 'axios';
-//
+// Store
 import { Store } from '../../../../Store';
-
 // imgs
 import AddImg from '/public/imgs/addImg.png'
 //
@@ -19,6 +18,13 @@ const AddNews = () => {
     const accessToken = store.currentUser.accessToken;
     // state cập nhật nội dung khi thay đổi (change)
     const [value, setValue] = useState('');
+    const slice1 = value.split('</strong></p><p><br></p>');
+    const slice2 = slice1[0].split('<strong>');
+    const content = slice1[1];
+    const subTitle = slice2[1];
+    console.log(value);
+    // console.log(content);
+    // console.log(subTitle);
     const [formData, setFormData] = useState({
         title: '',
         isCategory: '',
@@ -55,7 +61,14 @@ const AddNews = () => {
         for (const key in formData) {
             payloadFormData.append(key, formData[key]);
         };
-        payloadFormData.append('content', value);
+        {content ?
+        payloadFormData.append('content', content) :
+        payloadFormData.append('content', value)
+        };
+        {subTitle ?
+        payloadFormData.append('subTitle', subTitle) :
+        payloadFormData.append('subTitle', '')
+        };
         payloadFormData.append('isStatus', isStatus);
         try {
             const response = await axios.post(`http://localhost:8080/api/v1/news/create-news`, payloadFormData,
@@ -66,7 +79,7 @@ const AddNews = () => {
                 },
             });
             alert(response.data.message);
-            navigate('/admin/news');
+            navigate('/admin/news/all');
         } catch (error) {
             alert(error.response.data.message);
         }
@@ -74,7 +87,7 @@ const AddNews = () => {
     return (
         <div className='addNews'>
             <h3>Thêm bài viết</h3>
-            <div className='form'>
+            <div className='formAddNews'>
                 <div className='left'>
                     <div className='section1'>
                         <div className='grImg'>
@@ -111,9 +124,8 @@ const AddNews = () => {
                 <div className='right'>
                     <h5>Xuất bản</h5>
                     <div className='grButton'>
-                        <button type='submit' onMouseEnter={() => setIsStatus('Đã xuất bản')} onClick={handleSubmit}>Xuất bản</button>
-                        <button type='submit' onMouseEnter={() => setIsStatus('Bản nháp')} onClick={handleSubmit}>Lưu nháp</button>
-                        <button type='submit' onMouseEnter={() => setIsStatus('Thùng rác')} onClick={handleSubmit}>Bỏ vào thùng rác</button>
+                        <button type='submit' onMouseEnter={() => setIsStatus('published')} onClick={handleSubmit}>Xuất bản</button>
+                        <button type='submit' onMouseEnter={() => setIsStatus('draft')} onClick={handleSubmit}>Lưu nháp</button>
                     </div>
                 </div>
             </div>
