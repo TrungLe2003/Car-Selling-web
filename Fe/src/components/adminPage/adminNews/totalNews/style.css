@@ -1,0 +1,31 @@
+.totalNews {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+    background-color: #F7F7F7;
+}
+
+.totalNews .newsFilter {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.totalNews .newsFilter > .div {
+    display: flex;
+    gap: 5px;
+    cursor: pointer;
+}
+
+.totalNews .newsFilter > .activeDiv {
+    font-weight: bold;
+}
+
+.totalNews .newsFilter > .activeDiv p:nth-child(1) {
+    color: #000000;
+}
+
+.totalNews .newsFilter > div p:nth-child(1) {
+    color: #2271B1;
+}
