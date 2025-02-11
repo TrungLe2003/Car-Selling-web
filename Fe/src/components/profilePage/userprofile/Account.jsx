@@ -40,8 +40,9 @@ const Account = () => {
 
       return `${day}/${month}/${year}`;
     }
-    return null;
-  };
+
+    return null
+  }
 
   return (
     <div className="account">

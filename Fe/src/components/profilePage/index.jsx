@@ -6,14 +6,16 @@ import { useParams } from 'react-router-dom';
 import UserSidebar from './userprofile/UserSidebar.jsx';
 import AccounSetting from './userprofile/AccountSetting.jsx';
 import Account from './userprofile/Account.jsx';
+import PostingCar from '../postingCarInfoPage/index.jsx'
+import { Button } from 'antd';
 
 const ProfilePage = () => {
 
-    const {activepage} = useParams()
+    const { activepage } = useParams()
 
     // alert(activepage)
     return (
-        
+
         <div className='profile'>
             <div className='heading'>
                 <img className='bannerimg' src={slider} alt="" />
@@ -24,10 +26,10 @@ const ProfilePage = () => {
             {/* UserProfile , showing {activepage}  */}
             <div className="profilein">
                 <div className="left">
-                    <UserSidebar activepage={activepage}/>
+                    <UserSidebar activepage={activepage} />
                 </div>
                 <div className="right">
-                    {activepage === 'account' && <Account/>}
+                    {activepage === 'account' && <Account />}
                     {activepage === 'accountsetting' && <AccounSetting />}
                 </div>
             </div>
