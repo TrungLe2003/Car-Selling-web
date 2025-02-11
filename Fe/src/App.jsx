@@ -30,6 +30,8 @@ import NewsCategory from "./components/newsPage/newsCategory";
 // import PageWithCarByBrand from "./components/categoryPage/PageWithCarByBrand";
 import CarDetailPage from "./components/carPage";
 import PostingCarInfoPage from "./components/postingCarInfoPage";
+import ProviderPage from "./components/providerPage";
+import PostManage from "./components/providerPage/postManage";
 import SearchPage from "./components/searchPage";
 //
 import "./App.css";
@@ -52,6 +54,9 @@ function App() {
               <Route path="addNews" element={<AddNews />} />
             </Route>
             <Route path="comments" element={<AdminComments />} />
+          </Route>
+          <Route path="/provider/:idUser" element={<ProviderPage />}>
+            <Route path="postmanage" element={<PostManage />}></Route>
           </Route>
           <Route path="/car/:idCar" element={<CarDetailPage />} />
           <Route path="/postingCar" element={<PostingCarInfoPage />} />

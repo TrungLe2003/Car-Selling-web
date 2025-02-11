@@ -13,6 +13,7 @@ const upload = multer({
 });
 //
 import UserModel from "../models/UserModel.js";
+import CarModel from "../models/CarModel.js";
 
 const UserController = {
   register: async (req, res) => {
@@ -186,7 +187,9 @@ const UserController = {
         if (dateOfBirth) {
           crrUser.dateOfBirth = dateOfBirth;
         }
-        
+        if (role) {
+          crrUser.role = role;
+        }
 
         await crrUser.save();
 
@@ -201,7 +204,7 @@ const UserController = {
         })
       }
     }
-  ]
+  ],
 };
 
 export default UserController;

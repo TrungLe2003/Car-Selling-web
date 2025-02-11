@@ -6,43 +6,41 @@ import SittingChairIcon from "../../../icons/CarFrame/SittingChair";
 import WheelIcon from "../../../icons/CarFrame/Wheelcon";
 //css
 import "./style.css";
-const CarFrame1 = () => {
+const CarFrame1 = ({ car }) => {
   return (
     //viết tên loằng ngoằng để không trùng cái đã có
     <div className="CarFrameComponent1">
       <div className="carImg">
-        <img src="./public/imgs/carDetailPage/carDetail1.png" alt="" />
+        <img src={car.carImg[0]} alt={car.carName} />
       </div>
       <div className="carInfo">
-        <div className="state">Mới</div>
-        <div className="nameCar">Mitsubishi Xpander 1.5 AT Premium 2022</div>
+        <div className="nameCar">{car.carName}</div>
         <div className="Price">
-          VNĐ: <span>100.000</span>
+          VNĐ: <span>{car.carPrice.toLocaleString()}</span>
         </div>
         <div className="BrandAndCountry">
-          Mitsubishi, <span>Nhật Bản</span>
+          {car.brand}, <span>{car.origin}</span>
         </div>
         {/* thông số */}
         <div className="parameter">
           <div className="parameterFrame">
             <CalendarIcon></CalendarIcon>
-            <div className="title">2022</div>
+            <div className="title">{car.year}</div>
           </div>
           <div className="parameterFrame">
             <WheelIcon></WheelIcon>
-            <div className="title">Số tự động</div>
+            <div className="title">{car.gearBox}</div>
           </div>
           <div className="parameterFrame">
             <EnergyIcon></EnergyIcon>
-            <div className="title">Xăng</div>
+            <div className="title">{car.power}</div>
           </div>
           <div className="parameterFrame">
             <SittingChairIcon></SittingChairIcon>
-            <div className="title">7</div>
+            <div className="title">{car.sitChairs}</div>
           </div>
         </div>
         <div className="line"></div>
-        <div className="votingStar">Phần đánh giá đang cập nhật</div>
       </div>
     </div>
   );
