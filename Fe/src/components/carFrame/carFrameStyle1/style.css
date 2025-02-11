@@ -1,17 +1,18 @@
 div.CarFrameComponent1 {
-  width: 761px;
-  height: 216px;
-  border: 1px solid black;
+  width: 75%;
+  height: 10%;
+  border: 1px solid rgb(194, 182, 182);
   padding: 10px;
   gap: 20px;
   display: flex;
   flex-direction: row;
+  border-radius: 10px;
 }
 
 /* container1 */
 div.CarFrameComponent1 div.carImg {
-  height: 189px;
-  width: 304px;
+  height: 100%;
+  width: 50%;
 }
 
 div.CarFrameComponent1 div.carImg img {
@@ -23,7 +24,7 @@ div.CarFrameComponent1 div.carImg img {
 div.CarFrameComponent1 div.carInfo {
   display: flex;
   flex-direction: column;
-  justify-content: start;
+  justify-content: space-around;
   gap: 10px;
   width: 100%;
 }
@@ -52,7 +53,6 @@ div.CarFrameComponent1 div.carInfo div.Price span {
 
 div.CarFrameComponent1 div.carInfo div.BrandAndCountry {
   color: rgb(255, 63, 63);
-  font-weight: 600;
   font-size: 16px;
 }
 
@@ -80,6 +80,6 @@ div.CarFrameComponent1 div.carInfo div.parameter div.parameterFrame div.title {
 }
 
 div.CarFrameComponent1 div.carInfo div.line {
-  border: 1px solid black;
+  border: 1px solid rgb(241, 133, 209);
   opacity: 0.8;
 }

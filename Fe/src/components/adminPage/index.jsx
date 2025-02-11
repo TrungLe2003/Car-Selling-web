@@ -66,7 +66,7 @@ const AdminPage = () => {
 
     const navigate = useNavigate();
     const pathname = useLocation().pathname;
-    console.log(pathname);
+    const splitPathname = pathname.split('/');
     return (
         <div className='adminPage'>
             <div className='left'>
@@ -87,19 +87,23 @@ const AdminPage = () => {
                 </h5>
                 <h5
                     onClick={() => navigate('news/all')}
-                    className={pathname === "/admin/news/all" || pathname === "/admin/news/published" || pathname === "/admin/news/draft" || pathname === "/admin/news/addNews" ? activeComponent : component}
+                    className={pathname === "/admin/news/all" || pathname === "/admin/news/published" || pathname === "/admin/news/draft" || pathname === "/admin/news/createNews" || splitPathname[3] === "editNews" ? activeComponent : component}
                     >Bài viết
                 </h5>
-                <div className={pathname === "/admin/news/all" || pathname === "/admin/news/published" || pathname === "/admin/news/draft" || pathname === "/admin/news/addNews" ? activeDiv : div}>
+                <div className={pathname === "/admin/news/all" || pathname === "/admin/news/published" || pathname === "/admin/news/draft" || pathname === "/admin/news/createNews" || splitPathname[3] === "editNews" ? activeDiv : div}>
                     <p 
                         onClick={() => navigate('news/all')}
                         className={pathname === "/admin/news/all" || pathname === "/admin/news/published" || pathname === "/admin/news/draft" ? activeSubComponent : subComponent}
                         >Tất cả bài viết
                     </p>
                     <p 
-                        onClick={() => navigate('news/addNews')}
-                        className={pathname === "/admin/news/addNews" ? activeSubComponent : subComponent}
-                        >Thêm bài viết
+                        onClick={() => navigate('news/createNews')}
+                        className={pathname === "/admin/news/createNews" ? activeSubComponent : subComponent}
+                        >Tạo bài viết mới
+                    </p>
+                    <p 
+                        style={splitPathname[3] === "editNews" ? {display:'block', fontSize:'12px', color:'#FFFFFF', fontWeight:'bold', cursor:'pointer', transition:'all 0.5s ease',} : {display:'none'}}
+                        >Sửa bài viết
                     </p>
                 </div>
                 <h5 

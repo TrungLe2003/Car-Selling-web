@@ -11,8 +11,8 @@ import AdminNews from "./components/adminPage/adminNews";
 import AdminComments from "./components/adminPage/adminComments";
 import TotalNews from "./components/adminPage/adminNews/totalNews";
 import TotalNewsByStatus from './components/adminPage/adminNews/totalNews/byStatus';
-import AddNews from "./components/adminPage/adminNews/addNews";
-import EditNews from "./components/adminPage/adminNews/editNews";
+import CreateNews from "./components/adminPage/adminNews/CreateEdit/createNews";
+import EditNews from "./components/adminPage/adminNews/CreateEdit/editNews";
 import NotFoundPage from "./components/notFoundPage";
 import LoginPage from "./components/loginPage";
 import RegisterPage from "./components/registerPage";
@@ -29,6 +29,8 @@ import NewsByCategory from "./components/newsPage/newsByCategory";
 // import PageWithCarByBrand from "./components/categoryPage/PageWithCarByBrand";
 import CarDetailPage from "./components/carPage";
 import PostingCarInfoPage from "./components/postingCarInfoPage";
+import ProviderPage from "./components/providerPage";
+import PostManage from "./components/providerPage/postManage";
 import SearchPage from "./components/searchPage";
 //
 import "./App.css";
@@ -50,10 +52,13 @@ function App() {
               <Route path="" element={<TotalNews />} >
                 <Route path=":isStatus" element={<TotalNewsByStatus />} />
               </Route>
-              <Route path="addNews" element={<AddNews />} />
-              <Route path="editNews" element={<EditNews />} />
+              <Route path="createNews" element={<CreateNews />} />
+              <Route path="editNews/:id" element={<EditNews />} />
             </Route>
             <Route path="comments" element={<AdminComments />} />
+          </Route>
+          <Route path="/provider/:idUser" element={<ProviderPage />}>
+            <Route path="postmanage" element={<PostManage />}></Route>
           </Route>
           <Route path="/car/:idCar" element={<CarDetailPage />} />
           <Route path="/postingCar" element={<PostingCarInfoPage />} />

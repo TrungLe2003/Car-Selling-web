@@ -12,4 +12,5 @@ UserRouter.post("/login", UserMiddleware.validateLogin, UserController.login);
 UserRouter.get("/:id", UserController.getUser);
 UserRouter.put("/modify/:id", UserController.modifyUser);
 
+
 export default UserRouter;

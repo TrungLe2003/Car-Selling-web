@@ -213,7 +213,11 @@ const CarDetailPage = () => {
                 </div>
                 <div className="row">
                   <div className="title">ODO</div>
-                  <div className="text">{carData.ODO.toLocaleString()}km</div>
+                  <div className="text">
+                    {carData?.ODO
+                      ? carData.ODO.toLocaleString() + " km"
+                      : "Chưa có thông tin"}
+                  </div>
                 </div>
                 <div className="row">
                   <div className="title">Năm sản xuất</div>

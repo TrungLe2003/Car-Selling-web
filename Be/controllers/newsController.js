@@ -21,7 +21,7 @@ const upload = multer({
 import NewsModel from "../models/NewsModel.js";
 
 const newsController = {
-    // Tạo tin mới
+    // Tạo tin tức mới
     createNews: [upload.single('file'), async (req, res) => {
         try {
             const currentUser = req.currentUser;
@@ -34,7 +34,7 @@ const newsController = {
                 public_id: fileName,
                 resource_type: 'auto',
             });
-            const newNews = await NewsModel.create({
+            const createNews = await NewsModel.create({
                 author: currentUser._id,
                 title,
                 subTitle,
@@ -48,13 +48,13 @@ const newsController = {
             if (isStatus === 'published') {
                 res.status(201).send({
                     message: 'Đăng bài viết mới thành công!',
-                    data: newNews,
+                    data: createNews,
                 });
             };
             if (isStatus === 'draft') {
                 res.status(201).send({
                     message: 'Đã lưu bản nháp!',
-                    data: newNews,
+                    data: createNews,
                 });
             };
         } catch (error) {
@@ -64,29 +64,52 @@ const newsController = {
             });
         }
     }],
-    get: async (req, res) => {
+    // Sửa tin tức
+    editNews: [upload.single('file'), async (req, res) => {
         try {
-            const {isCategory, limit} = req.query;
-            const dataLimit = parseInt(limit) || 0;
-            if (isCategory) {
-                const result = await NewsModel.find({
-                    isCategory: isCategory
-                })
-                .limit(dataLimit)
-                .sort({createdAt: -1})
-                .populate('author', 'username avatar');
-                res.status(200).send({
-                    message: 'Lấy thông tin tất cả bài viết theo danh mục thành công!',
-                    data: result,
+            const currentUser = req.currentUser;
+            const {title, subTitle, content, addImg, isCategory, isStatus} = req.body;
+            const {id} = req.params;
+            const file = req.file;
+            if (!file) {
+                const editNews = await NewsModel.findByIdAndUpdate({
+                    _id: id,
+                }, {
+                    author: currentUser._id,
+                    title,
+                    subTitle,
+                    content,
+                    img: addImg,
+                    isCategory,
+                    isStatus,
+                    updatedAt: new Date(),
+                });
+                res.status(201).send({
+                    message: 'Sửa bài viết thành công!',
+                    data: editNews,
                 });
             } else {
-                const result = await NewsModel.find({})
-                .limit(dataLimit)
-                .sort({createdAt: -1})
-                .populate('author', 'username avatar');
-                res.status(200).send({
-                    message: 'Lấy thông tin tất cả bài viết thành công!',
-                    data: result,
+                const dataUrl = `data:${file.mimetype};base64,${file.buffer.toString('base64')}`;
+                const fileName = file.originalname.split('.')[0];
+                const result = await cloudinary.uploader.upload(dataUrl, {
+                    public_id: fileName,
+                    resource_type: 'auto',
+                });
+                const editNews = await NewsModel.findByIdAndUpdate({
+                    _id: id,
+                }, {
+                    author: currentUser._id,
+                    title,
+                    subTitle,
+                    content,
+                    img: result.secure_url,
+                    isCategory,
+                    isStatus,
+                    updatedAt: new Date(),
+                });
+                res.status(201).send({
+                    message: 'Sửa bài viết thành công!',
+                    data: editNews,
                 });
             }
         } catch (error) {
@@ -95,7 +118,7 @@ const newsController = {
                 data: null,
             });
         }
-    },
+    }],
     // Đếm số tin theo trạng thái
     countNews: async (req, res) => {
         try {

@@ -14,9 +14,6 @@ const TotalNews = () => {
     const naviagte = useNavigate();
     const store = useContext(Store);
     const pathname = useLocation().pathname;
-    // const [totalNews, setTotalNews] = useState();
-    // const [publishedNews, setPublishedNews] = useState();
-    // const [draftNews, setDraftNews] = useState();
     const queryCountNews = async () => {
         try {
             const response = await axios.get('http://localhost:8080/api/v1/news/countNews');
