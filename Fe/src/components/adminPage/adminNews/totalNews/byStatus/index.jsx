@@ -72,15 +72,15 @@ const TotalNewsByStatus = () => {
                     'Authorization': `Bearer ${accessToken}`,
                 },
             });
+            const queryCountNews = await axios.get('http://localhost:8080/api/v1/news/countNews');
+            store.setTotalNews(queryCountNews.data.totalNews);
+            store.setPublishedNews(queryCountNews.data.publishedNews);
+            store.setDraftNews(queryCountNews.data.draftNews);
             queryListNews();
-            // const response2 = await axios.get('http://localhost:8080/api/v1/news/countNews');
-            // store.setTotalNews(response.data.totalNews);
-            // store.setPublishedNews(response.data.publishedNews);
-            // store.setDraftNews(response.data.draftNews);
         } catch (error) {
             alert(error.response.data.message);
         }
-    }
+    };
     return (
         <div className='totalNewsTotal'>
             <div className='table'>
@@ -109,7 +109,7 @@ const TotalNewsByStatus = () => {
                                     <p onClick={() => navigate(`/news/details/${news._id}`)}>Xem</p> :
                                     <p onClick={() => navigate(`/news/details/${news._id}`)}>Xem trước</p>
                                 }
-                                <p>Chỉnh sửa</p>
+                                <p onClick={() => navigate(`/admin/news/editNews/${news._id}`)}>Chỉnh sửa</p>
                                 <p onClick={() => handleDelete(news._id)}>Xóa bỏ</p>
                             </div>
                         </div>
