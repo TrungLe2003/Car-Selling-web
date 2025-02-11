@@ -1,4 +1,8 @@
-import { option } from "framer-motion/client";
+import { useState } from "react";
+import axios from "axios";
+import { message } from "antd"; //Thông báo
+
+//
 import "./style.css";
 
 const listBrand = [
@@ -29,24 +33,92 @@ const listYear = [
 
 const listColor = ["Đỏ", "Đen", "Trắng", "Ghi", "Xanh lá", "Xanh dương", "Nâu"];
 
-const EditPostProviderModal = ({ openEditModal }) => {
+const EditPostProviderModal = ({ openEditModal, car }) => {
+  const [carPrice, setCarPrice] = useState(car.carPrice || "");
+  const [brand, setBrand] = useState(car.brand || listBrand[0]);
+  const [color, setColor] = useState(car.color || listColor[0]);
+  const [sitChairs, setSitChairs] = useState(car.sitChairs || "");
+  const [state, setState] = useState(car.state || "Mới");
+  const [ODO, setODO] = useState(car.ODO || "");
+  const [origin, setOrigin] = useState(car.origin || "");
+  const [year, setYear] = useState(car.year || listYear[0]);
+  const [version, setVersion] = useState(car.version || "");
+  const [gearBox, setGearBox] = useState(car.gearBox || "Số tự động");
+  const [driveSystem, setDriveSystem] = useState(car.driveSystem || "");
+  const [torque, setTorque] = useState(car.torque || "");
+  const [engine, setEngine] = useState(car.engine || "");
+  const [horsePower, setHorsePower] = useState(car.horsePower || "");
+  const [power, setPower] = useState(car.power || "Xăng");
+  const [describe, setDescribe] = useState(car.describe || "");
+  //Lấy token
+  const crrUser = localStorage.getItem("currentUser");
+  const userObj = JSON.parse(crrUser); // Chuyển chuỗi JSON thành object
+  const accessToken = userObj.accessToken;
+  const idUser = userObj._id;
+  // Hàm gửi dữ liệu cập nhật lên API
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!carPrice) {
+      message.warning("Giá xe là bắt buộc");
+      return;
+    }
+
+    const updatedCar = {
+      carPrice,
+      brand,
+      color,
+      sitChairs,
+      state,
+      ODO,
+      origin,
+      year,
+      version,
+      gearBox,
+      driveSystem,
+      torque,
+      engine,
+      horsePower,
+      power,
+      describe,
+    };
+
+    try {
+      const response = await axios.put(
+        `http://localhost:8080/api/v1/cars/updatecar/${car._id}`,
+        updatedCar,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      message.success("Cập nhật thành công");
+    } catch (error) {
+      console.error("Lỗi cập nhật xe:", error);
+      message.error(error);
+    }
+  };
+
   return (
     <div className="EditPostProviderModal">
       <div className="modal">
         <div className="EditPostProviderheader">
           <div className="nameCar">
-            <h2>Honda civic đời 2021 viết dài để edit</h2>
+            <h2>{car.carName}</h2>
             <div>(Tên và ảnh xe không thể thay thế)</div>
           </div>
           <div className="closeModal" onClick={openEditModal}>
             X
           </div>
         </div>
-        <form action="" className="editInfoForm">
+        <form action="" className="editInfoForm" onSubmit={handleSubmit}>
           <div className="section1 section">
             <div className="sq">
               <label htmlFor="Price">Giá</label>
               <input
+                value={carPrice}
+                onChange={(e) => setCarPrice(e.target.value)}
                 type="number"
                 id="Price"
                 placeholder="100000000 (100.000.000vnđ)"
@@ -55,7 +127,12 @@ const EditPostProviderModal = ({ openEditModal }) => {
             <div className="sq">
               <label htmlFor="brand">Thương hiệu</label>
 
-              <select name="" id="brand">
+              <select
+                name=""
+                id="brand"
+                value={brand}
+                onChange={(e) => setBrand(e.target.value)}
+              >
                 {listBrand.map((brand, index) => (
                   <option value={brand} key={index}>
                     {brand}
@@ -66,7 +143,12 @@ const EditPostProviderModal = ({ openEditModal }) => {
             <div className="sq">
               <label htmlFor="color">Màu sắc</label>
 
-              <select name="" id="color">
+              <select
+                name=""
+                id="color"
+                value={color}
+                onChange={(e) => setColor(e.target.value)}
+              >
                 {listColor.map((color, index) => (
                   <option value={color} key={index}>
                     {color}
@@ -76,12 +158,23 @@ const EditPostProviderModal = ({ openEditModal }) => {
             </div>
             <div className="sq">
               <label htmlFor="sitChairs">Ghế</label>
-              <input type="number" id="sitChairs" placeholder="Số ghế" />
+              <input
+                type="number"
+                id="sitChairs"
+                placeholder="Số ghế"
+                value={sitChairs}
+                onChange={(e) => setSitChairs(e.target.value)}
+              />
             </div>
             <div className="sq">
               <label htmlFor="state">Trạng thái</label>
 
-              <select name="" id="state">
+              <select
+                name=""
+                id="state"
+                value={state}
+                onChange={(e) => setState(e.target.value)}
+              >
                 {["Cũ", "Mới"].map((state, index) => (
                   <option value={state} key={index}>
                     {state}
@@ -91,15 +184,32 @@ const EditPostProviderModal = ({ openEditModal }) => {
             </div>
             <div className="sq">
               <label htmlFor="ODO">Số Km</label>
-              <input type="number" id="ODO" placeholder="100000 (100.000 Km)" />
+              <input
+                type="number"
+                value={ODO}
+                onChange={(e) => setODO(e.target.value)}
+                id="ODO"
+                placeholder="100000 (100.000 Km)"
+              />
             </div>
             <div className="sq">
               <label htmlFor="origin">Xuất xứ</label>
-              <input type="text" id="origin" placeholder="Nước" />
+              <input
+                type="text"
+                id="origin"
+                placeholder="Nước"
+                value={origin}
+                onChange={(e) => setOrigin(e.target.value)}
+              />
             </div>
             <div className="sq">
               <label htmlFor="year">Năm</label>
-              <select name="" id="year">
+              <select
+                name=""
+                id="year"
+                value={year}
+                onChange={(e) => setYear(e.target.value)}
+              >
                 {listYear.map((y, index) => (
                   <option key={index} value={y}>
                     {y}
@@ -111,7 +221,12 @@ const EditPostProviderModal = ({ openEditModal }) => {
           <div className="section2 section">
             <div className="sq">
               <label htmlFor="gearBox">Hộp số</label>
-              <select name="" id="gearBox">
+              <select
+                name=""
+                id="gearBox"
+                value={gearBox}
+                onChange={(e) => setGearBox(e.target.value)}
+              >
                 {["Số tự động", "Số sàn"].map((y, index) => (
                   <option key={index} value={y}>
                     {y}
@@ -121,28 +236,63 @@ const EditPostProviderModal = ({ openEditModal }) => {
             </div>
             <div className="sq">
               <label htmlFor="driveSystem">Hệ dẫn động</label>
-              <input type="text" id="driveSystem" placeholder="Dẫn động" />
+              <input
+                value={driveSystem}
+                onChange={(e) => setDriveSystem(e.target.value)}
+                type="text"
+                id="driveSystem"
+                placeholder="Dẫn động"
+              />
             </div>
             <div className="sq">
               <label htmlFor="torque">Momen xoắn</label>
-              <input type="text" id="torque" placeholder="Momen" />
+              <input
+                value={torque}
+                onChange={(e) => setTorque(e.target.value)}
+                type="text"
+                id="torque"
+                placeholder="Momen"
+              />
             </div>
             <div className="sq">
               <label htmlFor="engine">Động cơ</label>
-              <input type="text" id="engine" placeholder="Động cơ" />
+              <input
+                value={engine}
+                onChange={(e) => setEngine(e.target.value)}
+                type="text"
+                id="engine"
+                placeholder="Động cơ"
+              />
             </div>
             <div className="sq">
               <label htmlFor="horsePower">Mã lực</label>
-              <input type="text" id="horsePower" placeholder="Mã lực" />
+              <input
+                value={horsePower}
+                onChange={(e) => setHorsePower(e.target.value)}
+                type="text"
+                id="horsePower"
+                placeholder="Mã lực"
+              />
             </div>
             <div className="sq">
               <label htmlFor="power">Năng lượng</label>
-              <input type="text" id="power" placeholder="Nguyên liệu" />
+              <input
+                value={power}
+                onChange={(e) => setPower(e.target.value)}
+                type="text"
+                id="power"
+                placeholder="Nguyên liệu"
+              />
             </div>
           </div>
           <div className="sq describe">
             <label htmlFor="describe">Miêu tả chi tiết</label>
-            <textarea id="describe" placeholder="Viết gì đó"></textarea>
+            <textarea
+              value={describe}
+              onChange={(e) => setDescribe(e.target.value)}
+              id="describe"
+              placeholder="Viết gì đó"
+            ></textarea>
           </div>
           <button type="submit">Gửi</button>
         </form>

@@ -55,7 +55,7 @@ function App() {
             </Route>
             <Route path="comments" element={<AdminComments />} />
           </Route>
-          <Route path="/provider" element={<ProviderPage />}>
+          <Route path="/provider/:idUser" element={<ProviderPage />}>
             <Route path="postmanage" element={<PostManage />}></Route>
           </Route>
           <Route path="/car/:idCar" element={<CarDetailPage />} />

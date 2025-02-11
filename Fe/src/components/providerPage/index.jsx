@@ -12,7 +12,9 @@ const ProviderPage = () => {
           <p>Quản lý tin đăng bán và đơn hàng</p>
         </div>
         <div className="section2">
-          <div className="sq sq1">Tin đăng bán</div>
+          <div className="sq sq1" onClick={() => nav("postmanage")}>
+            Tin đăng bán
+          </div>
           <div className="sq sq2">Đơn của khách </div>
           <div className="sq sq3" onClick={() => nav("/postingCar")}>
             Đăng bán xe

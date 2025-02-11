@@ -63,7 +63,7 @@ const PostingCarInfoPage = () => {
   const crrUser = localStorage.getItem("currentUser");
   const userObj = JSON.parse(crrUser); // Chuyển chuỗi JSON thành object
   const accessToken = userObj.accessToken;
-
+  const idUser = userObj._id;
   //Hàm thay đổi file ảnh
   const handleFileChange = (e) => {
     const files = Array.from(e.target.files);
@@ -142,7 +142,7 @@ const PostingCarInfoPage = () => {
     <div className="PostingCarInfoPage">
       <div
         className="returnProviderManagePage"
-        onClick={() => nav("/provider/postmanage")}
+        onClick={() => nav(`/provider/${idUser}/postmanage`)}
       >
         {" "}
         <LogoutIcon></LogoutIcon> Quay lại trang quản lý{" "}
