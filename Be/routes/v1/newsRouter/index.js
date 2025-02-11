@@ -4,6 +4,7 @@ import newsController from "../../../controllers/newsController.js";
 const NewsRouter = Router();
 
 NewsRouter.post("/create-news", middlewares.verifyAccessToken, newsController.createNews); // Tạo tin tức mới
+NewsRouter.put("/edit-news/:id", middlewares.verifyAccessToken, newsController.editNews); // Sửa tin tức
 NewsRouter.get("/the3LatestNewsPerCategory", newsController.getThe3LatestNewsPerCategory); // 3 tin mới nhất mỗi danh mục, hiển thị ở NewsPage - Overview
 NewsRouter.get("/publishedByCategory", newsController.getAllNewsPublishedByCategory); // Đã xuất bản, hiển thị ở NewsPage - Category
 NewsRouter.get("/countNews", newsController.countNews); // Đếm số tin

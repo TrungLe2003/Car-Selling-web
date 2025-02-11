@@ -31,7 +31,7 @@ const Header = () => {
         const userResponse = await axios.get(
           `http://localhost:8080/api/v1/users/${store.currentUser._id}`
         );
-        console.log(userResponse);
+        // console.log(userResponse);
         setUserData(userResponse.data.data);
       } catch (error) {
         console.error("Error fetching user data:", error.message);
