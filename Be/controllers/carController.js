@@ -210,6 +210,71 @@ const CarController = {
       });
     }
   },
+  ///lấy tất cả xe của user qua id
+  listUserCar: async (req, res) => {
+    try {
+      const { idProvider } = req.params;
+      const cars = await CarModel.find({ idProvider });
+      res.status(200).send({
+        message: "Successful",
+        data: cars,
+      });
+    } catch (error) {
+      res.status(500).send({
+        message: error.message,
+        data: null
+      })
+    }
+  },
+
+  ////api sửa thông tin của xe
+  updatedCar: [
+    uploadImgCar,
+    async (req, res) => {
+      try {
+        const { idCar } = req.params;
+        ////Tải lên Cloudinary và lấy URL
+        const files = req.files;
+        if (!files || files.length === 0) {
+          return res
+            .status(400)
+            .send({ message: "Chưa có file ảnh nào được tải lên" });
+        }
+
+        ////Duyệt qua tất cả các ảnh và tải lên Cloudinary
+        const imageUrls = await Promise.all(files.map(uploadToCloudinary));
+        const { carName, carPrice, carImg, color, version, ODO, year, origin, gearBox, driveSystem, torque, engine, horsePower, power, brand, describe, state, sitChairs } = req.body;
+        const updatedCar = await CarModel.findByIdAndUpdate(idCar, { carName, carPrice, carImg: imageUrls, color, version, ODO, year, origin, gearBox, driveSystem, torque, engine, horsePower, power, brand, describe, state, sitChairs });
+        res.status(201).send({
+          message: 'Update successful!',
+          data: updatedCar
+        })
+      } catch (error) {
+        res.status(500).send({
+          message: error.message,
+          data: null
+        })
+      }
+
+    }
+  ],
+  /////api xoá xe 
+  deleteCar: async (req, res) => {
+    try {
+      const {idCar} = req.params;
+      const deleteCar = await CarModel.findByIdAndDelete(idCar);
+      res.status(201).send({
+        message: 'Delete successful!',
+        data: deleteCar
+      })
+    } catch (error) {
+      res.status(500).send({
+        message: error.message,
+      })
+    }
+  }
+    
+
 };
 
 export default CarController;

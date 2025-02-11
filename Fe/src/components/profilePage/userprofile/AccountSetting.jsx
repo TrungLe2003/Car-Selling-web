@@ -160,6 +160,7 @@ const AccountSetting = () => {
 
           <Col span={24}>
             <Upload
+              className='avatar'
               listType="picture-circle"
               fileList={fileList}
               onPreview={handlePreview}

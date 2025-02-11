@@ -19,5 +19,11 @@ CarRouter.get("", CarController.getListCar);
 CarRouter.get("/brand", CarController.findCarsByBrand);
 //api tìm kiếm xe bằng tên
 CarRouter.get("/search", CarController.searchingCar);
+//// lấy tất cả xe của user qua id
+CarRouter.get("/:idProvider", CarController.listUserCar);
+////sửa thông tin của xe
+CarRouter.put("/updatecar/:idCar", UserMiddleware.checkProviderOrAdmin, CarController.updatedCar);
+///xoá xe
+CarRouter.delete("/deletecar/:idCar", UserMiddleware.checkProviderOrAdmin, CarController.deleteCar);
 
 export default CarRouter;
