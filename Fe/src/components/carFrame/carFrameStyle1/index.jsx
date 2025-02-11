@@ -11,10 +11,9 @@ const CarFrame1 = () => {
     //viết tên loằng ngoằng để không trùng cái đã có
     <div className="CarFrameComponent1">
       <div className="carImg">
-        <img src="./public/imgs/carDetailPage/carDetail1.png" alt="" />
+        <img src="../public/imgs/carDetailPage/carDetail1.png" alt="" />
       </div>
       <div className="carInfo">
-        <div className="state">Mới</div>
         <div className="nameCar">Mitsubishi Xpander 1.5 AT Premium 2022</div>
         <div className="Price">
           VNĐ: <span>100.000</span>
@@ -42,7 +41,6 @@ const CarFrame1 = () => {
           </div>
         </div>
         <div className="line"></div>
-        <div className="votingStar">Phần đánh giá đang cập nhật</div>
       </div>
     </div>
   );
