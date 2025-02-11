@@ -11,7 +11,12 @@ cloudinary.config({
   api_secret: "KWRTFbpOnBzDtbcx7xsipZUnVKM",
 });
 const storage = multer.memoryStorage();
-const upload = multer({ storage: storage });
+const upload = multer({
+    storage: storage,
+    limits: {
+        fieldNameSize: 1024
+    }
+});
 //
 import NewsModel from "../models/NewsModel.js";
 
@@ -19,7 +24,7 @@ const newsController = {
     createNews: [upload.single('file'), async (req, res) => {
         try {
             const currentUser = req.currentUser;
-            const {title, content, isCategory} = req.body;
+            const {title, content, isCategory, isStatus} = req.body;
             const file = req.file;
             if (!file) throw new Error('Chưa lựa chọn ảnh!');
             const dataUrl = `data:${file.mimetype};base64,${file.buffer.toString('base64')}`;
@@ -34,13 +39,28 @@ const newsController = {
                 content,
                 img: result.secure_url,
                 isCategory,
+                isStatus,
                 createdAt: new Date(),
                 updatedAt: new Date(),
             });
-            res.status(201).send({
-                message: 'Đăng bài viết mới thành công!',
-                data: newNews,
-            });
+            if (isStatus === 'Đã xuất bản') {
+                res.status(201).send({
+                    message: 'Đăng bài viết mới thành công!',
+                    data: newNews,
+                });
+            };
+            if (isStatus === 'Bản nháp') {
+                res.status(201).send({
+                    message: 'Đã lưu bản nháp!',
+                    data: newNews,
+                });
+            };
+            if (isStatus === 'Thùng rác') {
+                res.status(201).send({
+                    message: 'Đã bỏ vào thùng rác!',
+                    data: newNews,
+                });
+            };
         } catch (error) {
             res.status(403).send({
                 message: error.message,
@@ -50,23 +70,64 @@ const newsController = {
     }],
     getAllNews: async (req, res) => {
         try {
-            const result = await NewsModel.find({})
-            .populate('author');
-            const allNews = result.map(news => ({
-                _id: news._id,
-                author: news.author.username,
-                title: news.title,
-                content: news.content,
-                img: news.img,
-                isCategory: news.isCategory,
-                isStatus: news.isStatus,
-                createdAt: news.createdAt,
-                updatedAt: news.updatedAt,
-            }));
-            res.status(200).send({
-                message: 'Lấy thông tin tất cả bài viết thành công!',
-                data: allNews,
+            const {isCategory, limit} = req.query;
+            const dataLimit = parseInt(limit) || 0;
+            if (isCategory) {
+                const result = await NewsModel.find({
+                    isCategory: isCategory
+                })
+                .limit(dataLimit)
+                .sort({createdAt: -1})
+                .populate('author', 'username avatar');
+                res.status(200).send({
+                    message: 'Lấy thông tin tất cả bài viết theo danh mục thành công!',
+                    data: result,
+                });
+            } else {
+                const result = await NewsModel.find({})
+                .limit(dataLimit)
+                .sort({createdAt: -1})
+                .populate('author', 'username avatar');
+                res.status(200).send({
+                    message: 'Lấy thông tin tất cả bài viết thành công!',
+                    data: result,
+                });
+            }
+        } catch (error) {
+            res.status(403).send({
+                message: error.message,
+                data: null,
             });
+        }
+    },
+    getAllNewsPublished: async (req, res) => {
+        try {
+            const {isCategory, limit} = req.query;
+            const dataLimit = parseInt(limit) || 0;
+            if (isCategory) {
+                const result = await NewsModel.find({
+                    isCategory: isCategory,
+                    isStatus: 'Đã xuất bản'
+                })
+                .limit(dataLimit)
+                .sort({createdAt: -1})
+                .populate('author', 'username avatar');
+                res.status(200).send({
+                    message: 'Lấy thông tin tất cả bài viết theo danh mục thành công!',
+                    data: result,
+                });
+            } else {
+                const result = await NewsModel.find({
+                    isStatus: 'Đã xuất bản'
+                })
+                .limit(dataLimit)
+                .sort({createdAt: -1})
+                .populate('author', 'username avatar');
+                res.status(200).send({
+                    message: 'Lấy thông tin tất cả bài viết thành công!',
+                    data: result,
+                });
+            }
         } catch (error) {
             res.status(403).send({
                 message: error.message,
@@ -76,24 +137,12 @@ const newsController = {
     },
     getNewsById: async (req, res) => {
         try {
-            const {id} = req.params
+            const {id} = req.params;
             const result = await NewsModel.findById(id)
-            .populate('author');
-            const news = {
-                _id: result._id,
-                avatarAuthor: result.author.avatar,
-                usernameAuthor: result.author.username,
-                title: result.title,
-                content: result.content,
-                img: result.img,
-                isCategory: result.isCategory,
-                isStatus: result.isStatus,
-                createdAt: result.createdAt,
-                updatedAt: result.updatedAt,
-            };
+            .populate('author', 'username avatar');
             res.status(200).send({
                 message: 'Lấy thông tin bài viết thành công!',
-                data: news,
+                data: result,
             });
         } catch (error) {
             res.status(403).send({
@@ -101,7 +150,7 @@ const newsController = {
                 data: null,
             });
         }
-    }
+    },
 }
 
 export default newsController

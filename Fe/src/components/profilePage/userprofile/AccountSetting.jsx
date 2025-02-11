@@ -5,6 +5,8 @@ import { PlusOutlined } from '@ant-design/icons';
 import { Image, Upload, Button, Col, DatePicker, Form, Input, Row, Select, message } from 'antd';
 import axios from 'axios';
 import { Store } from '../../../Store';
+import dayjs from "dayjs";
+import moment from 'moment';
 
 const { Option } = Select;
 
@@ -51,8 +53,8 @@ const AccountSetting = () => {
     }));
   };
 
-    const accessToken = store.currentUser.accessToken;
-    
+  const accessToken = store.currentUser.accessToken;
+
 
   const ModifyUserData = async () => {
     if (!fileList.length) {
@@ -66,20 +68,20 @@ const AccountSetting = () => {
         avatar: fileList[0].originFileObj,
       };
 
-        
+
 
       await axios.put(
-          `http://localhost:8080/api/v1/users/modify/${store.currentUser._id}`,updatedData, {
-          headers: {
-              'Authorization': `Bearer ${accessToken}`,
-              "Content-type": "multipart/form-data",
-          },
-          }
+        `http://localhost:8080/api/v1/users/modify/${store.currentUser._id}`, updatedData, {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+          "Content-type": "multipart/form-data",
+        },
+      }
       );
 
       message.success("User data updated successfully!");
     } catch (error) {
-    console.log(error.message);
+      console.log(error.message);
       message.error("Failed to update user data.");
     }
   };
@@ -146,14 +148,19 @@ const AccountSetting = () => {
               label="Date of Birth"
               rules={[{ required: true, message: 'Please select date of birth' }]}
             >
-              <DatePicker onChange={(date) => onChange('dateOfBirth', date)} />
+              <DatePicker onChange={(date) => onChange('dateOfBirth', date)} disabledDate={(current) => {
+                return (
+                  moment().add(-20, "years") <= current
+                );
+              }} />
             </Form.Item>
           </Col>
 
-          
+
 
           <Col span={24}>
             <Upload
+              className='avatar'
               listType="picture-circle"
               fileList={fileList}
               onPreview={handlePreview}
@@ -174,7 +181,7 @@ const AccountSetting = () => {
           </Col>
 
           <Form.Item wrapperCol={{ offset: 6, span: 16 }}>
-            <Button type="primary" onClick={ModifyUserData} > 
+            <Button type="primary" onClick={ModifyUserData} >
               Submit
             </Button>
           </Form.Item>

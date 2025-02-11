@@ -1,6 +1,6 @@
 //library
-import { useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { React, useEffect, useState, useContext } from 'react';
+import { useNavigate, useParams } from "react-router-dom";
 // store
 import { Store } from "../../Store";
 // imgs
@@ -11,14 +11,35 @@ import ProfileIcon from "../../icons/header/ProfileIcon";
 import LogoutIcon from "../../icons/header/LogoutIcon";
 //
 import "./style.css";
-    
+
+import axios from 'axios';
+
+
 const Header = () => {
-const navigate = useNavigate();
+  const navigate = useNavigate();
   const store = useContext(Store);
   const handleClick = () => {
     store.setCurrentUser(null);
     navigate("/");
   };
+
+  const { userId } = useParams();
+  const [userData, setUserData] = useState(null);
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const userResponse = await axios.get(
+          `http://localhost:8080/api/v1/users/${store.currentUser._id}`
+        );
+        console.log(userResponse);
+        setUserData(userResponse.data.data);
+      } catch (error) {
+        console.error("Error fetching user data:", error.message);
+      }
+    };
+    fetchUserData();
+  }, [userId]);
+
   return (
     <div className="header">
       {store.currentUser && store.currentUser.role === "ADMIN" ? (
@@ -61,7 +82,7 @@ const navigate = useNavigate();
           />
         </div>
         <div className="gr2">
-          <h5 onClick={() => navigate("/cars/all")}>Sản phẩm</h5>
+          <h5 onClick={() => navigate("/allCars")}>Sản phẩm</h5>
           <h5 onClick={() => navigate("/news")}>Tin tức</h5>
           <h5 onClick={() => navigate("/contact")}>Liên hệ</h5>
           <h5 onClick={() => navigate("/introduce")}>Giới thiệu</h5>
@@ -83,10 +104,15 @@ const navigate = useNavigate();
                   <h5>{store.currentUser.username}</h5>
                   <i>{store.currentUser.role}</i>
                 </div>
-                <img src={store.currentUser.avatar} alt="" />
+                <img src={userData?.avatar ? userData?.avatar : store.currentUser.avatar} class="avatar-img" alt="" />
               </div>
               <div className="dropdown">
-                <div className='grProfile' onClick={() => navigate('/profile/account/' + store.currentUser._id)}>
+                <div
+                  className="grProfile"
+                  onClick={() =>
+                    navigate("/profile/account/" + store.currentUser._id)
+                  }
+                >
                   <p className="profileIcon">
                     <ProfileIcon />
                   </p>
