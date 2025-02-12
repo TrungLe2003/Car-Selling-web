@@ -13,7 +13,7 @@ import './style.css';
 const div = 'div'
 const activeDiv = 'activeDiv div'
 
-const TotalNews = () => {
+const ListNews = () => {
     const navigate = useNavigate();
     const store = useContext(Store);
     const accessToken = store.currentUser.accessToken;
@@ -105,7 +105,7 @@ const TotalNews = () => {
         }
     };
     return (
-        <div className='totalNews'>
+        <div className='listNews'>
             <h3>Bài viết</h3>
             <div className='newsFilter'>
                 <div className={pathname === '/admin/news/all' ? activeDiv : div} onClick={() => navigate('/admin/news/all')}>
@@ -123,7 +123,7 @@ const TotalNews = () => {
                     <p>({draftNews ? draftNews : 0})</p>
                 </div>
             </div>
-            <div className='totalNewsTotal'>
+            <div className='displayTable'>
                 <div className='table'>
                     <div className='thead'>
                         <p className='theadTitle'>Tiêu đề</p>
@@ -176,4 +176,4 @@ const TotalNews = () => {
     )
 }
 
-export default TotalNews
+export default ListNews
