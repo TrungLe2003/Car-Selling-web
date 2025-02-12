@@ -83,10 +83,7 @@ const NewsDetailPage = () => {
                     <div className='oldComment'>
                         <div className='title'>
                             <CommentIcon/>
-                            {listComments.length !== 0 ?
-                            <h5>{listComments.length} Comments</h5> :
-                            <h5>0 Comment</h5>
-                            }
+                            <h5>{listComments.length} Bình luận</h5>
                         </div>
                         <div className='listOldComment'>
                             {listComments.map((comment) => {
@@ -104,7 +101,7 @@ const NewsDetailPage = () => {
                         </div>
                     </div>
                     <div className='newComment'>
-                        <h5>Comment</h5>
+                        <h5>Viết bình luận</h5>
                         <textarea name="" id="" placeholder='Hãy viết bình luận' value={content} onChange={(e) => setContent(e.target.value)}></textarea>
                         <div className='grButton'>
                             <button onClick={handleSubmit}>Gửi</button>

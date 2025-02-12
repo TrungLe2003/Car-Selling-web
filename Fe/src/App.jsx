@@ -10,7 +10,7 @@ import AdminCars from "./components/adminPage/adminCars";
 import AdminNews from "./components/adminPage/adminNews";
 import AdminComments from "./components/adminPage/adminComments";
 import TotalNews from "./components/adminPage/adminNews/totalNews";
-import TotalNewsByStatus from './components/adminPage/adminNews/totalNews/byStatus';
+// import TotalNewsByStatus from './components/adminPage/adminNews/totalNews/byStatus';
 import CreateNews from "./components/adminPage/adminNews/CreateEdit/createNews";
 import EditNews from "./components/adminPage/adminNews/CreateEdit/editNews";
 import NotFoundPage from "./components/notFoundPage";
@@ -49,9 +49,9 @@ function App() {
             <Route path="users" element={<AdminUsers />} />
             <Route path="cars" element={<AdminCars />} />
             <Route path="news" element={<AdminNews />}>
-              <Route path="" element={<TotalNews />} >
-                <Route path=":isStatus" element={<TotalNewsByStatus />} />
-              </Route>
+              <Route path=":isStatus" element={<TotalNews />} />
+                {/* <Route path=":isStatus" element={<TotalNewsByStatus />} />
+              </Route> */}
               <Route path="createNews" element={<CreateNews />} />
               <Route path="editNews/:id" element={<EditNews />} />
             </Route>
