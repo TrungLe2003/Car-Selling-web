@@ -1,5 +1,4 @@
 import CommentModel from "../models/CommentModel.js";
-import UserModel from "../models/UserModel.js";
 
 const commentController = {
     // Tạo bình luận
