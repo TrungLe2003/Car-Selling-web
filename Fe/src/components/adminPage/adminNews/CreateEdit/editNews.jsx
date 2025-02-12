@@ -54,7 +54,6 @@ const EditNews = () => {
             setIsCategory(news.isCategory)
             setIsStatus(news.isStatus)
             setAddImg(news.img)
-            setFile(news.img)
             setValue(`<p><strong>${news.subTitle}</strong></p><p><br /></p>${news.content}`)
         } catch (error) {
             alert(error.response.data.message);
@@ -63,8 +62,6 @@ const EditNews = () => {
     useEffect(() => {
         queryNews()
     }, [])
-    console.log(file);
-    
     // submit
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -134,7 +131,7 @@ const EditNews = () => {
                     </div>
                 </div>
                 <div className='right'>
-                    <h5>Xuất bản</h5>
+                    <h5>Lưu thay đổi</h5>
                     <div className='grButton'>
                         <button type='submit' onMouseEnter={() => setIsStatus('published')} onClick={handleSubmit}>Xuất bản</button>
                         <button type='submit' onMouseEnter={() => setIsStatus('draft')} onClick={handleSubmit}>Lưu nháp</button>

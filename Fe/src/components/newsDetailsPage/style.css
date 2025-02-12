@@ -156,7 +156,7 @@
 
 .newsDetailsPage .right .listSameCategory .item {
     width: 350px;
-    height: 120px;
+    height: 130px;
     display: flex;
     align-items: center;
     padding-top: 20px;
@@ -184,7 +184,7 @@
 
 .newsDetailsPage .right .listSameCategory .item .rightItem .background {
     width: 5px;
-    height: 100px;
+    height: 110px;
     background-color: #3772FF;
     position: absolute;
     left: 0;

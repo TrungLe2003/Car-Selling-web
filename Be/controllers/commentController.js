@@ -1,11 +1,11 @@
 import CommentModel from "../models/CommentModel.js";
-import UserModel from "../models/UserModel.js";
 
 const commentController = {
+    // Tạo bình luận
     createComment: async (req, res) => {
         try {
             const currentUser = req.currentUser;
-            const {newsId, userId, content} = req.body;
+            const {newsId, content} = req.body;
             const newComment = await CommentModel.create({
                 user: currentUser._id,
                 news: newsId,
@@ -24,6 +24,7 @@ const commentController = {
             });
         }
     },
+    // Lấy tất cả bình luận
     getAllComment: async (req, res) => {
         try {
             const {limit} = req.query;
@@ -43,9 +44,10 @@ const commentController = {
             });
         }
     },
+    // Lấy tất cả bình luận theo tin
     getCommentByNewsId: async (req, res) => {
         try {
-            const {limit, newsId} = req.query;            
+            const {limit, newsId} = req.query;
             const dataLimit = parseInt(limit) || 0;
             const result = await CommentModel.find({news: newsId})
             .limit(dataLimit)
