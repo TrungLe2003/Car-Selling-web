@@ -119,7 +119,7 @@ const newsController = {
             });
         }
     }],
-    // Đếm số tin theo trạng thái
+    // Đếm tất cả tin và theo trạng thái
     countNews: async (req, res) => {
         try {
             const totalNews = await NewsModel.find({}, '-content')

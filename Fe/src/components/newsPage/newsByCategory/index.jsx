@@ -31,7 +31,9 @@ const NewsByCategory = () => {
     }, [currentPage]);
     useEffect(() => {
         setCurrentPage(1);
-        queryNewsByCategory();
+        if (currentPage === 1) {
+            queryNewsByCategory();
+        }
     }, [isCategory]);
     const handlePageChange = (newPage) => {
         if (newPage >= 1 && newPage <= totalPages) {
