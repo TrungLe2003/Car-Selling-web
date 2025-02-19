@@ -22,6 +22,11 @@ const ListCommentsByNews = () => {
     };
     const pathname = useLocation().pathname;
     const splitPathname = pathname.split('/');
+    // màn hình hiển thị ở đầu trang khi mở trang lên, thiết lập thanh cuộn trên đầu trang
+    const location = useLocation();
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, [location]);
     // queryCountComments
     const [totalComments, setTotalComments] = useState();
     const [approvedComments, setApprovedComments] = useState();

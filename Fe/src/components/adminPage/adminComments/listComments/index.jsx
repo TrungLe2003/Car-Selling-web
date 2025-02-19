@@ -21,6 +21,11 @@ const ListComments = () => {
         accessToken = store.currentUser.accessToken
     };
     const pathname = useLocation().pathname;
+    // màn hình hiển thị ở đầu trang khi mở trang lên, thiết lập thanh cuộn trên đầu trang
+    const location = useLocation();
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, [location]);
     // queryCountComments
     const [totalComments, setTotalComments] = useState();
     const [approvedComments, setApprovedComments] = useState();
