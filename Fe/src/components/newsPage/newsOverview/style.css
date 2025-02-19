@@ -4,11 +4,11 @@
     padding: 25px 200px;
 }
 
-.newsOverview .grListNews {
+.newsOverview .grListNewsByCategory {
     margin: 50px 0;
 }
 
-.newsOverview .grListNews .listNews {
+.newsOverview .grListNewsByCategory .listNewsByCategory {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(2, 1fr);
@@ -16,16 +16,16 @@
     grid-row-gap: 5px;
     margin-top: 10px;
 }
-.newsOverview .grListNews .listNews .news1 { grid-area: 1 / 1 / 3 / 3; }
-.newsOverview .grListNews .listNews .news2 { grid-area: 1 / 3 / 2 / 4; }
-.newsOverview .grListNews .listNews .news3 { grid-area: 2 / 3 / 3 / 4; }
+.newsOverview .grListNewsByCategory .listNewsByCategory .news1 { grid-area: 1 / 1 / 3 / 3; }
+.newsOverview .grListNewsByCategory .listNewsByCategory .news2 { grid-area: 1 / 3 / 2 / 4; }
+.newsOverview .grListNewsByCategory .listNewsByCategory .news3 { grid-area: 2 / 3 / 3 / 4; }
 
-.newsOverview .grListNews .listNews .news {
+.newsOverview .grListNewsByCategory .listNewsByCategory .news {
     cursor: pointer;
     position: relative;
 }
 
-.newsOverview .grListNews .listNews .news img {
+.newsOverview .grListNewsByCategory .listNewsByCategory .news img {
     width: 100%;
     height: 100%;
     aspect-ratio: 2 / 1;
@@ -34,7 +34,7 @@
     transition: all 0.5s ease;
 }
 
-.newsOverview .grListNews .listNews .news .content {
+.newsOverview .grListNewsByCategory .listNewsByCategory .news .content {
     width: 100%;
     position: absolute;
     bottom: 0;
@@ -47,29 +47,29 @@
     background: linear-gradient(#00000000 0%, #000000 100%);
 }
 
-.newsOverview .grListNews .listNews .news .content h4 {
+.newsOverview .grListNewsByCategory .listNewsByCategory .news .content h4 {
     color: #FFFFFF;
     transition: all 0.5s ease;
 }
 
-.newsOverview .grListNews .listNews .news .content .row {
+.newsOverview .grListNewsByCategory .listNewsByCategory .news .content .row {
     display: flex;
     align-items: center;
     gap: 5px;
 }
 
-.newsOverview .grListNews .listNews .news .content .row h5 {
+.newsOverview .grListNewsByCategory .listNewsByCategory .news .content .row h5 {
     color: #EC7723;
 }
 
-.newsOverview .grListNews .listNews .news .content .row p {
+.newsOverview .grListNewsByCategory .listNewsByCategory .news .content .row p {
     color: #888888;
 }
 
-.newsOverview .grListNews .listNews .news:hover img {
+.newsOverview .grListNewsByCategory .listNewsByCategory .news:hover img {
     opacity: 1;
 }
 
-.newsOverview .grListNews .listNews .news:hover h4 {
+.newsOverview .grListNewsByCategory .listNewsByCategory .news:hover h4 {
     color: #EC7723;
 }

@@ -64,7 +64,7 @@ const newsController = {
             });
         }
     }],
-    // Sửa tin tức
+    // Chỉnh sửa tin tức
     editNews: [upload.single('file'), async (req, res) => {
         try {
             const currentUser = req.currentUser;
@@ -119,14 +119,14 @@ const newsController = {
             });
         }
     }],
-    // Đếm tất cả tin và theo trạng thái
+    // Đếm tất cả tin theo trạng thái
     countNews: async (req, res) => {
         try {
-            const totalNews = await NewsModel.find({}, '-content')
-            const publishedNews = await NewsModel.find({isStatus: 'published'}, '-content')
-            const draftNews = await NewsModel.find({isStatus: 'draft'}, '-content')
+            const totalNews = await NewsModel.find({}, '-content');
+            const publishedNews = await NewsModel.find({isStatus: 'published'}, '-content');
+            const draftNews = await NewsModel.find({isStatus: 'draft'}, '-content');
             res.status(200).send({
-                message: 'Lấy thông tin tất cả bài viết thành công!',
+                message: 'Đếm tin tức thành công!',
                 totalNews: totalNews.length,
                 publishedNews: publishedNews.length,
                 draftNews: draftNews.length,
@@ -138,7 +138,7 @@ const newsController = {
             });
         }
     },
-    // Lấy tất cả tin hoặc tin theo trạng thái
+    // Lấy tất cả tin theo trạng thái
     getAllNews: async (req, res) => {
         try {
             const {limit, currentPage, isStatus} = req.query;
@@ -146,7 +146,7 @@ const newsController = {
             const pageNumber = parseInt(currentPage) || 1;
             const skip = (pageNumber - 1) * dataLimit;
             if (isStatus === 'all') {
-                const totalNews = await NewsModel.find({}, '-content')
+                const totalNews = await NewsModel.find({}, '-content');
                 const result = await NewsModel.find({}, '-content')
                 .skip(skip)
                 .limit(dataLimit)
@@ -160,7 +160,7 @@ const newsController = {
             } else {
                 const totalNews = await NewsModel.find({
                     isStatus: isStatus
-                }, '-content')
+                }, '-content');
                 const result = await NewsModel.find({
                     isStatus: isStatus
                 }, '-content')
@@ -170,6 +170,83 @@ const newsController = {
                 .populate('author', 'username avatar');
                 res.status(200).send({
                     message: 'Lấy thông tin tất cả bài viết theo trạng thái thành công!',
+                    data: result,
+                    totalPages: Math.ceil(totalNews.length / dataLimit),
+                });
+            }
+        } catch (error) {
+            res.status(403).send({
+                message: error.message,
+                data: null,
+            });
+        }
+    },
+    // Đếm tất cả tin theo trạng thái theo danh mục
+    countNewsByCategory: async (req, res) => {
+        try {
+            const {isCategory} = req.params;
+            const totalNews = await NewsModel.find({
+                isCategory: isCategory,
+            }, '-content');
+            const publishedNews = await NewsModel.find({
+                isStatus: 'published',
+                isCategory: isCategory,
+            }, '-content');
+            const draftNews = await NewsModel.find({
+                isStatus: 'draft',
+                isCategory: isCategory,
+            }, '-content');
+            res.status(200).send({
+                message: 'Đếm tin tức theo danh mục thành công!',
+                totalNews: totalNews.length,
+                publishedNews: publishedNews.length,
+                draftNews: draftNews.length,
+            });
+        } catch (error) {
+            res.status(403).send({
+                message: error.message,
+                data: null,
+            });
+        }
+    },
+    // Lấy tất cả tin theo trạng thái theo danh mục
+    getNewsByCategory: async (req, res) => {
+        try {
+            const {limit, currentPage, isStatus, isCategory} = req.query;
+            const dataLimit = parseInt(limit);
+            const pageNumber = parseInt(currentPage) || 1;
+            const skip = (pageNumber - 1) * dataLimit;
+            if (isStatus === 'all') {
+                const totalNews = await NewsModel.find({
+                    isCategory: isCategory,
+                }, '-content');
+                const result = await NewsModel.find({
+                    isCategory: isCategory,
+                }, '-content')
+                .skip(skip)
+                .limit(dataLimit)
+                .sort({createdAt: -1})
+                .populate('author', 'username avatar');
+                res.status(200).send({
+                    message: 'Lấy thông tin tất cả bài viết theo danh mục thành công!',
+                    data: result,
+                    totalPages: Math.ceil(totalNews.length / dataLimit),
+                });
+            } else {
+                const totalNews = await NewsModel.find({
+                    isStatus: isStatus,
+                    isCategory: isCategory,
+                }, '-content');
+                const result = await NewsModel.find({
+                    isStatus: isStatus,
+                    isCategory: isCategory,
+                }, '-content')
+                .skip(skip)
+                .limit(dataLimit)
+                .sort({createdAt: -1})
+                .populate('author', 'username avatar');
+                res.status(200).send({
+                    message: 'Lấy thông tin tất cả bài viết theo trạng thái theo danh mục thành công!',
                     data: result,
                     totalPages: Math.ceil(totalNews.length / dataLimit),
                 });
@@ -206,7 +283,7 @@ const newsController = {
         }
     },
     // Lấy tất cả tin đã xuất bản theo danh mục
-    getAllNewsPublishedByCategory: async (req, res) => {
+    getNewsPublishedByCategory: async (req, res) => {
         try {
             const {isCategory, limit, currentPage} = req.query;
             const dataLimit = parseInt(limit) || 4;
@@ -236,7 +313,7 @@ const newsController = {
             });
         }
     },
-    // Lấy tin theo id
+    // Lấy thông tin tin tức theo id
     getNewsById: async (req, res) => {
         try {
             const {id} = req.params;
@@ -267,7 +344,7 @@ const newsController = {
                 data: null,
             });
         }
-    }
+    },
 }
 
 export default newsController

@@ -1,5 +1,5 @@
 import { React, useEffect, useState, useContext } from 'react';
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import './AccountSetting.css';
 import { PlusOutlined } from '@ant-design/icons';
 import { Image, Upload, Button, Col, DatePicker, Form, Input, Row, Select, message } from 'antd';
@@ -19,8 +19,13 @@ const getBase64 = (file) =>
   });
 
 const AccountSetting = () => {
+  const navigate = useNavigate();
   const store = useContext(Store);
-
+  useEffect(() => {
+    if (!store.currentUser) {
+        navigate('/');
+    };
+  }, []);
 
   const [formData, setFormData] = useState({
     address: '',
@@ -53,8 +58,10 @@ const AccountSetting = () => {
     }));
   };
 
-  const accessToken = store.currentUser.accessToken;
-
+  let accessToken;
+  if (store.currentUser) {
+      accessToken = store.currentUser.accessToken
+  };
 
   const ModifyUserData = async () => {
     if (!fileList.length) {

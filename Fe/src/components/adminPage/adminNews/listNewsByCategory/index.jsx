@@ -13,7 +13,7 @@ import './style.css';
 const div = 'div'
 const activeDiv = 'activeDiv div'
 
-const ListNews = () => {
+const ListNewsByCategory = () => {
     const navigate = useNavigate();
     const store = useContext(Store);
     let accessToken;
@@ -21,13 +21,14 @@ const ListNews = () => {
         accessToken = store.currentUser.accessToken
     };
     const pathname = useLocation().pathname;
+    const splitPathname = pathname.split('/');
     // queryCountNews
     const [totalNews, setTotalNews] = useState();
     const [publishedNews, setPublishedNews] = useState();
     const [draftNews, setDraftNews] = useState();
     const queryCountNews = async () => {
         try {
-            const response = await axios.get('http://localhost:8080/api/v1/news/countNews',
+            const response = await axios.get(`http://localhost:8080/api/v1/news/countNewsByCategory/${splitPathname[5]}`,
                 {
                     headers: {
                         'Authorization': `Bearer ${accessToken}`,
@@ -50,9 +51,10 @@ const ListNews = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const [listNews, setListNews] = useState([]);
+    console.log(listNews);
     const queryListNews = async () => {
         try {
-            const response = await axios.get(`http://localhost:8080/api/v1/news?limit=${limit}&currentPage=${currentPage}&isStatus=${isStatus}`,
+            const response = await axios.get(`http://localhost:8080/api/v1/news/newsByCategory?limit=${limit}&currentPage=${currentPage}&isStatus=${isStatus}&isCategory=${splitPathname[5]}`,
                 {
                     headers: {
                         'Authorization': `Bearer ${accessToken}`,
@@ -108,11 +110,12 @@ const ListNews = () => {
     const handleDelete = async (id) => {
         try {
             const response = await axios.delete(`http://localhost:8080/api/v1/news/deleteNewsById/${id}`,
-            {
-                headers: {
-                    'Authorization': `Bearer ${accessToken}`,
-                },
-            });
+                {
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`,
+                    },
+                }
+            );
             queryCountNews();
             queryListNews();
         } catch (error) {
@@ -120,20 +123,23 @@ const ListNews = () => {
         }
     };
     return (
-        <div className='listNews'>
-            <h3>Bài viết</h3>
+        <div className='ListNewsByCategory'>
+            <div className='head'>
+                <h3>Bài viết - Danh mục: {getCategoryName(splitPathname[5])}</h3>
+                <h5 onClick={() => navigate(`/news/${splitPathname[5]}`)}>Xem danh mục</h5>
+            </div>
             <div className='newsFilter'>
-                <div className={pathname === '/admin/news/all' ? activeDiv : div} onClick={() => navigate('/admin/news/all')}>
+                <div className={pathname === `/admin/news/newsByCategory/all/${splitPathname[5]}` ? activeDiv : div} onClick={() => navigate(`/admin/news/newsByCategory/all/${splitPathname[5]}`)}>
                     <p>Tất cả</p>
                     <p>({totalNews ? totalNews : 0})</p>
                 </div>
                 |
-                <div className={pathname === '/admin/news/published' ? activeDiv : div} onClick={() => navigate('/admin/news/published')}>
+                <div className={pathname === `/admin/news/newsByCategory/published/${splitPathname[5]}` ? activeDiv : div} onClick={() => navigate(`/admin/news/newsByCategory/published/${splitPathname[5]}`)}>
                     <p>Đã xuất bản</p>
                     <p>({publishedNews ? publishedNews : 0})</p>
                 </div>
                 |
-                <div className={pathname === '/admin/news/draft' ? activeDiv : div} onClick={() => navigate('/admin/news/draft')}>
+                <div className={pathname === `/admin/news/newsByCategory/draft/${splitPathname[5]}` ? activeDiv : div} onClick={() => navigate(`/admin/news/newsByCategory/draft/${splitPathname[5]}`)}>
                     <p>Bản nháp</p>
                     <p>({draftNews ? draftNews : 0})</p>
                 </div>
@@ -143,7 +149,6 @@ const ListNews = () => {
                     <div className='thead'>
                         <p className='theadTitle'>Tiêu đề</p>
                         <p className='theadAuthor'>Tác giả</p>
-                        <p className='theadCategory'>Danh mục</p>
                         <p className='theadTime'>Thời gian</p>
                         <p className='theadAction'>Hành động</p>
                     </div>
@@ -155,7 +160,6 @@ const ListNews = () => {
                                 <h5 className='title'>Không có tiêu đề</h5>
                                 }
                                 <p className='author'>{news.author.username}</p>
-                                <p className='category' onClick={() => navigate(`/admin/news/newsByCategory/all/${news.isCategory}`)}>{getCategoryName(news.isCategory)}</p>
                                 <div className='time'>
                                     <p>{getStatusName(news.isStatus)}</p>
                                     <p>{moment(news.createdAt).format('HH:mm, DD/MM/YYYY')}</p>
@@ -191,4 +195,4 @@ const ListNews = () => {
     )
 }
 
-export default ListNews
+export default ListNewsByCategory

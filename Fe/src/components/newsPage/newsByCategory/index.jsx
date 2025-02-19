@@ -54,8 +54,8 @@ const NewsByCategory = () => {
     };
     return (
         <div className='newsByCategory'>
-            {listNews.map((news) => {
-                return <div className='news'>
+            {listNews.map((news, idx) => {
+                return <div key={idx + 1} className='news'>
                     <div className='leftNews' onClick={() => navigate(`/news/details/${news._id}`)}>
                         <img src={news.img} alt=""/>
                         <SearchIcon100px/>

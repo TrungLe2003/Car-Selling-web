@@ -25,9 +25,9 @@ const NewsOverview = () => {
     const navigate = useNavigate();
     return (
         <div className='newsOverview'>
-            <div className='grListNews'>
+            <div className='grListNewsByCategory'>
                 <h2>Tin xe</h2>
-                <div className='listNews'>
+                <div className='listNewsByCategory'>
                     {listCarNews.map((news, index) => {
                         return <div key={index + 1} className={`news news${index + 1}`} onClick={() => navigate(`/news/details/${news._id}`)}>
                             <img src={news.img} alt="" />
@@ -42,9 +42,9 @@ const NewsOverview = () => {
                     })}
                 </div>
             </div>
-            <div className='grListNews'>
+            <div className='grListNewsByCategory'>
                 <h2>Tin thị trường</h2>
-                <div className='listNews'>
+                <div className='listNewsByCategory'>
                     {listMarketNews.map((news, index) => {
                         return <div key={index + 1} className={`news news${index + 1}`} onClick={() => navigate(`/news/details/${news._id}`)}>
                             <img src={news.img} alt="" />
@@ -59,9 +59,9 @@ const NewsOverview = () => {
                     })}
                 </div>
             </div>
-            <div className='grListNews'>
+            <div className='grListNewsByCategory'>
                 <h2>Khám phá</h2>
-                <div className='listNews'>
+                <div className='listNewsByCategory'>
                     {listExplore.map((news, index) => {
                         return <div key={index + 1} className={`news news${index + 1}`} onClick={() => navigate(`/news/details/${news._id}`)}>
                             <img src={news.img} alt="" />

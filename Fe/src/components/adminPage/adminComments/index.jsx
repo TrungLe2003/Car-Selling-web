@@ -1,9 +1,10 @@
-//
-import "./style.css"
+import { Outlet } from "react-router-dom";
 
 const AdminComments = () => {
     return (
-        <div className="adminComments">Comments</div>
+        <div className="adminComments">
+            <Outlet/>
+        </div>
     )
 }
 

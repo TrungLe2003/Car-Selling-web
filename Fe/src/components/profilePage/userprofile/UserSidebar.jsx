@@ -1,12 +1,16 @@
 import { React, useContext } from "react";
-import "./UserSidebar.css";
 import { useNavigate, Link } from "react-router-dom";
 import { Store } from "../../../Store";
 import { Button } from "antd";
+import "./UserSidebar.css";
 
 const UserSidebar = ({ activepage }) => {
   const navigate = useNavigate();
   const store = useContext(Store);
+  let id;
+  if (store.currentUser) {
+    id = store.currentUser._id
+  };
   const handleClick = () => {
     store.setCurrentUser(null);
     navigate("/");
@@ -34,7 +38,7 @@ const UserSidebar = ({ activepage }) => {
         </div>
       ) : (
         <Link
-          to={"/profile/account/" + store.currentUser._id}
+          to={"/profile/account/" + id}
           className="style"
         >
           <div className="s1">
@@ -76,7 +80,7 @@ const UserSidebar = ({ activepage }) => {
         </div>
       ) : (
         <Link
-          to={"/profile/accountsetting/" + store.currentUser._id}
+          to={"/profile/accountsetting/" + id}
           className="style"
         >
           <div className="s1">
