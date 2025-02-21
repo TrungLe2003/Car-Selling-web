@@ -138,13 +138,16 @@ const ListCars = () => {
                                 </div>
                                 <p className='name'>{car.carName}</p>
                                 <p className='brand'>{car.brand}</p>
-                                <p className='state'>{car.state}</p>
+                                <p className='state'>{car.state}</p>    
                                 <div className='time'>
                                     <p>{getStatusName(car.isStatus)}</p>
                                     <p>{moment(car.createdAt).format('HH:mm, DD/MM/YYYY')}</p>
                                 </div>
                                 <div className='action'>
-                                    <p>Xem</p>
+                                    {car.isStatus === 'approved' ?
+                                        <p onClick={() => navigate(`/car/${car._id}`)}>Xem</p> :
+                                        <p onClick={() => navigate(`/car/${car._id}`)}>Xem trước</p>
+                                    }
                                     <p>Chỉnh sửa</p>
                                     <p>Xóa bỏ</p>
                                 </div>
