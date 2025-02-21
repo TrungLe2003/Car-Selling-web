@@ -5,11 +5,8 @@ import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 dotenv.config();
 const SECRET_KEY = process.env.SECRET_KEY;
-cloudinary.config({
-  cloud_name: "dxkokrlhr",
-  api_key: "494724485678384",
-  api_secret: "KWRTFbpOnBzDtbcx7xsipZUnVKM",
-});
+const getCloudinaryConfig = JSON.parse(process.env.CLOUD_DAINARY_CONFIG);
+cloudinary.config(getCloudinaryConfig);
 const storage = multer.memoryStorage();
 const upload = multer({
     storage: storage,
@@ -58,7 +55,7 @@ const newsController = {
                 });
             };
         } catch (error) {
-            res.status(403).send({
+            res.status(500).send({
                 message: error.message,
                 data: null,
             });
@@ -113,7 +110,7 @@ const newsController = {
                 });
             }
         } catch (error) {
-            res.status(403).send({
+            res.status(500).send({
                 message: error.message,
                 data: null,
             });
@@ -132,7 +129,7 @@ const newsController = {
                 draftNews: draftNews.length,
             });
         } catch (error) {
-            res.status(403).send({
+            res.status(500).send({
                 message: error.message,
                 data: null,
             });
@@ -175,7 +172,7 @@ const newsController = {
                 });
             }
         } catch (error) {
-            res.status(403).send({
+            res.status(500).send({
                 message: error.message,
                 data: null,
             });
@@ -203,7 +200,7 @@ const newsController = {
                 draftNews: draftNews.length,
             });
         } catch (error) {
-            res.status(403).send({
+            res.status(500).send({
                 message: error.message,
                 data: null,
             });
@@ -252,7 +249,7 @@ const newsController = {
                 });
             }
         } catch (error) {
-            res.status(403).send({
+            res.status(500).send({
                 message: error.message,
                 data: null,
             });
@@ -276,7 +273,7 @@ const newsController = {
                 dataListExplore: listExplore,
             });
         } catch (error) {
-            res.status(403).send({
+            res.status(500).send({
                 message: error.message,
                 data: null,
             });
@@ -307,7 +304,7 @@ const newsController = {
                 totalPages: Math.ceil(totalNews.length / dataLimit),
             });
         } catch (error) {
-            res.status(403).send({
+            res.status(500).send({
                 message: error.message,
                 data: null,
             });
@@ -324,7 +321,7 @@ const newsController = {
                 data: result,
             });
         } catch (error) {
-            res.status(403).send({
+            res.status(500).send({
                 message: error.message,
                 data: null,
             });
@@ -339,7 +336,7 @@ const newsController = {
                 message: 'Xóa tin thành công!',
             });
         } catch (error) {
-            res.status(403).send({
+            res.status(500).send({
                 message: error.message,
                 data: null,
             });

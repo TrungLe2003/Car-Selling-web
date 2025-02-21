@@ -38,6 +38,11 @@ const carSchema = new mongoose.Schema({
     required: true,
   },
   createdAt: { type: Date, default: Date.now },
+  isStatus: {
+    type: String,
+    enum: ["approved", "pending"],
+    default: 'approved'
+},
 });
 
 const CarModel = mongoose.model("cars", carSchema);

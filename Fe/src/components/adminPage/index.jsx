@@ -79,10 +79,40 @@ const AdminPage = () => {
                     </p>
                 </div>
                 <h5
-                    onClick={() => navigate('cars')}
-                    className={pathname === "/admin/cars" ? activeComponent : component}
+                    onClick={() => navigate('cars/all')}
+                    className={
+                        pathname === "/admin/cars/all" ||
+                        pathname === "/admin/cars/approved" ||
+                        pathname === "/admin/cars/pending"
+                        ? activeComponent : component}
                     >Xe
                 </h5>
+                <div
+                    className={
+                        pathname === "/admin/cars/all" ||
+                        pathname === "/admin/cars/approved" ||
+                        pathname === "/admin/cars/pending"
+                        // splitPathname[3] === "viewUserInfo" ||
+                        // splitPathname[3] === "editUserInfo"
+                        ? activeDiv : div}>
+                    <p 
+                        onClick={() => navigate('users/all')}
+                        className={
+                            pathname === "/admin/cars/all" ||
+                            pathname === "/admin/cars/approved" ||
+                            pathname === "/admin/cars/pending"
+                            ? activeSubComponent : subComponent}
+                        >Tất cả xe
+                    </p>
+                    {/* <p 
+                        style={splitPathname[3] === "viewUserInfo" ? {display:'block', fontSize:'12px', color:'#FFFFFF', fontWeight:'bold', cursor:'pointer', transition:'all 0.5s ease',} : {display:'none'}}
+                        >Xem thông tin thành viên
+                    </p> */}
+                    {/* <p 
+                        style={splitPathname[3] === "editUserInfo" ? {display:'block', fontSize:'12px', color:'#FFFFFF', fontWeight:'bold', cursor:'pointer', transition:'all 0.5s ease',} : {display:'none'}}
+                        >Sửa thông tin thành viên
+                    </p> */}
+                </div>
                 <h5
                     onClick={() => navigate('news/all')}
                     className={
@@ -135,6 +165,22 @@ const AdminPage = () => {
                         ? activeComponent : component}
                     >Bình luận
                 </h5>
+                <div
+                    className={
+                        pathname === "/admin/comments/all" ||
+                        pathname === "/admin/comments/approved" ||
+                        pathname === "/admin/comments/spam"
+                        ? activeDiv : div}>
+                    <p 
+                        onClick={() => navigate('comments/all')}
+                        className={
+                            pathname === "/admin/comments/all" ||
+                            pathname === "/admin/comments/approved" ||
+                            pathname === "/admin/comments/spam"
+                            ? activeSubComponent : subComponent}
+                        >Tất cả bình luận
+                    </p>
+                </div>
             </div>
             <div className='right'>
                 <Outlet/>

@@ -43,7 +43,7 @@ const middlewares = {
             if (role !== "ADMIN") throw new Error('Bạn không phải là ADMIN!');
             next();
         } catch (error) {
-            res.status(401).send({
+            res.status(500).send({
                 message: error.message,
                 data: null,
             });
@@ -58,7 +58,7 @@ const middlewares = {
             if (role !== "ADMIN" && id !== currentUser._id) throw new Error('Bạn không phải là ADMIN hoặc chủ tài khoản này!');
             next();
         } catch (error) {
-            res.status(401).send({
+            res.status(500).send({
                 message: error.message,
                 data: null,
             });
@@ -72,7 +72,7 @@ const middlewares = {
             if (role !== "PROVIDER") throw new Error('Bạn không phải là PROVIDER!');
             next();
         } catch (error) {
-            res.status(401).send({
+            res.status(500).send({
                 message: error.message,
                 data: null,
             });
@@ -86,7 +86,7 @@ const middlewares = {
             if (role !== "CUSTOMER") throw new Error('Bạn không phải là CUSTOMER!');
             next();
         } catch (error) {
-            res.status(401).send({
+            res.status(500).send({
                 message: error.message,
                 data: null,
             });

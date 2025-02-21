@@ -5,8 +5,8 @@ import axios from 'axios';
 // Store
 import { Store } from '../../../../Store';
 // icons
-import LeftArrowIcon from '../../../../icons/adminPage/LeftArrowIcon'
-import RightArrowIcon from '../../../../icons/adminPage/RightArrowIcon'
+import LeftArrowIcon from '../../../../icons/adminPage/LeftArrowIcon';
+import RightArrowIcon from '../../../../icons/adminPage/RightArrowIcon';
 //
 import './style.css';
 

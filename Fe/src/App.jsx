@@ -15,6 +15,7 @@ import ViewUserInfo from "./components/adminPage/adminUsers/ViewEdit/viewUserInf
 import EditUserInfo from "./components/adminPage/adminUsers/ViewEdit/editUserInfo";
 // AdminCars
 import AdminCars from "./components/adminPage/adminCars";
+import ListCars from "./components/adminPage/adminCars/listCars";
 // AdminNews
 import AdminNews from "./components/adminPage/adminNews";
 import ListNews from "./components/adminPage/adminNews/listNews";
@@ -64,7 +65,9 @@ function App() {
               <Route path="viewUserInfo/:id" element={<ViewUserInfo/>} />
               <Route path="editUserInfo/:id" element={<EditUserInfo/>} />
             </Route>
-            <Route path="cars" element={<AdminCars />} />
+            <Route path="cars" element={<AdminCars />} >
+              <Route path=":isStatus" element={<ListCars/>}/>
+            </Route>
             <Route path="news" element={<AdminNews />}>
               <Route path=":isStatus" element={<ListNews />} />
               <Route path="newsByCategory/:isStatus/:category" element={<ListNewsByCategory />} />

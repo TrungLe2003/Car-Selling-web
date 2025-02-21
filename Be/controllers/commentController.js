@@ -19,7 +19,7 @@ const commentController = {
                 data: newComment
             });
         } catch (error) {
-            res.status(401).send({
+            res.status(500).send({
                 message: error.message,
                 data: null,
             });
@@ -38,7 +38,7 @@ const commentController = {
                 spamComments: spamComments.length,
             });
         } catch (error) {
-            res.status(403).send({
+            res.status(500).send({
                 message: error.message,
                 data: null,
             });
@@ -84,7 +84,7 @@ const commentController = {
                 });
             }
         } catch (error) {
-            res.status(401).send({
+            res.status(500).send({
                 message: error.message,
                 data: null,
             });
@@ -112,7 +112,7 @@ const commentController = {
                 spamComments: spamComments.length,
             });
         } catch (error) {
-            res.status(403).send({
+            res.status(500).send({
                 message: error.message,
                 data: null,
             });
@@ -173,7 +173,7 @@ const commentController = {
                 });
             }
         } catch (error) {
-            res.status(401).send({
+            res.status(500).send({
                 message: error.message,
                 data: null,
             });
@@ -208,7 +208,7 @@ const commentController = {
                 data: changeCommentStatus,
             });
         } catch (error) {
-            res.status(403).send({
+            res.status(500).send({
                 message: error.message,
                 data: null,
             });
@@ -223,7 +223,7 @@ const commentController = {
                 message: 'Xóa bình luận thành công!',
             });
         } catch (error) {
-            res.status(403).send({
+            res.status(500).send({
                 message: error.message,
                 data: null,
             });

@@ -127,7 +127,7 @@ const UserController = {
             customer: customer.length,
         });
     } catch (error) {
-        res.status(403).send({
+        res.status(500).send({
             message: error.message,
             data: null,
         });
@@ -263,7 +263,7 @@ const UserController = {
             message: 'Xóa người dùng thành công!',
         });
     } catch (error) {
-        res.status(403).send({
+        res.status(500).send({
             message: error.message,
             data: null,
         });

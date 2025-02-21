@@ -8,7 +8,7 @@ const commentMidleware = {
             if (news.isStatus === 'draft') throw new Error('Tin chưa xuất bản, chưa thể bình luận!');
             next();
         } catch (error) {
-            res.status(403).send({
+            res.status(500).send({
                 message: error.message,
                 data: null,
             });

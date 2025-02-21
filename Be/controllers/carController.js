@@ -4,11 +4,8 @@ import { v2 as cloudinary } from "cloudinary";
 import dotenv from "dotenv";
 dotenv.config();
 const SECRET_KEY = process.env.SECRET_KEY;
-cloudinary.config({
-  cloud_name: "dxkokrlhr",
-  api_key: "494724485678384",
-  api_secret: "KWRTFbpOnBzDtbcx7xsipZUnVKM",
-});
+const getCloudinaryConfig = JSON.parse(process.env.CLOUD_DAINARY_CONFIG);
+cloudinary.config(getCloudinaryConfig);
 const storage = multer.memoryStorage();
 const uploadImgCar = multer({ storage: storage }).array("carImg", 5); // CHo phép tối đa 5 ảnh
 
@@ -29,16 +26,15 @@ const uploadToCloudinary = (file) => {
 };
 
 const CarController = {
+  // Tạo đơn đăng bán xe mới
   createCar: [
     uploadImgCar,
     async (req, res) => {
       try {
         const { carName, carPrice } = req.body;
         const { idUser } = req.user;
-
         if (!carName) throw new Error("Cần nhập tên xe");
         if (!carPrice) throw new Error("Cần nhập giá xe");
-
         // Tải lên Cloudinary và lấy URL
         const files = req.files;
         if (!files || files.length === 0) {
@@ -46,10 +42,8 @@ const CarController = {
             .status(400)
             .send({ message: "Chưa có file ảnh nào được tải lên" });
         }
-
         // Duyệt qua tất cả các ảnh và tải lên Cloudinary
         const imageUrls = await Promise.all(files.map(uploadToCloudinary));
-
         // Tạo xe mới trong database
         const newCar = await CarModel.create({
           carName,
@@ -86,6 +80,7 @@ const CarController = {
       }
     },
   ],
+  // Lấy thông tin xe theo id
   getCarById: async (req, res) => {
     try {
       const { idCar } = req.params;
@@ -101,7 +96,7 @@ const CarController = {
       });
     }
   },
-  //api lấy tất cả xe (có limit)
+  // Lấy tất cả xe (có limit)
   getListCar: async (req, res) => {
     try {
       const { limit, page, brand, state, color, year, minPrice, maxPrice } =
@@ -110,7 +105,6 @@ const CarController = {
       const pageNumber = parseInt(page) || 1;
       const skip = (pageNumber - 1) * dataLimit;
       // console.log("Min Price:", minPrice, "Max Price:", maxPrice);
-
       const filters = {};
       if (brand) filters.brand = { $regex: brand, $options: "i" }; //áp các điều kiện vô filter - k phân biệt hoa thường
       if (state) filters.state = state;
@@ -119,10 +113,8 @@ const CarController = {
       if (minPrice && maxPrice) {
         filters.carPrice = { $gte: Number(minPrice), $lte: Number(maxPrice) };
       }
-
       const listCar = await CarModel.find(filters).skip(skip).limit(dataLimit); //find({color : color})
       const totalCars = await CarModel.countDocuments(filters); //Đếm những phần tử thỏa mãn đk
-
       res.status(200).send({
         message: "Successful",
         data: listCar,
@@ -136,12 +128,11 @@ const CarController = {
       });
     }
   },
-  //Lấy xe theo brand
+  // Lấy tất xe theo brand
   findCarsByBrand: async (req, res) => {
     try {
       const { brand, limit } = req.query;
       const dataLimit = parseInt(limit) || 0;
-
       if (!brand) {
         return res.status(400).send({
           message: "Thiếu thông tin brand",
@@ -151,7 +142,6 @@ const CarController = {
       const cars = await CarModel.find({
         brand: { $regex: brand, $options: "i" }, // Regex không phân biệt hoa thường
       }).limit(dataLimit);
-
       if (!cars.length) {
         return res.status(404).send({
           message: "Không tìm thấy xe với brand được cung cấp",
@@ -169,7 +159,7 @@ const CarController = {
       });
     }
   },
-  //hàm thêm lại ghế ngồi (trước đăng lên thiếu)
+  // Hàm thêm lại ghế ngồi (trước đăng lên thiếu)
   updateCarColors: async (req, res) => {
     try {
       const result = await CarModel.updateMany(
@@ -188,6 +178,7 @@ const CarController = {
       });
     }
   },
+  // Tìm xe theo tên
   searchingCar: async (req, res) => {
     const { carName, limit, page } = req.query;
     const dataLimit = parseInt(limit) || 9;
@@ -210,7 +201,7 @@ const CarController = {
       });
     }
   },
-  ///lấy tất cả xe của user qua id
+  // Lấy tất cả xe của Provider theo id
   listUserCar: async (req, res) => {
     try {
       const { idProvider } = req.params;
@@ -226,8 +217,7 @@ const CarController = {
       });
     }
   },
-
-  ////api sửa thông tin của xe
+  // Sửa thông tin của xe
   updatedCar: [
     // uploadImgCar,
     async (req, res) => {
@@ -290,7 +280,7 @@ const CarController = {
       }
     },
   ],
-  /////api xoá xe
+  // Xoá xe
   deleteCar: async (req, res) => {
     try {
       const { idCar } = req.params;
@@ -302,6 +292,69 @@ const CarController = {
     } catch (error) {
       res.status(500).send({
         message: error.message,
+      });
+    }
+  },
+  // Phương thêm từ đây để dử dụng cho trang quản trị
+  // Đếm tất cả xe theo trạng thái
+  countCars: async (req, res) => {
+    try {
+        const totalCars = await CarModel.find({});
+        const approvedCars = await CarModel.find({isStatus: 'approved'});
+        const pendingCars = await CarModel.find({isStatus: 'pending'});
+        res.status(200).send({
+            message: 'Đếm xe thành công!',
+            totalCars: totalCars.length,
+            approvedCars: approvedCars.length,
+            pendingCars: pendingCars.length,
+        });
+    } catch (error) {
+        res.status(500).send({
+            message: error.message,
+            data: null,
+        });
+    }
+  },
+  // Lấy tất cả xe theo trạng thái
+  getAllCar: async (req, res) => {
+    try {
+      const {limit, currentPage, isStatus} = req.query;
+      const dataLimit = parseInt(limit);
+      const pageNumber = parseInt(currentPage) || 1;
+      const skip = (pageNumber - 1) * dataLimit;
+      if (isStatus === 'all') {
+        const totalCars = await CarModel.find({}, 'carName brand state isStatus createdAt');
+        const result = await CarModel.find({}, 'carName brand state isStatus createdAt')
+        .skip(skip)
+        .limit(dataLimit)
+        .sort({createdAt: -1})
+        .populate('idProvider', 'username avatar');
+        res.status(200).send({
+          message: 'Lấy thông tin tất cả xe thành công!',
+          data: result,
+          totalPages: Math.ceil(totalCars.length / dataLimit),
+        });
+      } else {
+        const totalCars = await CarModel.find({
+          isStatus: isStatus
+        }, 'carName brand state isStatus createdAt');
+        const result = await CarModel.find({
+          isStatus: isStatus
+        }, 'carName brand state isStatus createdAt')
+        .skip(skip)
+        .limit(dataLimit)
+        .sort({createdAt: -1})
+        .populate('idProvider', 'username avatar');
+        res.status(200).send({
+          message: 'Lấy thông tin tất cả xe theo trạng thái thành công!',
+          data: result,
+          totalPages: Math.ceil(totalCars.length / dataLimit),
+        });
+      }
+    } catch (error) {
+      res.status(500).send({
+        message: error.message,
+        data: null,
       });
     }
   },
