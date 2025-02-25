@@ -1,11 +1,17 @@
 import { React, useEffect, useState, useContext } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import "../userprofile/Account.css";
 import axios from "axios";
 import { Store } from "../../../Store";
 
 const Account = () => {
+  const navigate = useNavigate();
   const store = useContext(Store);
+  useEffect(() => {
+    if (!store.currentUser) {
+        navigate('/');
+    };
+  }, []);
 
   //dữ liệu user
   const { userId } = useParams();

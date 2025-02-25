@@ -1,22 +1,27 @@
-import { useNavigate, useParams,  } from 'react-router-dom';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { useState, useEffect, useContext } from 'react';
 import moment from 'moment';
 import axios from 'axios';
 //
 import { Store } from '../../Store';
 //
-import Avatar from '/public/imgs/avatar.png'
-import CommentIcon from '../../icons/newsDetailsPage/CommentIcon'
+import CommentIcon from '../../icons/newsDetailsPage/CommentIcon';
 //
 import './style.css';
 
 const NewsDetailPage = () => {
-    // navigate
     const navigate = useNavigate();
-    // store lấy accessToken crrUser
     const store = useContext(Store);
-    const accessToken = store.currentUser.accessToken;
-    //
+    let accessToken;
+    if (store.currentUser) {
+        accessToken = store.currentUser.accessToken
+    };
+    // màn hình hiển thị ở đầu trang khi mở trang lên, thiết lập thanh cuộn trên đầu trang
+    const location = useLocation();
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, [location]);
+    // queryNews, queryListNews, queryListComment
     const { id } = useParams();
     const [news, setNews] = useState({});
     const [listNews, setListNews] = useState([]);
@@ -28,7 +33,7 @@ const NewsDetailPage = () => {
             if (data) {
                 axios.all([
                     axios.get(`http://localhost:8080/api/v1/news/publishedByCategory?limit=6&isCategory=${data.isCategory}`),
-                    axios.get(`http://localhost:8080/api/v1/comments/commentByNewsId?newsId=${id}`),
+                    axios.get(`http://localhost:8080/api/v1/comments/commentByNewsId?isStatus=approved&newsId=${id}`),
                 ])
                 .then(axios.spread((response1, response2) => {
                     setListNews(response1.data.data);
@@ -43,6 +48,7 @@ const NewsDetailPage = () => {
     useEffect(() => {
         queryNews();
     }, [id]);
+    // tạo bình luận mới
     const [content, setContent] = useState('');
     const handleSubmit = async (e) => {
         const formData = {
@@ -52,12 +58,13 @@ const NewsDetailPage = () => {
         e.preventDefault();
         try {
             const response = await axios.post('http://localhost:8080/api/v1/comments/create-comment', formData,
-            {
-                headers: {
-                    'Authorization': `Bearer ${accessToken}`,
-                    "Content-type": "application/json",
-                },
-            });
+                {
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`,
+                        "Content-type": "application/json",
+                    },
+                }
+            );
             queryNews();
             setContent('');
         } catch (error) {
@@ -86,8 +93,8 @@ const NewsDetailPage = () => {
                             <h5>{listComments.length} Bình luận</h5>
                         </div>
                         <div className='listOldComment'>
-                            {listComments.map((comment) => {
-                                return <div className='comment'>
+                            {listComments.map((comment, idx) => {
+                                return <div key={idx + 1} className='comment'>
                                     <img src={comment.user.avatar} alt="" />
                                     <div className='rightComment'>
                                         <div className="row">
@@ -112,8 +119,8 @@ const NewsDetailPage = () => {
             <div className='right'>
                 <h3>Cùng danh mục</h3>
                 <div className='listSameCategory'>
-                    {listNews.map((item) => {
-                        return <div className='item' onClick={() => navigate(`/news/details/${item._id}`)}>
+                    {listNews.map((item, idx) => {
+                        return <div key={idx + 1} className='item' onClick={() => navigate(`/news/details/${item._id}`)}>
                             <div className='leftItem'>
                                 <img src={item.img} alt="" />
                             </div>

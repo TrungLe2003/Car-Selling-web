@@ -11,13 +11,12 @@ import AddImg from '/public/imgs/addImg.png'
 import './style.css';
 
 const EditNews = () => {
-    // navigate
     const navigate = useNavigate();
-    // params
-    const {id} = useParams();
-    // store lấy accessToken crrUser
     const store = useContext(Store);
-    const accessToken = store.currentUser.accessToken;
+    let accessToken;
+    if (store.currentUser) {
+        accessToken = store.currentUser.accessToken
+    };
     // react-quill
     const quillRef = useRef(null);
     const modules = {
@@ -27,7 +26,8 @@ const EditNews = () => {
           ['link', 'image', 'code-block'],
         ]
     };
-    // state cập nhật nội dung khi thay đổi (change)
+    // queryNews
+    const {id} = useParams();
     const [title, setTitle] = useState('');
     const [isCategory, setIsCategory] = useState('');
     const [isStatus, setIsStatus] = useState('');
@@ -41,19 +41,14 @@ const EditNews = () => {
     // console.log(value);
     // console.log(subTitle);
     // console.log(content);
-    const handleFileChange = (e) => {
-        setFile(e.target.files[0])
-        setAddImg(URL.createObjectURL(e.target.files[0]));
-    };
-    // lấy thông tin của tin
     const queryNews = async () => {
         try {
             const queryNews = await axios.get(`http://localhost:8080/api/v1/news/${id}`);
-            const news = queryNews.data.data
-            setTitle(news.title)
-            setIsCategory(news.isCategory)
-            setIsStatus(news.isStatus)
-            setAddImg(news.img)
+            const news = queryNews.data.data;
+            setTitle(news.title);
+            setIsCategory(news.isCategory);
+            setIsStatus(news.isStatus);
+            setAddImg(news.img);
             setValue(`<p><strong>${news.subTitle}</strong></p><p><br /></p>${news.content}`)
         } catch (error) {
             alert(error.response.data.message);
@@ -61,8 +56,12 @@ const EditNews = () => {
     };
     useEffect(() => {
         queryNews()
-    }, [])
+    }, []);
     // submit
+    const handleFileChange = (e) => {
+        setFile(e.target.files[0]);
+        setAddImg(URL.createObjectURL(e.target.files[0]));
+    };
     const handleSubmit = async (e) => {
         e.preventDefault();
         const payloadFormData = new FormData();
