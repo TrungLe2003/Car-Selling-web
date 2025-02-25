@@ -3,15 +3,16 @@ import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
+import "./cron-jobs/cron.js"; //import để chạy cron
+import { initSocket } from "./socket/socket.js";
+import http from "http";
 dotenv.config();
 //
 import RootRouter from "./routes/index.js";
 
-await mongoose
-  .connect(process.env.MONGO_URL)
-  .then(() => {
-    console.log("Connected database!");
-  });
+await mongoose.connect(process.env.MONGO_URL).then(() => {
+  console.log("Connected database!");
+});
 
 const app = express();
 app.use(express.json());
@@ -21,6 +22,10 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 //app.use(cors());
+
+const server = http.createServer(app);
+initSocket(server); // Truyền server HTTP vào
+
 app.get("", (req, res) => {
   res.send({
     message: "Connected!",
@@ -29,6 +34,6 @@ app.get("", (req, res) => {
 
 app.use("/api", RootRouter);
 
-app.listen(process.env.PORT || 8080, () => {
+server.listen(process.env.PORT || 8080, () => {
   console.log("This is Car Selling Project");
 });

@@ -45,7 +45,7 @@ const MailController = {
         expiresAt,
       };
       const newMail = await MailModel.create(allMailInclude);
-      io.to(updatedMail.recipientId.toString()).emit("sendMail", {
+      io.to(allMailInclude.recipientId.toString()).emit("sendMail", {
         message: `Bạn có 1 thư mới`,
       });
       res.status(200).send({
