@@ -133,7 +133,8 @@
 }
 
 .header .gr .gr3_2 .grDropdown .dropdown .grProfile,
-.header .gr .gr3_2 .grDropdown .dropdown .grLogout {
+.header .gr .gr3_2 .grDropdown .dropdown .grLogout,
+.header .gr .gr3_2 .grDropdown .dropdown .grWishList {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -165,7 +166,8 @@
 }
 
 .header .gr .gr3_2 .grDropdown .dropdown .grProfile:hover,
-.header .gr .gr3_2 .grDropdown .dropdown .grLogout:hover {
+.header .gr .gr3_2 .grDropdown .dropdown .grLogout:hover,
+.header .gr .gr3_2 .grDropdown .dropdown .grWishList:hover {
   background-color: #3563e9;
 }
 

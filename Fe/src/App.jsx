@@ -31,10 +31,15 @@ import PostingCarInfoPage from "./components/postingCarInfoPage";
 import ProviderPage from "./components/providerPage";
 import PostManage from "./components/providerPage/postManage";
 import SearchPage from "./components/searchPage";
+import WishListPage from "./components/wishListPage/index";
 //
 import "./App.css";
 
 function App() {
+
+
+
+
   return (
     <div className="container">
       <header>
@@ -66,6 +71,8 @@ function App() {
             path="/profile/:activepage/:userId"
             element={<ProfilePage />}
           />
+
+          <Route path="/wishList/:userId" element={<WishListPage />} />
           <Route path="/category" element={<CategoryPage />} />
           <Route path="/allCars" element={<CategoryPage />}></Route>
           <Route path="/news/details/:id" element={<NewsDetailPage />} />

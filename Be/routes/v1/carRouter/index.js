@@ -25,5 +25,10 @@ CarRouter.get("/:idProvider", CarController.listUserCar);
 CarRouter.put("/updatecar/:idCar", UserMiddleware.checkProviderOrAdmin, CarController.updatedCar);
 ///xoá xe
 CarRouter.delete("/deletecar/:idCar", UserMiddleware.checkProviderOrAdmin, CarController.deleteCar);
-
+//thêm xe vào wishlist
+CarRouter.post('/:idCar/wishlist/:userId', CarController.addToWishlist);
+//xoá xe trong wishlist
+CarRouter.delete('/:idCar/wishlist/:userId', CarController.removeFromWishlist);
+//lấy xe trong wishlist
+CarRouter.get('/wishlist/:userId', CarController.getWishlist);
 export default CarRouter;
