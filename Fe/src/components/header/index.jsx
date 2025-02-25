@@ -9,6 +9,7 @@ import LogoBlack from "/public/imgs/logoBlack.png";
 // svgs
 import ProfileIcon from "../../icons/header/ProfileIcon";
 import LogoutIcon from "../../icons/header/LogoutIcon";
+import WishIcon from '../../icons/header/WishListIcon';
 //
 import "./style.css";
 
@@ -39,6 +40,7 @@ const Header = () => {
     };
     fetchUserData();
   }, [userId]);
+
 
   return (
     <div className="header">
@@ -116,8 +118,25 @@ const Header = () => {
                   <p className="profileIcon">
                     <ProfileIcon />
                   </p>
-                  <p className="profile">Profile</p>
+                    <p className="profile">Profile</p>
                 </div>
+
+
+
+                  <div
+                    className="grWishList"
+                    onClick={() =>
+                      navigate("/wishList/" + store.currentUser._id)
+                    }
+                  >
+                    <p className="wishIcon">
+                      <WishIcon />
+                    </p>
+                    <p className="wishList">Favorites</p>
+                  </div>
+
+
+
                 <div className="grLogout" onClick={handleClick}>
                   <p className="logoutIcon">
                     <LogoutIcon />

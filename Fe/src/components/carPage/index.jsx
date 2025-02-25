@@ -24,19 +24,41 @@ const CarDetailPage = () => {
   //dữ liệu xe
   const { idCar } = useParams();
   const [carData, setCarData] = useState(null);
+
+  const [wishlist, setWishlist] = useState([]);
   useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("currentUser"));
+    const accessToken = user.accessToken;
+
     const fetchCarData = async () => {
       try {
         const carResponse = await axios.get(
           `http://localhost:8080/api/v1/cars/car/${idCar}`
         );
         setCarData(carResponse.data.data);
-        console.log(carData);
+
+        const wishListResponse = await axios.get(`http://localhost:8080/api/v1/cars/wishlist/${user._id}?limit=100&page=1`, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
+
+        // setWishlist(wishListResponse.data.data);
+
+        wishListResponse.data.data.forEach((w) => {
+          console.log(idCar);
+          if (w._id == idCar) {
+            setBtnLikeProduct(true);
+          }
+
+        })
       } catch (error) {
         console.error("Error fetching car data:", error.message);
       }
     };
     fetchCarData();
+
+
   }, [idCar]);
 
   const listImgRv = carData?.carImg;
@@ -50,12 +72,41 @@ const CarDetailPage = () => {
     setCrrImg((prev) => (prev + 1) % listImgRv.length);
   };
   // hàm thích sản phẩm (chưa kết hợp api để lưu - mới là ảnh động)
-  const handleLikeProduct = () => {
-    if (!btnLikeProduct) {
-      setBtnLikeProduct(true);
-    } else {
-      setBtnLikeProduct(false);
+
+  const handleLikeProduct = async () => {
+    try {
+      const user = JSON.parse(localStorage.getItem("currentUser"));
+      const accessToken = user.accessToken;
+      if (!accessToken) {
+        alert("Please login to add to wishlist");
+        return;
+      }
+
+      if (!btnLikeProduct) {
+        await axios.post(`http://localhost:8080/api/v1/cars/${idCar}/wishlist/${user._id}`, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }).then(response => {
+          console.log(response);
+        })
+
+        setBtnLikeProduct(true);
+      } else {
+        await axios.delete(`http://localhost:8080/api/v1/cars/${idCar}/wishlist/${user._id}`, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }).then(response => {
+          console.log(response);
+        });
+        setBtnLikeProduct(false);
+      }
+    } catch (error) {
+      console.error("Error updating wishlist:", error.message);
     }
+
+
   };
 
   if (!carData) {
@@ -98,7 +149,7 @@ const CarDetailPage = () => {
         <div className="frameLeft">
           <div className="section1 loveAndShareFrame">
             <div className="likeFrame item" onClick={handleLikeProduct}>
-              {!btnLikeProduct ? <HeartIcon /> : <LikedIcon></LikedIcon>}
+              {!btnLikeProduct ? <HeartIcon /> : <LikedIcon />}
 
               <div className="text">Yêu thích</div>
             </div>

@@ -5,13 +5,7 @@ import CarController from "../../../controllers/carController.js";
 const CarRouter = Router();
 
 //Thêm xe mới (đã là provider - role: 'PROVIDER')
-
-CarRouter.post(
-  "/create-car",
-  
-  UserMiddleware.checkRoleProvider,
-  CarController.createCar
-);
+CarRouter.post("/create-car", UserMiddleware.checkRoleProvider, CarController.createCar);
 // tìm xe qua id
 CarRouter.get("/car/:idCar", CarController.getCarById);
 // tìm xe (có query)
@@ -24,6 +18,7 @@ CarRouter.get("/search", CarController.searchingCar);
 CarRouter.put("/updatecar/:carId", middlewares.verifyAccessToken, middlewares.validateAdminOrCarOwner, CarController.updatedCar);
 // Xoá xe - ADMIN || CAR OWNER
 CarRouter.delete("/deletecar/:carId", middlewares.verifyAccessToken, middlewares.validateAdminOrCarOwner, CarController.deleteCar);
+//
 // Thay đổi trạng thái xe - ADMIN
 CarRouter.put("/changeStatusCar/:id", middlewares.verifyAccessToken, middlewares.validateAdmin, CarController.changeStatusCar);
 // Đếm xe theo trạng thái - ADMIN
@@ -44,5 +39,12 @@ CarRouter.get("/carByState", middlewares.verifyAccessToken, middlewares.validate
 CarRouter.get("/carByProvider", middlewares.verifyAccessToken, middlewares.validateAdmin, CarController.getCarByProvider);
 // Lấy danh sách xe của user qua id
 CarRouter.get("/:idProvider", CarController.listUserCar);
+//
+// Thêm xe vào wishlist
+CarRouter.post('/:idCar/wishlist/:userId', CarController.addToWishlist);
+// Xoá xe trong wishlist
+CarRouter.delete('/:idCar/wishlist/:userId', CarController.removeFromWishlist);
+// Lấy xe trong wishlist
+CarRouter.get('/wishlist/:userId', CarController.getWishlist);
 
 export default CarRouter;

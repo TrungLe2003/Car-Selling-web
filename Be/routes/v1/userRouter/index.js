@@ -12,4 +12,5 @@ UserRouter.put("/modify/:id", middlewares.verifyAccessToken, middlewares.validat
 UserRouter.delete("/deleteUserById/:id", middlewares.verifyAccessToken, middlewares.validateAdmin, UserController.deleteUserById); // Xóa người dùng - ADMIN
 UserRouter.get("/:id", UserController.getUser); // Theo id
 
+
 export default UserRouter;

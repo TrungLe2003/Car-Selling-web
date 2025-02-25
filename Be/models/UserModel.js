@@ -15,6 +15,10 @@ const userSchema = new mongoose.Schema({
       enum: ['CUSTOMER', 'PROVIDER', 'ADMIN'],
       default: 'CUSTOMER'
   },
+  wishlist: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "cars",
+  }],
   createdAt: Date,
   updatedAt: Date,
   idDeleted: {
