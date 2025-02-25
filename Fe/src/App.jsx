@@ -9,8 +9,9 @@ import AdminUsers from "./components/adminPage/adminUsers";
 import AdminCars from "./components/adminPage/adminCars";
 import AdminNews from "./components/adminPage/adminNews";
 import AdminComments from "./components/adminPage/adminComments";
-import TotalNews from "./components/adminPage/adminNews/totalNews";
-import AddNews from "./components/adminPage/adminNews/addNews";
+import ListNews from "./components/adminPage/adminNews/listNews";
+import CreateNews from "./components/adminPage/adminNews/CreateEdit/createNews";
+import EditNews from "./components/adminPage/adminNews/CreateEdit/editNews";
 import NotFoundPage from "./components/notFoundPage";
 import LoginPage from "./components/loginPage";
 import RegisterPage from "./components/registerPage";
@@ -22,19 +23,23 @@ import CategoryPage from "./components/categoryPage";
 import NewsDetailPage from "./components/newsDetailsPage";
 import NewsPage from "./components/newsPage";
 import NewsOverview from "./components/newsPage/newsOverview";
-// import NewsCarNews from "./components/newsPage/newsCarNews";
-// import NewsMarketNews from "./components/newsPage/newsMarketNews";
-// import NewsExploreCars from "./components/newsPage/newsExploreCars";
-import NewsCategory from "./components/newsPage/newsCategory";
+import NewsByCategory from "./components/newsPage/newsByCategory";
 // import PageWithAllCar from "./components/categoryPage/PageWithAllCar";
 // import PageWithCarByBrand from "./components/categoryPage/PageWithCarByBrand";
 import CarDetailPage from "./components/carPage";
 import PostingCarInfoPage from "./components/postingCarInfoPage";
+import ProviderPage from "./components/providerPage";
+import PostManage from "./components/providerPage/postManage";
 import SearchPage from "./components/searchPage";
+import WishListPage from "./components/wishListPage/index";
 //
 import "./App.css";
 
 function App() {
+
+
+
+
   return (
     <div className="container">
       <header>
@@ -48,10 +53,14 @@ function App() {
             <Route path="users" element={<AdminUsers />} />
             <Route path="cars" element={<AdminCars />} />
             <Route path="news" element={<AdminNews />}>
-              <Route path="" element={<TotalNews />} />
-              <Route path="addNews" element={<AddNews />} />
+              <Route path=":isStatus" element={<ListNews />} />
+              <Route path="createNews" element={<CreateNews />} />
+              <Route path="editNews/:id" element={<EditNews />} />
             </Route>
             <Route path="comments" element={<AdminComments />} />
+          </Route>
+          <Route path="/provider/:idUser" element={<ProviderPage />}>
+            <Route path="postmanage" element={<PostManage />}></Route>
           </Route>
           <Route path="/car/:idCar" element={<CarDetailPage />} />
           <Route path="/postingCar" element={<PostingCarInfoPage />} />
@@ -62,12 +71,14 @@ function App() {
             path="/profile/:activepage/:userId"
             element={<ProfilePage />}
           />
+
+          <Route path="/wishList/:userId" element={<WishListPage />} />
           <Route path="/category" element={<CategoryPage />} />
           <Route path="/allCars" element={<CategoryPage />}></Route>
           <Route path="/news/details/:id" element={<NewsDetailPage />} />
           <Route path="/news" element={<NewsPage />}>
             <Route path="" element={<NewsOverview />} />
-            <Route path=":isCategory" element={<NewsCategory />} />
+            <Route path=":isCategory" element={<NewsByCategory />} />
           </Route>
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/introduce" element={<IntroducePage />} />

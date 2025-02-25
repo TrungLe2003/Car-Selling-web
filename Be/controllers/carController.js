@@ -1,4 +1,5 @@
 import CarModel from "../models/CarModel.js";
+import UserModel from "../models/UserModel.js"
 import multer from "multer";
 import { v2 as cloudinary } from "cloudinary";
 import dotenv from "dotenv";
@@ -222,58 +223,175 @@ const CarController = {
     } catch (error) {
       res.status(500).send({
         message: error.message,
-        data: null
-      })
+        data: null,
+      });
     }
   },
 
   ////api sửa thông tin của xe
   updatedCar: [
-    uploadImgCar,
+    // uploadImgCar,
     async (req, res) => {
       try {
         const { idCar } = req.params;
-        ////Tải lên Cloudinary và lấy URL
-        const files = req.files;
-        if (!files || files.length === 0) {
-          return res
-            .status(400)
-            .send({ message: "Chưa có file ảnh nào được tải lên" });
-        }
+        // ////Tải lên Cloudinary và lấy URL
+        // const files = req.files;
+        // if (!files || files.length === 0) {
+        //   return res
+        //     .status(400)
+        //     .send({ message: "Chưa có file ảnh nào được tải lên" });
+        // }
 
         ////Duyệt qua tất cả các ảnh và tải lên Cloudinary
-        const imageUrls = await Promise.all(files.map(uploadToCloudinary));
-        const { carName, carPrice, carImg, color, version, ODO, year, origin, gearBox, driveSystem, torque, engine, horsePower, power, brand, describe, state, sitChairs } = req.body;
-        const updatedCar = await CarModel.findByIdAndUpdate(idCar, { carName, carPrice, carImg: imageUrls, color, version, ODO, year, origin, gearBox, driveSystem, torque, engine, horsePower, power, brand, describe, state, sitChairs });
+        // const imageUrls = await Promise.all(files.map(uploadToCloudinary));
+        const {
+          carPrice,
+          color,
+          ODO,
+          year,
+          origin,
+          gearBox,
+          driveSystem,
+          torque,
+          engine,
+          horsePower,
+          power,
+          brand,
+          describe,
+          state,
+          sitChairs,
+        } = req.body;
+        const updatedCar = await CarModel.findByIdAndUpdate(idCar, {
+          carPrice,
+          color,
+          ODO,
+          year,
+          origin,
+          gearBox,
+          driveSystem,
+          torque,
+          engine,
+          horsePower,
+          power,
+          brand,
+          describe,
+          state,
+          sitChairs,
+        });
+        //xóa phần img với name ở 2 dòng trên
         res.status(201).send({
-          message: 'Update successful!',
-          data: updatedCar
-        })
+          message: "Update successful!",
+          data: updatedCar,
+        });
       } catch (error) {
         res.status(500).send({
           message: error.message,
-          data: null
-        })
+          data: null,
+        });
       }
-
-    }
+    },
   ],
-  /////api xoá xe 
+  /////api xoá xe
   deleteCar: async (req, res) => {
     try {
-      const {idCar} = req.params;
+      const { idCar } = req.params;
       const deleteCar = await CarModel.findByIdAndDelete(idCar);
       res.status(201).send({
-        message: 'Delete successful!',
-        data: deleteCar
-      })
+        message: "Delete successful!",
+        data: deleteCar,
+      });
     } catch (error) {
       res.status(500).send({
         message: error.message,
-      })
+      });
     }
-  }
-    
+  },
+
+
+  //api thêm danh sách xe yêu thích
+  addToWishlist: async (req, res) => {
+    try {
+      const { idCar, userId } = req.params;
+      const user = await UserModel.findById(userId);
+      if (!user) throw new Error("user not found");
+
+      if (user.wishlist?.includes(idCar)) {
+        return res.status(400).send({ message: "Car already in wishlist" });
+      }
+
+      user.wishlist.push(idCar);
+      await user.save();
+
+      res.status(200).send({
+        message: "Car added to wishlist",
+        isLiked: true, // Trả về trạng thái yêu thích
+      });
+    } catch (error) {
+      res.status(500).send({
+        message: error.message,
+        data: null,
+      });
+    }
+  },
+
+
+  //api xoá danh sách xe yêu thích
+
+  removeFromWishlist: async (req, res) => {
+    try {
+      const { idCar, userId } = req.params;
+      const user = await UserModel.findById(userId);
+      if (!user) throw new Error("user not found");
+
+      user.wishlist = user.wishlist.filter(carId => carId.toString() !== idCar);
+      await user.save();
+
+      res.status(200).send({
+        message: "Car removed from wishlist",
+        isLiked: false, // Trả về trạng thái yêu thích
+      });
+    } catch (error) {
+      res.status(500).send({
+        message: error.message,
+        data: null,
+      });
+    }
+  },
+
+  //api lấy danh sách xe yêu thích
+  
+  getWishlist: async (req, res) => {
+    try {
+      const { userId } = req.params;
+      const { limit, page } = req.query;
+      const dataLimit = parseInt(limit) || 9;
+      const pageNumber = parseInt(page) || 1;
+      const skip = (pageNumber - 1) * dataLimit;
+
+      const user = await UserModel.findById(userId);
+      if (!user) throw new Error("User not found");
+
+      const totalCars = user.wishlist.length;
+
+      // Lấy danh sách ID xe trong wishlist và phân trang
+      const wishlistIds = user.wishlist.slice(skip, skip + dataLimit);
+
+      // Populate thông tin xe từ danh sách ID đã phân trang
+      const wishlistCars = await CarModel.find({ _id: { $in: wishlistIds } });
+
+      res.status(200).send({
+        message: "Wishlist retrieved successfully",
+        data: wishlistCars,
+        totalPages: Math.ceil(totalCars / dataLimit),
+        currentPage: pageNumber,
+      });
+    } catch (error) {
+      res.status(500).send({
+        message: error.message,
+        data: null,
+      });
+    }
+  },
 
 };
 

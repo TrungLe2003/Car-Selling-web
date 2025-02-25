@@ -1,9 +1,11 @@
 //svgs
 import FolderIcon from "../../icons/carDetailPage/FolderIcon";
+import LogoutIcon from "../../icons/header/LogoutIcon";
 // librarys
 import { useState } from "react";
 import axios from "axios";
 import { message } from "antd"; //Thông báo
+import { useNavigate } from "react-router-dom";
 
 //
 import "./style.css";
@@ -37,6 +39,7 @@ const listYear = [
 const listColor = ["Đỏ", "Đen", "Trắng", "Ghi", "Xanh lá", "Xanh dương", "Nâu"];
 
 const PostingCarInfoPage = () => {
+  const nav = useNavigate();
   const [fileCount, setFileCount] = useState(0); //đếm số lượng ảnh
   const [carName, setCarName] = useState(null);
   const [carPrice, setCarPrice] = useState(null);
@@ -60,7 +63,7 @@ const PostingCarInfoPage = () => {
   const crrUser = localStorage.getItem("currentUser");
   const userObj = JSON.parse(crrUser); // Chuyển chuỗi JSON thành object
   const accessToken = userObj.accessToken;
-
+  const idUser = userObj._id;
   //Hàm thay đổi file ảnh
   const handleFileChange = (e) => {
     const files = Array.from(e.target.files);
@@ -128,7 +131,7 @@ const PostingCarInfoPage = () => {
           },
         }
       );
-      alert("Tạo xe thành công!");
+      message.success("Đăng bán xe thành công!");
       console.log(response.data);
     } catch (error) {
       console.error(error.response?.data || error.message);
@@ -137,6 +140,13 @@ const PostingCarInfoPage = () => {
   };
   return (
     <div className="PostingCarInfoPage">
+      <div
+        className="returnProviderManagePage"
+        onClick={() => nav(`/provider/${idUser}/postmanage`)}
+      >
+        {" "}
+        <LogoutIcon></LogoutIcon> Quay lại trang quản lý{" "}
+      </div>
       <div className="title">
         <h1>ĐĂNG THÔNG TIN BÁN XE</h1>
       </div>

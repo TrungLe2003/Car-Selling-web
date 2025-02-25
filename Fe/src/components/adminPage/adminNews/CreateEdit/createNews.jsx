@@ -3,41 +3,19 @@ import { useNavigate } from 'react-router-dom';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import axios from 'axios';
-//
+// Store
 import { Store } from '../../../../Store';
-
 // imgs
 import AddImg from '/public/imgs/addImg.png'
 //
 import './style.css';
 
-const AddNews = () => {
+const CreateNews = () => {
     // navigate
     const navigate = useNavigate();
     // store lấy accessToken crrUser
     const store = useContext(Store);
     const accessToken = store.currentUser.accessToken;
-    // state cập nhật nội dung khi thay đổi (change)
-    const [value, setValue] = useState('');
-    const [formData, setFormData] = useState({
-        title: '',
-        isCategory: '',
-        file: null
-    });
-    const [addImg, setAddImg] = useState(AddImg);
-    const handleFileChange = (e) => {
-        setFormData({
-            ...formData,
-            file: e.target.files[0]
-        });
-        setAddImg(URL.createObjectURL(e.target.files[0]));
-    };
-    const handleChange = (e) => {
-        setFormData({
-            ...formData,
-            [e.target.name]: e.target.value,
-        });
-    };
     // react-quill
     const quillRef = useRef(null);
     const modules = {
@@ -47,15 +25,39 @@ const AddNews = () => {
           ['link', 'image', 'code-block'],
         ]
     };
-    // submit
+    // state cập nhật nội dung khi thay đổi (change)
+    const [title, setTitle] = useState('');
+    const [isCategory, setIsCategory] = useState('');
     const [isStatus, setIsStatus] = useState('');
+    const [addImg, setAddImg] = useState(AddImg);
+    const [file, setFile] = useState('');
+    const [value, setValue] = useState('');
+    const split1 = value.split('</strong></p><p><br></p>');
+    const split2 = split1[0].split('<strong>');
+    const content = split1[1];
+    const subTitle = split2[1];
+    // console.log(value);
+    // console.log(subTitle);
+    // console.log(content);
+    const handleFileChange = (e) => {
+        setFile(e.target.files[0])
+        setAddImg(URL.createObjectURL(e.target.files[0]));
+    };
+    // submit
     const handleSubmit = async (e) => {
         e.preventDefault();
         const payloadFormData = new FormData();
-        for (const key in formData) {
-            payloadFormData.append(key, formData[key]);
+        payloadFormData.append('title', title);
+        payloadFormData.append('file', file);
+        {subTitle ?
+            payloadFormData.append('subTitle', subTitle) :
+            payloadFormData.append('subTitle', '')
         };
-        payloadFormData.append('content', value);
+        {content ?
+            payloadFormData.append('content', content) :
+            payloadFormData.append('content', value)
+        };
+        payloadFormData.append('isCategory', isCategory);
         payloadFormData.append('isStatus', isStatus);
         try {
             const response = await axios.post(`http://localhost:8080/api/v1/news/create-news`, payloadFormData,
@@ -66,15 +68,15 @@ const AddNews = () => {
                 },
             });
             alert(response.data.message);
-            navigate('/admin/news');
+            navigate('/admin/news/all');
         } catch (error) {
             alert(error.response.data.message);
         }
     };
     return (
-        <div className='addNews'>
-            <h3>Thêm bài viết</h3>
-            <div className='form'>
+        <div className='CreateEdit'>
+            <h3>Tạo bài viết mới</h3>
+            <div className='formCreateEdit'>
                 <div className='left'>
                     <div className='section1'>
                         <div className='grImg'>
@@ -85,11 +87,11 @@ const AddNews = () => {
                             <div className='col'>
                                 <label htmlFor="title">Tiêu đề</label>
                                 <input type="text" id='title' placeholder='Thêm tiêu đề'
-                                name='title' value={formData.title} onChange={handleChange} />
+                                name='title' value={title} onChange={(e) => setTitle(e.target.value)} />
                             </div>
                             <div className='col'>
                                 <label htmlFor="isCategory">Danh mục</label>
-                                <select name="isCategory" id="isCategory" value={formData.isCategory} onChange={handleChange}>
+                                <select name="isCategory" id="isCategory" value={isCategory} onChange={(e) => setIsCategory(e.target.value)}>
                                     <option value="" disabled>---------- Chọn danh mục ----------</option>
                                     <option value="carNews" >Tin xe</option>
                                     <option value="marketNews" >Tin thị trường</option>
@@ -111,9 +113,8 @@ const AddNews = () => {
                 <div className='right'>
                     <h5>Xuất bản</h5>
                     <div className='grButton'>
-                        <button type='submit' onMouseEnter={() => setIsStatus('Đã xuất bản')} onClick={handleSubmit}>Xuất bản</button>
-                        <button type='submit' onMouseEnter={() => setIsStatus('Bản nháp')} onClick={handleSubmit}>Lưu nháp</button>
-                        <button type='submit' onMouseEnter={() => setIsStatus('Thùng rác')} onClick={handleSubmit}>Bỏ vào thùng rác</button>
+                        <button type='submit' onMouseEnter={() => setIsStatus('published')} onClick={handleSubmit}>Xuất bản</button>
+                        <button type='submit' onMouseEnter={() => setIsStatus('draft')} onClick={handleSubmit}>Lưu nháp</button>
                     </div>
                 </div>
             </div>
@@ -121,4 +122,4 @@ const AddNews = () => {
     )
 }
 
-export default AddNews
+export default CreateNews
