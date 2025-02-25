@@ -1,5 +1,8 @@
 //library
 import { Route, Routes } from "react-router-dom";
+import { io } from "socket.io-client";
+import { message } from "antd";
+import { useEffect } from "react";
 // component
 import Footer from "./components/footer";
 import Header from "./components/header";
@@ -27,14 +30,40 @@ import NewsByCategory from "./components/newsPage/newsByCategory";
 // import PageWithAllCar from "./components/categoryPage/PageWithAllCar";
 // import PageWithCarByBrand from "./components/categoryPage/PageWithCarByBrand";
 import CarDetailPage from "./components/carPage";
+//provider
 import PostingCarInfoPage from "./components/postingCarInfoPage";
 import ProviderPage from "./components/providerPage";
 import PostManage from "./components/providerPage/postManage";
+import ContactMailManage from "./components/providerPage/contactMailProvider";
+//
 import SearchPage from "./components/searchPage";
+import MailPage from "./components/profilePage/addToProfilePage/UserMail";
 //
 import "./App.css";
+const socket = io("http://localhost:8080"); // Kết nối đến server
 
 function App() {
+  useEffect(() => {
+    const crrUser = localStorage.getItem("currentUser");
+    if (crrUser) {
+      const userObj = JSON.parse(crrUser);
+      const userId = userObj._id;
+      socket.emit("join_room", userId); // Tham gia phòng
+
+      // Đăng ký sự kiện một lần duy nhất
+      const handleMailStatusChanged = (data) => {
+        console.log("📩 Cập nhật mới từ server:", data);
+        message.success(data.message);
+      };
+      socket.on("mailStatusChanged", handleMailStatusChanged);
+
+      // Hủy lắng nghe sự kiện khi component unmount
+      return () => {
+        socket.off("mailStatusChanged", handleMailStatusChanged);
+      };
+    }
+  }, []);
+
   return (
     <div className="container">
       <header>
@@ -56,6 +85,10 @@ function App() {
           </Route>
           <Route path="/provider/:idUser" element={<ProviderPage />}>
             <Route path="postmanage" element={<PostManage />}></Route>
+            <Route
+              path="mailContactManage"
+              element={<ContactMailManage />}
+            ></Route>
           </Route>
           <Route path="/car/:idCar" element={<CarDetailPage />} />
           <Route path="/postingCar" element={<PostingCarInfoPage />} />
@@ -66,6 +99,8 @@ function App() {
             path="/profile/:activepage/:userId"
             element={<ProfilePage />}
           />
+          <Route path="/usermail/:userId" element={<MailPage />} />
+          {/* Thêm cái này vào phần profile user */}
           <Route path="/category" element={<CategoryPage />} />
           <Route path="/allCars" element={<CategoryPage />}></Route>
           <Route path="/news/details/:id" element={<NewsDetailPage />} />
