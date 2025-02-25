@@ -56,7 +56,6 @@ const ListNewsByCategory = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const [listNews, setListNews] = useState([]);
-    console.log(listNews);
     const queryListNews = async () => {
         try {
             const response = await axios.get(`http://localhost:8080/api/v1/news/newsByCategory?limit=${limit}&currentPage=${currentPage}&isStatus=${isStatus}&isCategory=${splitPathname[5]}`,
@@ -128,9 +127,9 @@ const ListNewsByCategory = () => {
         }
     };
     return (
-        <div className='ListNewsByCategory'>
+        <div className='listNewsByCategory'>
             <div className='head'>
-                <h3>Bài viết - Danh mục: {getCategoryName(splitPathname[5])}</h3>
+                <h3>Bài viết theo danh mục: {getCategoryName(splitPathname[5])}</h3>
                 <h5 onClick={() => navigate(`/news/${splitPathname[5]}`)}>Xem danh mục</h5>
             </div>
             <div className='newsFilter'>

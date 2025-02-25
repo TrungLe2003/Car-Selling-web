@@ -78,6 +78,7 @@
     opacity: 0.75;
 }
 .listNews .displayTable .table .tbody .tr .action p {
+    width: fit-content;
     cursor: pointer;
 }
 .listNews .displayTable .table .tbody .tr .action p:nth-child(2) {

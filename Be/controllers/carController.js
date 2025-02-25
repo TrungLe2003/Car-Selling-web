@@ -1,4 +1,5 @@
 import CarModel from "../models/CarModel.js";
+import UserModel from "../models/UserModel.js";
 import multer from "multer";
 import { v2 as cloudinary } from "cloudinary";
 import dotenv from "dotenv";
@@ -222,7 +223,7 @@ const CarController = {
     // uploadImgCar,
     async (req, res) => {
       try {
-        const { idCar } = req.params;
+        const { carId } = req.params;
         // ////Tải lên Cloudinary và lấy URL
         // const files = req.files;
         // if (!files || files.length === 0) {
@@ -249,8 +250,9 @@ const CarController = {
           describe,
           state,
           sitChairs,
+          version,
         } = req.body;
-        const updatedCar = await CarModel.findByIdAndUpdate(idCar, {
+        const updatedCar = await CarModel.findByIdAndUpdate(carId, {
           carPrice,
           color,
           ODO,
@@ -266,10 +268,11 @@ const CarController = {
           describe,
           state,
           sitChairs,
+          version,
         });
         //xóa phần img với name ở 2 dòng trên
         res.status(201).send({
-          message: "Update successful!",
+          message: "Thay đổi thông tin xe thành công!",
           data: updatedCar,
         });
       } catch (error) {
@@ -283,10 +286,10 @@ const CarController = {
   // Xoá xe
   deleteCar: async (req, res) => {
     try {
-      const { idCar } = req.params;
-      const deleteCar = await CarModel.findByIdAndDelete(idCar);
+      const {carId} = req.params;
+      const deleteCar = await CarModel.findByIdAndDelete(carId);
       res.status(201).send({
-        message: "Delete successful!",
+        message: "Xóa xe thành công!",
         data: deleteCar,
       });
     } catch (error) {
@@ -296,26 +299,54 @@ const CarController = {
     }
   },
   // Phương thêm từ đây để dử dụng cho trang quản trị
-  // Đếm tất cả xe theo trạng thái
+  // Thay đổi trạng thái xe (Duyệt - Bỏ duyệt)
+  changeStatusCar: async (req, res) => {
+    try {
+      const {id} = req.params;
+      const {newStatus} = req.body;
+      const changeStatusCar = await CarModel.findByIdAndUpdate({
+        _id: id,
+      }, {
+          isStatus: newStatus,
+      });
+      if (newStatus === 'approved') {
+        return res.status(201).send({
+          message: 'Duyệt xe thành công!',
+          data: changeStatusCar,
+        });
+      }
+      if (newStatus === 'pending') {
+        return res.status(201).send({
+          message: 'Bỏ duyệt xe thành công!',
+          data: changeStatusCar,
+        });
+      }
+    } catch (error) {
+      res.status(500).send({
+        message: error.message,
+      });
+    }
+  },
+  // Đếm xe theo trạng thái
   countCars: async (req, res) => {
     try {
         const totalCars = await CarModel.find({});
         const approvedCars = await CarModel.find({isStatus: 'approved'});
         const pendingCars = await CarModel.find({isStatus: 'pending'});
         res.status(200).send({
-            message: 'Đếm xe thành công!',
-            totalCars: totalCars.length,
-            approvedCars: approvedCars.length,
-            pendingCars: pendingCars.length,
+          message: 'Đếm xe thành công!',
+          totalCars: totalCars.length,
+          approvedCars: approvedCars.length,
+          pendingCars: pendingCars.length,
         });
     } catch (error) {
         res.status(500).send({
-            message: error.message,
-            data: null,
+          message: error.message,
+          data: null,
         });
     }
   },
-  // Lấy tất cả xe theo trạng thái
+  // Lấy danh sách xe theo trạng thái
   getAllCar: async (req, res) => {
     try {
       const {limit, currentPage, isStatus} = req.query;
@@ -330,7 +361,7 @@ const CarController = {
         .sort({createdAt: -1})
         .populate('idProvider', 'username avatar');
         res.status(200).send({
-          message: 'Lấy thông tin tất cả xe thành công!',
+          message: 'Lấy danh sách xe thành công!',
           data: result,
           totalPages: Math.ceil(totalCars.length / dataLimit),
         });
@@ -346,7 +377,263 @@ const CarController = {
         .sort({createdAt: -1})
         .populate('idProvider', 'username avatar');
         res.status(200).send({
-          message: 'Lấy thông tin tất cả xe theo trạng thái thành công!',
+          message: 'Lấy danh sách xe theo trạng thái thành công!',
+          data: result,
+          totalPages: Math.ceil(totalCars.length / dataLimit),
+        });
+      }
+    } catch (error) {
+      res.status(500).send({
+        message: error.message,
+        data: null,
+      });
+    }
+  },
+  // Đếm xe theo trạng thái + theo hãng
+  countCarsByBrand: async (req, res) => {
+    try {
+      const {brand} = req.params;
+      const totalCars = await CarModel.find({
+        brand: brand,
+      });
+      const approvedCars = await CarModel.find({
+        brand: brand,
+        isStatus: 'approved'
+      });
+      const pendingCars = await CarModel.find({
+        brand: brand,
+        isStatus: 'pending'
+      });
+      res.status(200).send({
+        message: 'Đếm xe theo hãng thành công!',
+        totalCars: totalCars.length,
+        approvedCars: approvedCars.length,
+        pendingCars: pendingCars.length,
+      });
+    } catch (error) {
+      res.status(500).send({
+        message: error.message,
+        data: null,
+      });
+    }
+  },
+  // Lấy danh sách xe theo trạng thái + theo hãng
+  getCarByBrand: async (req, res) => {
+    try {
+      const {limit, currentPage, isStatus, brand} = req.query;
+      const dataLimit = parseInt(limit);
+      const pageNumber = parseInt(currentPage) || 1;
+      const skip = (pageNumber - 1) * dataLimit;
+      if (isStatus === 'all') {
+        const totalCars = await CarModel.find({
+          brand: brand,
+        }, 'carName brand state isStatus createdAt');
+        const result = await CarModel.find({
+          brand: brand,
+        }, 'carName brand state isStatus createdAt')
+        .skip(skip)
+        .limit(dataLimit)
+        .sort({createdAt: -1})
+        .populate('idProvider', 'username avatar');
+        res.status(200).send({
+          message: 'Lấy danh sách xe theo hãng thành công!',
+          data: result,
+          totalPages: Math.ceil(totalCars.length / dataLimit),
+        });
+      } else {
+        const totalCars = await CarModel.find({
+          brand: brand,
+          isStatus: isStatus
+        }, 'carName brand state isStatus createdAt');
+        const result = await CarModel.find({
+          brand: brand,
+          isStatus: isStatus
+        }, 'carName brand state isStatus createdAt')
+        .skip(skip)
+        .limit(dataLimit)
+        .sort({createdAt: -1})
+        .populate('idProvider', 'username avatar');
+        res.status(200).send({
+          message: 'Lấy danh sách xe theo trạng thái + theo hãng thành công!',
+          data: result,
+          totalPages: Math.ceil(totalCars.length / dataLimit),
+        });
+      }
+    } catch (error) {
+      res.status(500).send({
+        message: error.message,
+        data: null,
+      });
+    }
+  },
+  // Đếm theo trạng thái + theo nhà cung cấp
+  countCarsByProvider: async (req, res) => {
+    try {
+      const {idProvider} = req.params;
+      const totalCars = await CarModel.find({
+        idProvider: idProvider,
+      });
+      const approvedCars = await CarModel.find({
+        idProvider: idProvider,
+        isStatus: 'approved'
+      });
+      const pendingCars = await CarModel.find({
+        idProvider: idProvider,
+        isStatus: 'pending'
+      });
+      res.status(200).send({
+        message: 'Đếm xe theo nhà cung cấp thành công!',
+        totalCars: totalCars.length,
+        approvedCars: approvedCars.length,
+        pendingCars: pendingCars.length,
+      });
+    } catch (error) {
+      res.status(500).send({
+        message: error.message,
+        data: null,
+      });
+    }
+  },
+  // Lấy tất cả xe theo trạng thái + theo nhà cung cấp
+  getCarByProvider: async (req, res) => {
+    try {
+      const {limit, currentPage, isStatus, idProvider} = req.query;
+      const dataLimit = parseInt(limit);
+      const pageNumber = parseInt(currentPage) || 1;
+      const skip = (pageNumber - 1) * dataLimit;
+      const provider = await UserModel.findById(idProvider);
+      if (isStatus === 'all') {
+        const totalCars = await CarModel.find({
+          idProvider: idProvider,
+        }, 'carName brand state isStatus createdAt');
+        const result = await CarModel.find({
+          idProvider: idProvider,
+        }, 'carName brand state isStatus createdAt')
+        .skip(skip)
+        .limit(dataLimit)
+        .sort({createdAt: -1})
+        .populate('idProvider', 'username avatar');
+        res.status(200).send({
+          message: 'Lấy danh sách xe theo nhà cung cấp thành công!',
+          data: result,
+          totalPages: Math.ceil(totalCars.length / dataLimit),
+          usernameProvider: provider.username,
+        });
+      } else {
+        const totalCars = await CarModel.find({
+          idProvider: idProvider,
+          isStatus: isStatus
+        }, 'carName brand state isStatus createdAt');
+        const result = await CarModel.find({
+          idProvider: idProvider,
+          isStatus: isStatus
+        }, 'carName brand state isStatus createdAt')
+        .skip(skip)
+        .limit(dataLimit)
+        .sort({createdAt: -1})
+        .populate('idProvider', 'username avatar');
+        res.status(200).send({
+          message: 'Lấy danh sách xe theo trạng thái + theo nhà cung cấp thành công!',
+          data: result,
+          totalPages: Math.ceil(totalCars.length / dataLimit),
+          usernameProvider: provider.username,
+        });
+      }
+    } catch (error) {
+      res.status(500).send({
+        message: error.message,
+        data: null,
+      });
+    }
+  },
+  // Đếm xe theo trạng thái + theo tình trạng
+  countCarsByState: async (req, res) => {
+    // đổi tên tình trạng
+    const getStateName = (state) => {
+      switch (state) {
+      case 'old':
+        return 'Cũ';
+      case 'new':
+        return 'Mới';
+      default:
+        return 'Không xác định';
+      }
+    };
+    try {
+      const {state} = req.params;
+      const totalCars = await CarModel.find({
+        state: getStateName(state),
+      });
+      const approvedCars = await CarModel.find({
+        state: getStateName(state),
+        isStatus: 'approved'
+      });
+      const pendingCars = await CarModel.find({
+        state: getStateName(state),
+        isStatus: 'pending'
+      });
+      res.status(200).send({
+        message: 'Đếm xe theo tình trạng thành công!',
+        totalCars: totalCars.length,
+        approvedCars: approvedCars.length,
+        pendingCars: pendingCars.length,
+      });
+    } catch (error) {
+      res.status(500).send({
+        message: error.message,
+        data: null,
+      });
+    }
+  },
+  // Lấy tất cả xe theo trạng thái + theo tình trạng
+  getCarByState: async (req, res) => {
+    // đổi tên tình trạng
+    const getStateName = (state) => {
+      switch (state) {
+      case 'old':
+        return 'Cũ';
+      case 'new':
+        return 'Mới';
+      default:
+        return 'Không xác định';
+      }
+    };
+    try {
+      const {limit, currentPage, isStatus, state} = req.query;
+      const dataLimit = parseInt(limit);
+      const pageNumber = parseInt(currentPage) || 1;
+      const skip = (pageNumber - 1) * dataLimit;
+      if (isStatus === 'all') {
+        const totalCars = await CarModel.find({
+          state: getStateName(state),
+        }, 'carName brand state isStatus createdAt');
+        const result = await CarModel.find({
+          state: getStateName(state),
+        }, 'carName brand state isStatus createdAt')
+        .skip(skip)
+        .limit(dataLimit)
+        .sort({createdAt: -1})
+        .populate('idProvider', 'username avatar');
+        res.status(200).send({
+          message: 'Lấy danh sách xe theo tình trạng thành công!',
+          data: result,
+          totalPages: Math.ceil(totalCars.length / dataLimit),
+        });
+      } else {
+        const totalCars = await CarModel.find({
+          state: getStateName(state),
+          isStatus: isStatus
+        }, 'carName brand state isStatus createdAt');
+        const result = await CarModel.find({
+          state: getStateName(state),
+          isStatus: isStatus
+        }, 'carName brand state isStatus createdAt')
+        .skip(skip)
+        .limit(dataLimit)
+        .sort({createdAt: -1})
+        .populate('idProvider', 'username avatar');
+        res.status(200).send({
+          message: 'Lấy danh sách xe theo trạng thái + theo tình trạng thành công!',
           data: result,
           totalPages: Math.ceil(totalCars.length / dataLimit),
         });

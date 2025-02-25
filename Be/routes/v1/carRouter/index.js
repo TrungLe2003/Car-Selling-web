@@ -18,17 +18,31 @@ CarRouter.get("/car/:idCar", CarController.getCarById);
 CarRouter.get("", CarController.getListCar);
 // CarRouter.put("/addColor", CarController.updateCarColors);
 CarRouter.get("/brand", CarController.findCarsByBrand);
-// api tìm kiếm xe bằng tên
+// Tìm kiếm xe theo tên - ALL
 CarRouter.get("/search", CarController.searchingCar);
-// sửa thông tin của xe
-CarRouter.put("/updatecar/:idCar", UserMiddleware.checkProviderOrAdmin, CarController.updatedCar);
-// xoá xe
-CarRouter.delete("/deletecar/:idCar", UserMiddleware.checkProviderOrAdmin, CarController.deleteCar);
-// Đếm tất cả xe theo trạng thái - ADMIN
+// Sửa thông tin xe - ADMIN || CAR OWNER
+CarRouter.put("/updatecar/:carId", middlewares.verifyAccessToken, middlewares.validateAdminOrCarOwner, CarController.updatedCar);
+// Xoá xe - ADMIN || CAR OWNER
+CarRouter.delete("/deletecar/:carId", middlewares.verifyAccessToken, middlewares.validateAdminOrCarOwner, CarController.deleteCar);
+// Thay đổi trạng thái xe - ADMIN
+CarRouter.put("/changeStatusCar/:id", middlewares.verifyAccessToken, middlewares.validateAdmin, CarController.changeStatusCar);
+// Đếm xe theo trạng thái - ADMIN
 CarRouter.get("/countCars", middlewares.verifyAccessToken, middlewares.validateAdmin, CarController.countCars);
-// Lấy tất cả xe - ADMIN
+// Đếm xe theo trạng thái + theo hãng - ADMIN
+CarRouter.get("/countCarsByBrand/:brand", middlewares.verifyAccessToken, middlewares.validateAdmin, CarController.countCarsByBrand);
+// Đếm xe theo trạng thái + theo tình trạng - ADMIN
+CarRouter.get("/countCarsByState/:state", middlewares.verifyAccessToken, middlewares.validateAdmin, CarController.countCarsByState);
+// Đếm xe theo trạng thái + theo nhà cung cấp - ADMIN
+CarRouter.get("/countCarsByProvider/:idProvider", middlewares.verifyAccessToken, middlewares.validateAdmin, CarController.countCarsByProvider);
+// Lấy danh sách xe theo trạng thái - ADMIN
 CarRouter.get("/getAllCar", middlewares.verifyAccessToken, middlewares.validateAdmin, CarController.getAllCar);
-// lấy tất cả xe của user qua id
+// Lấy danh sách xe theo trạng thái + theo hãng - ADMIN
+CarRouter.get("/carByBrand", middlewares.verifyAccessToken, middlewares.validateAdmin, CarController.getCarByBrand);
+// Lấy danh sách xe theo trạng thái + theo tình trạng - ADMIN
+CarRouter.get("/carByState", middlewares.verifyAccessToken, middlewares.validateAdmin, CarController.getCarByState);
+// Lấy danh sách xe theo trạng thái + theo nhà cung cấp - ADMIN
+CarRouter.get("/carByProvider", middlewares.verifyAccessToken, middlewares.validateAdmin, CarController.getCarByProvider);
+// Lấy danh sách xe của user qua id
 CarRouter.get("/:idProvider", CarController.listUserCar);
 
 export default CarRouter;

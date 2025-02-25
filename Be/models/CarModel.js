@@ -41,7 +41,7 @@ const carSchema = new mongoose.Schema({
   isStatus: {
     type: String,
     enum: ["approved", "pending"],
-    default: 'approved'
+    default: "pending"
 },
 });
 

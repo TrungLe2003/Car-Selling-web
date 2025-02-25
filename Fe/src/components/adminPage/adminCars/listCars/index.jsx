@@ -55,8 +55,6 @@ const ListCars = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const [listCars, setListCars] = useState([]);
-    console.log(listCars);
-    
     const queryListCars = async () => {
         try {
             const response = await axios.get(`http://localhost:8080/api/v1/cars/getAllCar?limit=${limit}&currentPage=${currentPage}&isStatus=${isStatus}`,
@@ -98,8 +96,51 @@ const ListCars = () => {
         setCurrentPage(newPage);
         }
     };
-
-
+    // xóa xe
+    const handleDelete = async (id) => {
+        try {
+            const response = await axios.delete(`http://localhost:8080/api/v1/cars/deletecar/${id}`,
+                {
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`,
+                    },
+                }
+            );
+            queryCountCars();
+            queryListCars();
+        } catch (error) {
+            alert(error.response.data.message);
+        }
+    };
+    // duyệt đăng bán xe
+    const handleApproveCar = async (id, newStatus) => {
+        try {
+            const response = await axios.put(`http://localhost:8080/api/v1/cars/changeStatusCar/${id}`,
+                {
+                    newStatus: newStatus,
+                },{
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`,
+                    },
+                }
+            );
+            queryCountCars();
+            queryListCars();
+        } catch (error) {
+            alert(error.response.data.message);
+        }
+    };
+    // đổi tên tình trạng
+    const getStateName = (state) => {
+        switch (state) {
+        case 'Cũ':
+            return 'old';
+        case 'Mới':
+            return 'new';
+        default:
+            return 'Không xác định';
+        }
+    };
     return (
         <div className='listCars'>
             <h3>Xe</h3>
@@ -122,23 +163,23 @@ const ListCars = () => {
             <div className='displayTable'>
                 <div className='table'>
                     <div className='thead'>
-                        <p className='theadProvider'>Nhà cung cấp</p>
                         <p className='theadName'>Tên xe</p>
                         <p className='theadBrand'>Tên hãng</p>
                         <p className='theadState'>Tình trạng</p>
+                        <p className='theadProvider'>Nhà cung cấp</p>
                         <p className='theadTime'>Thời gian</p>
                         <p className='theadAction'>Hành động</p>
                     </div>
                     <div className='tbody'>
                         {listCars.map((car, idx) => {
                             return <div key={idx + 1} className='tr' style={car.isStatus === "pending" ? {backgroundColor:'#2271B120'} : {backgroundColor:'#FFFFFF'}}>
-                                <div className='provider'>
-                                    <img src={car.idProvider.avatar} alt="" />
-                                    <h5>{car.idProvider.username}</h5>
-                                </div>
                                 <p className='name'>{car.carName}</p>
-                                <p className='brand'>{car.brand}</p>
-                                <p className='state'>{car.state}</p>    
+                                <p className='brand' onClick={() => navigate(`/admin/cars/carsByBrand/all/${car.brand}`)}>{car.brand}</p>
+                                <p className='state' onClick={() => navigate(`/admin/cars/carsByState/all/${getStateName(car.state)}`)}>{car.state}</p>    
+                                <div className='provider'>
+                                    {/* <img src={car.idProvider.avatar} alt="" /> */}
+                                    <h5 onClick={() => navigate(`/admin/cars/carsByProvider/all/${car.idProvider._id}`)}>{car.idProvider.username}</h5>
+                                </div>
                                 <div className='time'>
                                     <p>{getStatusName(car.isStatus)}</p>
                                     <p>{moment(car.createdAt).format('HH:mm, DD/MM/YYYY')}</p>
@@ -148,8 +189,12 @@ const ListCars = () => {
                                         <p onClick={() => navigate(`/car/${car._id}`)}>Xem</p> :
                                         <p onClick={() => navigate(`/car/${car._id}`)}>Xem trước</p>
                                     }
-                                    <p>Chỉnh sửa</p>
-                                    <p>Xóa bỏ</p>
+                                    <p onClick={() => navigate(`/admin/cars/editCarInfo/${car._id}`)}>Chỉnh sửa</p>
+                                    <p onClick={() => handleDelete(car._id)}>Xóa bỏ</p>
+                                    {car.isStatus === 'approved' ?
+                                        <p onClick={() => handleApproveCar(car._id, 'pending')}>Bỏ duyệt</p> :
+                                        <p onClick={() => handleApproveCar(car._id, 'approved')}>Duyệt</p>
+                                    }
                                 </div>
                             </div>
                         })}

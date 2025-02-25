@@ -14,6 +14,7 @@
 }
 
 .listCommentsByNews .head > h5 {
+    width: fit-content;
     color: #2271B1;
     text-decoration: underline;
     cursor: pointer;
@@ -107,6 +108,7 @@
 }
 
 .listCommentsByNews .displayTable .table .tbody .tr .comment > .row {
+    margin-top: 10px;
     justify-content: end;
     gap: 10px;
 }

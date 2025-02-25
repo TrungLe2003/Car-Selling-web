@@ -1,6 +1,8 @@
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 dotenv.config();
+//
+import CarModel from '../models/CarModel.js';
 
 const middlewares = {
     // xác minh access token
@@ -49,13 +51,30 @@ const middlewares = {
             });
         }
     },
-    // xác thực admin hoặc chủ tài khoản
+    // xác thực admin hoặc chủ tài khoản - dùng cho sửa thông tin người dùng
     validateAdminOrAccountOwner: async (req, res, next) => {
         try {
             const {id} = req.params;
             const currentUser = req.currentUser;
             const role = currentUser.role;
             if (role !== "ADMIN" && id !== currentUser._id) throw new Error('Bạn không phải là ADMIN hoặc chủ tài khoản này!');
+            next();
+        } catch (error) {
+            res.status(500).send({
+                message: error.message,
+                data: null,
+            });
+        }
+    },
+    // xác thực admin hoặc chủ xe - dùng cho sửa thông tin xe hoặc xóa xe
+    validateAdminOrCarOwner: async (req, res, next) => {
+        try {
+            const {carId} = req.params;
+            const car = await CarModel.findById(carId);
+            const idProvider = car.idProvider; // idProvider liên kết với xe
+            const currentUser = req.currentUser; // người dùng
+            const role = currentUser.role;
+            if (role !== "ADMIN" && idProvider !== currentUser._id) throw new Error('Bạn không phải là ADMIN hoặc chủ xe này!');
             next();
         } catch (error) {
             res.status(500).send({

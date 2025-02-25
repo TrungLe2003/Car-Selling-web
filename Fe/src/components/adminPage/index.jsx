@@ -83,7 +83,11 @@ const AdminPage = () => {
                     className={
                         pathname === "/admin/cars/all" ||
                         pathname === "/admin/cars/approved" ||
-                        pathname === "/admin/cars/pending"
+                        pathname === "/admin/cars/pending" ||
+                        splitPathname[3] === "carsByBrand" ||
+                        splitPathname[3] === "carsByState" ||
+                        splitPathname[3] === "carsByProvider" ||
+                        splitPathname[3] === "editCarInfo"
                         ? activeComponent : component}
                     >Xe
                 </h5>
@@ -91,27 +95,28 @@ const AdminPage = () => {
                     className={
                         pathname === "/admin/cars/all" ||
                         pathname === "/admin/cars/approved" ||
-                        pathname === "/admin/cars/pending"
-                        // splitPathname[3] === "viewUserInfo" ||
-                        // splitPathname[3] === "editUserInfo"
+                        pathname === "/admin/cars/pending" ||
+                        splitPathname[3] === "carsByBrand" ||
+                        splitPathname[3] === "carsByState" ||
+                        splitPathname[3] === "carsByProvider" ||
+                        splitPathname[3] === "editCarInfo"
                         ? activeDiv : div}>
                     <p 
-                        onClick={() => navigate('users/all')}
+                        onClick={() => navigate('cars/all')}
                         className={
                             pathname === "/admin/cars/all" ||
                             pathname === "/admin/cars/approved" ||
-                            pathname === "/admin/cars/pending"
+                            pathname === "/admin/cars/pending" ||
+                            splitPathname[3] === "carsByBrand" ||
+                            splitPathname[3] === "carsByState" ||
+                            splitPathname[3] === "carsByProvider"
                             ? activeSubComponent : subComponent}
                         >Tất cả xe
                     </p>
-                    {/* <p 
-                        style={splitPathname[3] === "viewUserInfo" ? {display:'block', fontSize:'12px', color:'#FFFFFF', fontWeight:'bold', cursor:'pointer', transition:'all 0.5s ease',} : {display:'none'}}
-                        >Xem thông tin thành viên
-                    </p> */}
-                    {/* <p 
-                        style={splitPathname[3] === "editUserInfo" ? {display:'block', fontSize:'12px', color:'#FFFFFF', fontWeight:'bold', cursor:'pointer', transition:'all 0.5s ease',} : {display:'none'}}
-                        >Sửa thông tin thành viên
-                    </p> */}
+                    <p 
+                        style={splitPathname[3] === "editCarInfo" ? {display:'block', fontSize:'12px', color:'#FFFFFF', fontWeight:'bold', cursor:'pointer', transition:'all 0.5s ease',} : {display:'none'}}
+                        >Sửa thông tin xe
+                    </p>
                 </div>
                 <h5
                     onClick={() => navigate('news/all')}

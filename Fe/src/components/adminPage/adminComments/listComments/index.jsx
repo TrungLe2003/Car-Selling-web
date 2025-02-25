@@ -113,12 +113,12 @@ const ListComments = () => {
         }
     };
     // thay đổi trạng thái bình luận
-    const handleChangeCommentStatus = async (id, newIsStatus) => {
+    const handleChangeCommentStatus = async (id, newStatus) => {
         try {
             const response = await axios.put(`http://localhost:8080/api/v1/comments/changeCommentStatus`,
                 {
                     commentId: id,
-                    newIsStatus: newIsStatus
+                    newStatus: newStatus
                 },{
                     headers: {
                         'Authorization': `Bearer ${accessToken}`,

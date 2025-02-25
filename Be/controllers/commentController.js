@@ -197,11 +197,11 @@ const commentController = {
     // Thay đổi trạng thái bình luận
     changeCommentStatus: async (req, res) => {
         try {
-            const {commentId, newIsStatus} = req.body;
+            const {commentId, newStatus} = req.body;
             const changeCommentStatus = await CommentModel.findByIdAndUpdate({
                 _id: commentId,
             }, {
-                isStatus: newIsStatus,
+                isStatus: newStatus,
             });
             res.status(201).send({
                 message: 'Thay đổi trạng thái bình luận thành công!',
