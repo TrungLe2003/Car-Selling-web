@@ -68,21 +68,22 @@ function App() {
     const crrUser = localStorage.getItem("currentUser");
     if (crrUser) {
       const userObj = JSON.parse(crrUser);
-      const userId = userObj._id;
-      socket.emit("join_room", userId); // Tham gia phòng
-
-      // Đăng ký sự kiện một lần duy nhất
-      const handleMailStatusChanged = (data) => {
-        console.log("📩 Cập nhật mới từ server:", data);
-        message.success(data.message);
-      };
-      socket.on("mailStatusChanged", handleMailStatusChanged);
-
-      // Hủy lắng nghe sự kiện khi component unmount
-      return () => {
-        socket.off("mailStatusChanged", handleMailStatusChanged);
-      };
+      if (userObj && userObj._id) {
+        socket.emit("join_room", userObj._id); // Chỉ tham gia phòng nếu userId hợp lệ
+      }
     }
+
+    const handleStorageChange = () => {
+      const updatedUser = localStorage.getItem("currentUser");
+      if (!updatedUser) {
+        socket.emit("leave_room"); // Rời khỏi phòng khi đăng xuất
+      }
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+    };
   }, []);
 
   return (

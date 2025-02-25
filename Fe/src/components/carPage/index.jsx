@@ -11,10 +11,11 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { message } from "antd";
+import { useNavigate } from "react-router-dom";
 //css
 import "./style.css";
-//Chưa thêm phần vote sao cho xe
 const CarDetailPage = () => {
+  const navigate = useNavigate();
   const [crrImg, setCrrImg] = useState(0); //hình ảnh to (ảnh hiện tại)
   const [btnLikeProduct, setBtnLikeProduct] = useState(false);
   const [userName, setUserName] = useState(null);
@@ -26,9 +27,16 @@ const CarDetailPage = () => {
   const [carData, setCarData] = useState(null);
   //
   const crrUser = localStorage.getItem("currentUser");
-  const userObj = JSON.parse(crrUser);
-  const accessToken = userObj.accessToken;
-  const userId = userObj._id;
+  const userObj = crrUser ? JSON.parse(crrUser) : null;
+  const accessToken = userObj?.accessToken || null;
+
+  const userId = userObj?._id || null;
+
+  if (!accessToken) {
+    console.error("AccessToken is missing!");
+    message.error("Người dùng chưa đăng nhập");
+    navigate("/login");
+  }
   //Hàm gửi thư
   const handleSendMail = async (e) => {
     e.preventDefault();
@@ -64,9 +72,6 @@ const CarDetailPage = () => {
   const [wishlist, setWishlist] = useState([]);
 
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("currentUser"));
-    const accessToken = user.accessToken;
-
     const fetchCarData = async () => {
       try {
         const carResponse = await axios.get(
