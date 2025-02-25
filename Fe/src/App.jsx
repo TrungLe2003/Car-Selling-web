@@ -1,17 +1,36 @@
 //library
 import { Route, Routes } from "react-router-dom";
 // component
+// Footer + Header
 import Footer from "./components/footer";
 import Header from "./components/header";
+// AdminPage
 import AdminPage from "./components/adminPage";
+// AdminOverview
 import AdminOverview from "./components/adminPage/adminOverview";
+// AdminUsers
 import AdminUsers from "./components/adminPage/adminUsers";
+import ListUsers from "./components/adminPage/adminUsers/listUser";
+import ViewUserInfo from "./components/adminPage/adminUsers/ViewEdit/viewUserInfo";
+import EditUserInfo from "./components/adminPage/adminUsers/ViewEdit/editUserInfo";
+// AdminCars
 import AdminCars from "./components/adminPage/adminCars";
+import ListCars from "./components/adminPage/adminCars/listCars";
+import ListCarsByBrand from "./components/adminPage/adminCars/listCarsByBrand";
+import ListCarsByProvider from "./components/adminPage/adminCars/listCarsByProvider";
+import ListCarsByState from "./components/adminPage/adminCars/listCarsByState";
+import EditCarInfo from "./components/adminPage/adminCars/editCarInfo";
+// AdminNews
 import AdminNews from "./components/adminPage/adminNews";
-import AdminComments from "./components/adminPage/adminComments";
 import ListNews from "./components/adminPage/adminNews/listNews";
+import ListNewsByCategory from "./components/adminPage/adminNews/listNewsByCategory";
 import CreateNews from "./components/adminPage/adminNews/CreateEdit/createNews";
 import EditNews from "./components/adminPage/adminNews/CreateEdit/editNews";
+// AdminComments
+import AdminComments from "./components/adminPage/adminComments";
+import ListComments from "./components/adminPage/adminComments/listComments";
+import ListCommentsByNews from "./components/adminPage/adminComments/listCommentsByNews";
+//
 import NotFoundPage from "./components/notFoundPage";
 import LoginPage from "./components/loginPage";
 import RegisterPage from "./components/registerPage";
@@ -50,14 +69,28 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/admin" element={<AdminPage />}>
             <Route path="" element={<AdminOverview />} />
-            <Route path="users" element={<AdminUsers />} />
-            <Route path="cars" element={<AdminCars />} />
+            <Route path="users" element={<AdminUsers />} >
+              <Route path=":role" element={<ListUsers />}/>
+              <Route path="viewUserInfo/:id" element={<ViewUserInfo/>} />
+              <Route path="editUserInfo/:id" element={<EditUserInfo/>} />
+            </Route>
+            <Route path="cars" element={<AdminCars />} >
+              <Route path=":isStatus" element={<ListCars/>}/>
+              <Route path="carsByBrand/:isStatus/:brand" element={<ListCarsByBrand/>}/>
+              <Route path="carsByState/:isStatus/:state" element={<ListCarsByState/>}/>
+              <Route path="carsByProvider/:isStatus/:idProvider" element={<ListCarsByProvider/>}/>
+              <Route path="editCarInfo/:id" element={<EditCarInfo/>}/>
+            </Route>
             <Route path="news" element={<AdminNews />}>
               <Route path=":isStatus" element={<ListNews />} />
+              <Route path="newsByCategory/:isStatus/:isCategory" element={<ListNewsByCategory />} />
               <Route path="createNews" element={<CreateNews />} />
               <Route path="editNews/:id" element={<EditNews />} />
             </Route>
-            <Route path="comments" element={<AdminComments />} />
+            <Route path="comments" element={<AdminComments />}>
+              <Route path=":isStatus" element={<ListComments />} />
+              <Route path="commentsByNews/:isStatus/:id" element={<ListCommentsByNews />} />
+            </Route>
           </Route>
           <Route path="/provider/:idUser" element={<ProviderPage />}>
             <Route path="postmanage" element={<PostManage />}></Route>
@@ -67,11 +100,7 @@ function App() {
           <Route path="/search" element={<SearchPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
-          <Route
-            path="/profile/:activepage/:userId"
-            element={<ProfilePage />}
-          />
-
+          <Route path="/profile/:activepage/:userId" element={<ProfilePage />}/>
           <Route path="/wishList/:userId" element={<WishListPage />} />
           <Route path="/category" element={<CategoryPage />} />
           <Route path="/allCars" element={<CategoryPage />}></Route>

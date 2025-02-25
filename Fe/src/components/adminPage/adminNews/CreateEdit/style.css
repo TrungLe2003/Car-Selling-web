@@ -5,7 +5,7 @@
 
 .CreateEdit {
     padding: 20px;
-    background-color: #F7F7F7;
+    background-color: #F0F0F0;
 }
 
 .CreateEdit .formCreateEdit {
@@ -27,9 +27,7 @@
     display: flex;
     align-items: center;
     gap: 20px;
-    /* padding: 20px; */
-    /* border: 1px solid #EEEEEE; */
-    background-color: #F7F7F7;
+    background-color: #F0F0F0;
 }
 
 .CreateEdit .formCreateEdit .left .section1 .grImg {

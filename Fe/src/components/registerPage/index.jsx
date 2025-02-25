@@ -1,7 +1,9 @@
 //library
-import { useState } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+// store
+import { Store } from '../../Store';
 // imgs
 import Background from '/public/imgs/background.png';
 // svgs
@@ -11,6 +13,12 @@ import './style.css';
 
 const RegisterPage = () => {
     const navigate = useNavigate();
+    const store = useContext(Store);
+    useEffect(() => {
+        if (store.currentUser) {
+            navigate('/');
+        };
+    }, []);
     const [formData, setFormData] = useState({
         email: '',
         username: '',
@@ -27,11 +35,12 @@ const RegisterPage = () => {
         e.preventDefault();
         try {
             const response = await axios.post('http://localhost:8080/api/v1/users/register', formData,
-            {
-                headers: {
-                    "Content-type": "application/json"
+                {
+                    headers: {
+                        "Content-type": "application/json"
+                    }
                 }
-            });
+            );
             alert(response.data.message);
             navigate('/login');
         } catch (error) {

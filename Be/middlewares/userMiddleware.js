@@ -23,7 +23,7 @@ const UserMiddleware = {
         throw new Error("Mật khẩu xác nhận không được bỏ trống!");
       next();
     } catch (error) {
-      res.status(403).send({
+      res.status(500).send({
         message: error.message,
         data: null,
       });
@@ -44,7 +44,7 @@ const UserMiddleware = {
       if (!password) throw new Error("Mật khẩu không được bỏ trống!");
       next();
     } catch (error) {
-      res.status(403).send({
+      res.status(500).send({
         message: error.message,
         data: null,
       });
@@ -117,7 +117,7 @@ const UserMiddleware = {
       console.log(req);
       next();
     } catch (error) {
-      res.status(401).send({
+      res.status(500).send({
         message: error.message,
         data: null,
       });

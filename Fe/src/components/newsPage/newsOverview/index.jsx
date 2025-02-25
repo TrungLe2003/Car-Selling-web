@@ -27,7 +27,7 @@ const NewsOverview = () => {
         <div className='newsOverview'>
             <div className='grListNews'>
                 <h2>Tin xe</h2>
-                <div className='listNews'>
+                <div className='listByCategory'>
                     {listCarNews.map((news, index) => {
                         return <div key={index + 1} className={`news news${index + 1}`} onClick={() => navigate(`/news/details/${news._id}`)}>
                             <img src={news.img} alt="" />
@@ -44,7 +44,7 @@ const NewsOverview = () => {
             </div>
             <div className='grListNews'>
                 <h2>Tin thị trường</h2>
-                <div className='listNews'>
+                <div className='listByCategory'>
                     {listMarketNews.map((news, index) => {
                         return <div key={index + 1} className={`news news${index + 1}`} onClick={() => navigate(`/news/details/${news._id}`)}>
                             <img src={news.img} alt="" />
@@ -61,7 +61,7 @@ const NewsOverview = () => {
             </div>
             <div className='grListNews'>
                 <h2>Khám phá</h2>
-                <div className='listNews'>
+                <div className='listByCategory'>
                     {listExplore.map((news, index) => {
                         return <div key={index + 1} className={`news news${index + 1}`} onClick={() => navigate(`/news/details/${news._id}`)}>
                             <img src={news.img} alt="" />

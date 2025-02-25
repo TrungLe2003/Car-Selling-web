@@ -15,7 +15,10 @@ const CreateNews = () => {
     const navigate = useNavigate();
     // store lấy accessToken crrUser
     const store = useContext(Store);
-    const accessToken = store.currentUser.accessToken;
+    let accessToken;
+    if (store.currentUser) {
+        accessToken = store.currentUser.accessToken
+    };
     // react-quill
     const quillRef = useRef(null);
     const modules = {

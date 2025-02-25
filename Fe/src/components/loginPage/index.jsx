@@ -1,7 +1,9 @@
 //library
-import { useState } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+// store
+import { Store } from '../../Store';
 // imgs
 import Background from '/public/imgs/background.png';
 // svgs
@@ -11,6 +13,12 @@ import './style.css';
 
 const LoginPage = () => {
     const navigate = useNavigate();
+    const store = useContext(Store);
+    useEffect(() => {
+        if (store.currentUser) {
+            navigate('/');
+        };
+    }, []);
     const [formData, setFormData] = useState({
         email: '',
         password: ''
@@ -25,11 +33,12 @@ const LoginPage = () => {
         e.preventDefault();
         try {
             const response = await axios.post('http://localhost:8080/api/v1/users/login', formData,
-            {
-                headers: {
-                    "Content-type": "application/json"
+                {
+                    headers: {
+                        "Content-type": "application/json"
+                    }
                 }
-            });
+            );
             const data = response.data;
             if (data) {
                 localStorage.setItem('currentUser', JSON.stringify(data.data));
