@@ -5,7 +5,7 @@ import axios from "axios";
 //css
 import "./UserMail.css";
 
-const socket = io("http://localhost:8080"); // Kết nối đến server
+// const socket = io("http://localhost:8080"); // Kết nối đến server
 
 const MailPage = () => {
   const [mails, setMails] = useState([]);
@@ -13,45 +13,45 @@ const MailPage = () => {
   const { userId } = useParams();
   //   console.log(userId);
 
-  useEffect(() => {
-    if (!userId) return;
-    socket.emit("join_room", userId); //tham gia phòng khi vào trang
-    socket.on("connect", () => {
-      console.log("🔗 Kết nối thành công:", socket.id);
-    });
-    socket.on("connect_error", (err) => {
-      console.error("❌ Lỗi kết nối:", err.message);
-    });
-    // 3️⃣ Lắng nghe sự kiện khi thư được cập nhật
-    socket.on("mailStatusChanged", (data) => {
-      console.log("📩 Cập nhật mới từ server:", data);
+  // useEffect(() => {
+  //   if (!userId) return;
+  //   socket.emit("join_room", userId); //tham gia phòng khi vào trang
+  //   socket.on("connect", () => {
+  //     console.log("🔗 Kết nối thành công:", socket.id);
+  //   });
+  //   socket.on("connect_error", (err) => {
+  //     console.error("❌ Lỗi kết nối:", err.message);
+  //   });
+  //   // 3️⃣ Lắng nghe sự kiện khi thư được cập nhật
+  //   socket.on("mailStatusChanged", (data) => {
+  //     console.log("📩 Cập nhật mới từ server:", data);
 
-      // Thêm thông báo vào danh sách (hiển thị trên UI)
-      setNotifications((prev) => [...prev, data]);
-      console.log(notifications);
+  //     // Thêm thông báo vào danh sách (hiển thị trên UI)
+  //     setNotifications((prev) => [...prev, data]);
+  //     console.log(notifications);
 
-      // Cập nhật trạng thái thư trong danh sách
-      //   setMails((prevMails) =>
-      //     prevMails.map((mail) =>
-      //       mail._id === data.mailId ? { ...mail, status: data.status } : mail
-      //     )
-      //   );
+  //     // Cập nhật trạng thái thư trong danh sách
+  //     setMails((prevMails) =>
+  //       prevMails.map((mail) =>
+  //         mail._id === data.mailId ? { ...mail, status: data.status } : mail
+  //       )
+  //     );
 
-      // Ẩn thông báo sau 5 giây
-      setTimeout(() => {
-        setNotifications((prev) =>
-          prev.filter((n) => n.mailId !== data.mailId)
-        );
-      }, 5000);
-    });
-    socket.on("mailStatusChanged", (data) => {
-      console.log("📩 Cập nhật mới từ server:", data);
-    });
+  //     // Ẩn thông báo sau 5 giây
+  //     setTimeout(() => {
+  //       setNotifications((prev) =>
+  //         prev.filter((n) => n.mailId !== data.mailId)
+  //       );
+  //     }, 8000);
+  //   });
+  //   socket.on("mailStatusChanged", (data) => {
+  //     console.log("📩 Cập nhật mới từ server:", data);
+  //   });
 
-    return () => {
-      socket.off("mailStatusChanged"); // Cleanup listener khi rời trang
-    };
-  }, [userId]);
+  //   return () => {
+  //     socket.off("mailStatusChanged"); // Cleanup listener khi rời trang
+  //   };
+  // }, [userId]);
 
   return (
     <div>
