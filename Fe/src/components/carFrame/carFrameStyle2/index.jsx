@@ -23,7 +23,7 @@ const CarFrame2 = ({ car }) => {
           {car.carName}
         </div>
         <div className="Price">
-          VNĐ: <span>{car.carPrice.toLocaleString()}</span>
+          VNĐ: <span>{car.carPrice ? car.carPrice.toLocaleString() : 0}</span>
         </div>
         <div className="BrandAndCountry">
           {car.brand}, <span>{car.origin}</span>

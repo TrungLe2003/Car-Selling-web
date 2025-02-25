@@ -1,5 +1,8 @@
 //library
 import { Route, Routes } from "react-router-dom";
+import { io } from "socket.io-client";
+import { message } from "antd";
+import { useEffect } from "react";
 // component
 // Footer + Header
 import Footer from "./components/footer";
@@ -46,18 +49,41 @@ import NewsByCategory from "./components/newsPage/newsByCategory";
 // import PageWithAllCar from "./components/categoryPage/PageWithAllCar";
 // import PageWithCarByBrand from "./components/categoryPage/PageWithCarByBrand";
 import CarDetailPage from "./components/carPage";
+//provider
 import PostingCarInfoPage from "./components/postingCarInfoPage";
 import ProviderPage from "./components/providerPage";
 import PostManage from "./components/providerPage/postManage";
+import ContactMailManage from "./components/providerPage/contactMailProvider";
+//
 import SearchPage from "./components/searchPage";
+import MailPage from "./components/profilePage/addToProfilePage/UserMail";
 import WishListPage from "./components/wishListPage/index";
+
 //
 import "./App.css";
+const socket = io("http://localhost:8080"); // Kết nối đến server
 
 function App() {
+  useEffect(() => {
+    const crrUser = localStorage.getItem("currentUser");
+    if (crrUser) {
+      const userObj = JSON.parse(crrUser);
+      const userId = userObj._id;
+      socket.emit("join_room", userId); // Tham gia phòng
 
+      // Đăng ký sự kiện một lần duy nhất
+      const handleMailStatusChanged = (data) => {
+        console.log("📩 Cập nhật mới từ server:", data);
+        message.success(data.message);
+      };
+      socket.on("mailStatusChanged", handleMailStatusChanged);
 
-
+      // Hủy lắng nghe sự kiện khi component unmount
+      return () => {
+        socket.off("mailStatusChanged", handleMailStatusChanged);
+      };
+    }
+  }, []);
 
   return (
     <div className="container">
@@ -69,38 +95,63 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/admin" element={<AdminPage />}>
             <Route path="" element={<AdminOverview />} />
-            <Route path="users" element={<AdminUsers />} >
-              <Route path=":role" element={<ListUsers />}/>
-              <Route path="viewUserInfo/:id" element={<ViewUserInfo/>} />
-              <Route path="editUserInfo/:id" element={<EditUserInfo/>} />
+            <Route path="users" element={<AdminUsers />}>
+              <Route path=":role" element={<ListUsers />} />
+              <Route path="viewUserInfo/:id" element={<ViewUserInfo />} />
+              <Route path="editUserInfo/:id" element={<EditUserInfo />} />
             </Route>
-            <Route path="cars" element={<AdminCars />} >
-              <Route path=":isStatus" element={<ListCars/>}/>
-              <Route path="carsByBrand/:isStatus/:brand" element={<ListCarsByBrand/>}/>
-              <Route path="carsByState/:isStatus/:state" element={<ListCarsByState/>}/>
-              <Route path="carsByProvider/:isStatus/:idProvider" element={<ListCarsByProvider/>}/>
-              <Route path="editCarInfo/:id" element={<EditCarInfo/>}/>
+            <Route path="cars" element={<AdminCars />}>
+              <Route path=":isStatus" element={<ListCars />} />
+              <Route
+                path="carsByBrand/:isStatus/:brand"
+                element={<ListCarsByBrand />}
+              />
+              <Route
+                path="carsByState/:isStatus/:state"
+                element={<ListCarsByState />}
+              />
+              <Route
+                path="carsByProvider/:isStatus/:idProvider"
+                element={<ListCarsByProvider />}
+              />
+              <Route path="editCarInfo/:id" element={<EditCarInfo />} />
             </Route>
             <Route path="news" element={<AdminNews />}>
               <Route path=":isStatus" element={<ListNews />} />
-              <Route path="newsByCategory/:isStatus/:isCategory" element={<ListNewsByCategory />} />
+              <Route
+                path="newsByCategory/:isStatus/:isCategory"
+                element={<ListNewsByCategory />}
+              />
               <Route path="createNews" element={<CreateNews />} />
               <Route path="editNews/:id" element={<EditNews />} />
             </Route>
             <Route path="comments" element={<AdminComments />}>
               <Route path=":isStatus" element={<ListComments />} />
-              <Route path="commentsByNews/:isStatus/:id" element={<ListCommentsByNews />} />
+              <Route
+                path="commentsByNews/:isStatus/:id"
+                element={<ListCommentsByNews />}
+              />
             </Route>
           </Route>
           <Route path="/provider/:idUser" element={<ProviderPage />}>
             <Route path="postmanage" element={<PostManage />}></Route>
+            <Route
+              path="mailContactManage"
+              element={<ContactMailManage />}
+            ></Route>
           </Route>
           <Route path="/car/:idCar" element={<CarDetailPage />} />
           <Route path="/postingCar" element={<PostingCarInfoPage />} />
           <Route path="/search" element={<SearchPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
-          <Route path="/profile/:activepage/:userId" element={<ProfilePage />}/>
+
+          <Route path="/usermail/:userId" element={<MailPage />} />
+          {/* Thêm cái này vào phần profile user */}
+          <Route
+            path="/profile/:activepage/:userId"
+            element={<ProfilePage />}
+          />
           <Route path="/wishList/:userId" element={<WishListPage />} />
           <Route path="/category" element={<CategoryPage />} />
           <Route path="/allCars" element={<CategoryPage />}></Route>
