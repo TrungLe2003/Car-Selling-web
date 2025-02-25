@@ -1,9 +1,10 @@
-//
-import "./style.css"
+import { Outlet } from "react-router-dom";
 
 const AdminUsers = () => {
     return (
-        <div className="adminUsers">Users</div>
+        <div className="adminUsers">
+            <Outlet/>
+        </div>
     )
 }
 

@@ -1,12 +1,12 @@
-import { useNavigate, Outlet, useLocation,useParams } from 'react-router-dom';
+import { useNavigate, useLocation,useParams } from 'react-router-dom';
 import { useState, useEffect, useContext } from 'react';
 import moment from 'moment';
 import axios from 'axios';
 // Store
 import { Store } from '../../../../Store';
 // icons
-import LeftArrowIcon from '../../../../icons/adminPage/LeftArrowIcon'
-import RightArrowIcon from '../../../../icons/adminPage/RightArrowIcon'
+import LeftArrowIcon from '../../../../icons/adminPage/LeftArrowIcon';
+import RightArrowIcon from '../../../../icons/adminPage/RightArrowIcon';
 //
 import './style.css';
 
@@ -16,15 +16,29 @@ const activeDiv = 'activeDiv div'
 const ListNews = () => {
     const navigate = useNavigate();
     const store = useContext(Store);
-    const accessToken = store.currentUser.accessToken;
+    let accessToken;
+    if (store.currentUser) {
+        accessToken = store.currentUser.accessToken
+    };
     const pathname = useLocation().pathname;
+    // màn hình hiển thị ở đầu trang khi mở trang lên, thiết lập thanh cuộn trên đầu trang
+    const location = useLocation();
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, [location]);
     // queryCountNews
     const [totalNews, setTotalNews] = useState();
     const [publishedNews, setPublishedNews] = useState();
     const [draftNews, setDraftNews] = useState();
     const queryCountNews = async () => {
         try {
-            const response = await axios.get('http://localhost:8080/api/v1/news/countNews');
+            const response = await axios.get('http://localhost:8080/api/v1/news/countNews',
+                {
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`,
+                    },
+                }
+            );
             setTotalNews(response.data.totalNews);
             setPublishedNews(response.data.publishedNews);
             setDraftNews(response.data.draftNews);
@@ -43,7 +57,13 @@ const ListNews = () => {
     const [listNews, setListNews] = useState([]);
     const queryListNews = async () => {
         try {
-            const response = await axios.get(`http://localhost:8080/api/v1/news?limit=${limit}&currentPage=${currentPage}&isStatus=${isStatus}`);
+            const response = await axios.get(`http://localhost:8080/api/v1/news?limit=${limit}&currentPage=${currentPage}&isStatus=${isStatus}`,
+                {
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`,
+                    },
+                }
+            );
             setListNews(response.data.data);
             setTotalPages(response.data.totalPages);
         } catch (error) {
@@ -133,14 +153,14 @@ const ListNews = () => {
                         <p className='theadAction'>Hành động</p>
                     </div>
                     <div className='tbody'>
-                        {listNews.map((news) => {
-                            return <div className='tr'>
+                        {listNews.map((news, idx) => {
+                            return <div key={idx + 1} className='tr' style={news.isStatus === "draft" ? {backgroundColor:'#2271B120'} : {backgroundColor:'#FFFFFF'}}>
                                 {news.title ?
                                 <h5 className='title'>{news.title}</h5> :
                                 <h5 className='title'>Không có tiêu đề</h5>
                                 }
                                 <p className='author'>{news.author.username}</p>
-                                <p className='category'>{getCategoryName(news.isCategory)}</p>
+                                <p className='category' onClick={() => navigate(`/admin/news/newsByCategory/all/${news.isCategory}`)}>{getCategoryName(news.isCategory)}</p>
                                 <div className='time'>
                                     <p>{getStatusName(news.isStatus)}</p>
                                     <p>{moment(news.createdAt).format('HH:mm, DD/MM/YYYY')}</p>

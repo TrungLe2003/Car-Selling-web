@@ -10,6 +10,11 @@ const commentSchema = new mongoose.Schema({
         ref: "news",
     },
     content: String,
+    isStatus: {
+        type: String,
+        enum: ["approved", "spam"],
+        default: 'approved'
+    },
     createdAt: Date,
     updatedAt: Date,
 });

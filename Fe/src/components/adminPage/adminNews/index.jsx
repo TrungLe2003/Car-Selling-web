@@ -1,6 +1,4 @@
-import { Outlet } from "react-router-dom"
-//
-import "./style.css"
+import { Outlet } from "react-router-dom";
 
 const AdminNews = () => {
     return (
