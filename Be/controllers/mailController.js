@@ -68,7 +68,8 @@ const MailController = {
       const skip = (pageNumber - 1) * dataLimit;
       const { userId } = req.query;
       const mails = await MailModel.find({ senderId: userId })
-        .populate("recipientId carId senderId")
+        .populate("recipientId  senderId")
+        .populate("carId", "carName")
         .skip(skip)
         .limit(dataLimit);
       const totalMail = await MailModel.countDocuments({
@@ -184,6 +185,7 @@ const MailController = {
         return res.json({ message: "Thư đã được đọc trước đó!", mail });
       }
       mail.isRead = true;
+      mail.status = "đã xem";
       await mail.save();
       return res.json({
         message: "Đánh dấu thư là đã đọc!",
