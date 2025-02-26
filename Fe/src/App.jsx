@@ -73,6 +73,9 @@ function App() {
       }
     }
 
+    socket.on("mailStatusChanged", (data) => {
+      message.success(data.message); // Hiển thị thông báo
+    });
     const handleStorageChange = () => {
       const updatedUser = localStorage.getItem("currentUser");
       if (!updatedUser) {
@@ -83,6 +86,7 @@ function App() {
     window.addEventListener("storage", handleStorageChange);
     return () => {
       window.removeEventListener("storage", handleStorageChange);
+      socket.off("mailStatusChanged");
     };
   }, []);
 
