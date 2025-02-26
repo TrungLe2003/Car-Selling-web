@@ -49,6 +49,7 @@
   border-radius: 5px;
   cursor: pointer;
   transition: all 0.5s ease;
+  text-wrap: nowrap;
 }
 
 .header .gr .gr2 h5:hover {
