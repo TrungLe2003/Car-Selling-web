@@ -164,11 +164,12 @@ div.PageWithAllCar h3 span {
 }
 
 div.PageWithAllCar div.listCar {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-column-gap: 0px;
-  grid-row-gap: 35px;
-  width: 1250px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 5%;
+  row-gap: 35px;
 }
 
 div.PageWithAllCar div.pagination {

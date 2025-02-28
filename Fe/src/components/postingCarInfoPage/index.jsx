@@ -1,6 +1,7 @@
 //svgs
 import FolderIcon from "../../icons/carDetailPage/FolderIcon";
 import LogoutIcon from "../../icons/header/LogoutIcon";
+import Loading from "../Loading";
 // librarys
 import { useState } from "react";
 import axios from "axios";
@@ -59,6 +60,7 @@ const PostingCarInfoPage = () => {
   const [horsePower, setHorsePower] = useState(""); //mã lực
   const [power, setPower] = useState("Xăng"); // năng lượng
   const [describe, setDescribe] = useState("");
+  const [loading, setLoading] = useState(false);
   //Lấy token
   const crrUser = localStorage.getItem("currentUser");
   const userObj = JSON.parse(crrUser); // Chuyển chuỗi JSON thành object
@@ -76,6 +78,7 @@ const PostingCarInfoPage = () => {
   };
   //Hàm đăng tải
   const handleSubmit = async (e) => {
+    setLoading(true);
     e.preventDefault();
     // Kiểm tra gửi thông báo này
     if (!carName) {
@@ -136,6 +139,8 @@ const PostingCarInfoPage = () => {
     } catch (error) {
       console.error(error.response?.data || error.message);
       alert(Lỗi);
+    } finally {
+      setLoading(false);
     }
   };
   return (
@@ -381,6 +386,7 @@ const PostingCarInfoPage = () => {
           <button type="submit">Gửi</button>
         </div>
       </form>
+      {loading && <Loading></Loading>}
     </div>
   );
 };

@@ -1,8 +1,6 @@
 //Icon
 import NextBtnIcon from "../../icons/carDetailPage/nextBtnIcon";
 import PreviousBtnIcon from "../../icons/carDetailPage/previousBtnIcon";
-import EmailIcon from "../../icons/carDetailPage/emailIcon";
-import PhoneIcon from "../../icons/carDetailPage/phoneIcon";
 import ShareIcon from "../../icons/carDetailPage/shareIcon";
 import HeartIcon from "../../icons/carDetailPage/Heart";
 import LikedIcon from "../../icons/carDetailPage/Liked";
@@ -12,6 +10,8 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import { message } from "antd";
 import { useNavigate } from "react-router-dom";
+//loading
+import Loading from "../Loading";
 //css
 import "./style.css";
 const CarDetailPage = () => {
@@ -22,6 +22,7 @@ const CarDetailPage = () => {
   const [email, setEmail] = useState(null);
   const [phoneNumber, setPhoneNumber] = useState(null);
   const [comment, setComment] = useState(null);
+  const [loading, setLoading] = useState(false);
   //dữ liệu xe
   const { idCar } = useParams();
   const [carData, setCarData] = useState(null);
@@ -39,6 +40,7 @@ const CarDetailPage = () => {
   }
   //Hàm gửi thư
   const handleSendMail = async (e) => {
+    setLoading(true);
     e.preventDefault();
     const formData = new FormData();
     formData.append("senderName", userName);
@@ -65,6 +67,8 @@ const CarDetailPage = () => {
       } else {
         message.error("Có lỗi xảy ra, vui lòng thử lại!");
       }
+    } finally {
+      setLoading(false);
     }
   };
   //lấy thông tin xe
@@ -160,7 +164,7 @@ const CarDetailPage = () => {
   };
 
   if (!carData) {
-    return <div>...Loading</div>;
+    return <Loading></Loading>;
   }
 
   return (
@@ -376,6 +380,7 @@ const CarDetailPage = () => {
           </div>
         </div>
       </div>
+      {loading && <Loading></Loading>}
     </div>
   );
 };

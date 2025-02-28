@@ -1,5 +1,7 @@
 div.CarFrameComponent2 {
-  width: 362px;
+  min-width: 362px;
+  max-width: 400px;
+  width: 30%;
   height: 511px;
   border: 1px solid rgb(206, 199, 199);
   padding: 10px;
