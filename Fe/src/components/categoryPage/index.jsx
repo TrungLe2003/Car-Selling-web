@@ -4,11 +4,14 @@ import IconLeft from "../../icons/categoryPage/IconLeft";
 import IconRight from "../../icons/categoryPage/IconRight";
 //components
 import CarFrame2 from "../carFrame/carFrameStyle2";
+import Loading from "../Loading";
 //library
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
+
 //css
+
 import "./style.css";
 
 const CategoryPage = () => {
@@ -110,7 +113,7 @@ const CategoryPage = () => {
     }
   };
   if (!allCarsData) {
-    return <div>Loading</div>;
+    return <Loading></Loading>;
   }
   //Phần chọn brand xe
   const listBrand = [

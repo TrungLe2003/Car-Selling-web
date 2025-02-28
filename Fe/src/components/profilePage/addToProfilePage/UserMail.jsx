@@ -8,6 +8,8 @@ import MailAcceptedIcon from "../../../icons/usermail/mailAccepted";
 import MailSeenIconUser from "../../../icons/usermail/mailSeen";
 import MailReJectedIcon from "../../../icons/usermail/mailRejected";
 import MailSend from "../../../icons/usermail/mailSend";
+//loading
+import Loading from "../../Loading";
 //css
 import "./UserMail.css";
 
