@@ -26,6 +26,7 @@ const CarDetailPage = () => {
   //dữ liệu xe
   const { idCar } = useParams();
   const [carData, setCarData] = useState(null);
+  const [wishlist, setWishlist] = useState([]);
   //
   const crrUser = localStorage.getItem("currentUser");
   const userObj = crrUser ? JSON.parse(crrUser) : null;
@@ -73,9 +74,12 @@ const CarDetailPage = () => {
   };
   //lấy thông tin xe
 
-  const [wishlist, setWishlist] = useState([]);
+  // const [wishlist, setWishlist] = useState([]);
 
   useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("currentUser"));
+    const accessToken = user.accessToken;
+
     const fetchCarData = async () => {
       try {
         const carResponse = await axios.get(
@@ -83,14 +87,11 @@ const CarDetailPage = () => {
         );
         setCarData(carResponse.data.data);
 
-        const wishListResponse = await axios.get(
-          `http://localhost:8080/api/v1/cars/wishlist/${user._id}?limit=100&page=1`,
-          {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
-          }
-        );
+        const wishListResponse = await axios.get(`http://localhost:8080/api/v1/cars/wishlist/${user._id}?limit=100&page=1`, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
 
         // setWishlist(wishListResponse.data.data);
 
@@ -99,9 +100,10 @@ const CarDetailPage = () => {
           if (w._id == idCar) {
             setBtnLikeProduct(true);
           }
-        });
+
+        })
       } catch (error) {
-        console.error("Error fetching car data:", error.response.data.message);
+        console.error("Error fetching car data:", error.message);
       }
     };
     fetchCarData();
@@ -129,33 +131,23 @@ const CarDetailPage = () => {
       }
 
       if (!btnLikeProduct) {
-        await axios
-          .post(
-            `http://localhost:8080/api/v1/cars/${idCar}/wishlist/${user._id}`,
-            {
-              headers: {
-                Authorization: `Bearer ${accessToken}`,
-              },
-            }
-          )
-          .then((response) => {
-            console.log(response);
-          });
+        await axios.post(`http://localhost:8080/api/v1/cars/${idCar}/wishlist/${user._id}`, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }).then(response => {
+          console.log(response);
+        })
 
         setBtnLikeProduct(true);
       } else {
-        await axios
-          .delete(
-            `http://localhost:8080/api/v1/cars/${idCar}/wishlist/${user._id}`,
-            {
-              headers: {
-                Authorization: `Bearer ${accessToken}`,
-              },
-            }
-          )
-          .then((response) => {
-            console.log(response);
-          });
+        await axios.delete(`http://localhost:8080/api/v1/cars/${idCar}/wishlist/${user._id}`, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }).then(response => {
+          console.log(response);
+        });
         setBtnLikeProduct(false);
       }
     } catch (error) {

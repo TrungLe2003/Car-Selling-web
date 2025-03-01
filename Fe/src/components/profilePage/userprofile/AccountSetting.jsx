@@ -5,7 +5,7 @@ import { PlusOutlined } from '@ant-design/icons';
 import { Image, Upload, Button, Col, DatePicker, Form, Input, Row, Select, message } from 'antd';
 import axios from 'axios';
 import { Store } from '../../../Store';
-import dayjs from "dayjs";
+// import dayjs from "dayjs";
 import moment from 'moment';
 
 const { Option } = Select;
@@ -38,25 +38,25 @@ const AccountSetting = () => {
   });
 
   const [fileList, setFileList] = useState([]);
-  const [previewOpen, setPreviewOpen] = useState(false);
-  const [previewImage, setPreviewImage] = useState('');
+  // const [previewOpen, setPreviewOpen] = useState(false);
+  // const [previewImage, setPreviewImage] = useState('');
 
-  const handlePreview = async (file) => {
-    if (!file.url && !file.preview) {
-      file.preview = await getBase64(file.originFileObj);
-    }
-    setPreviewImage(file.url || file.preview);
-    setPreviewOpen(true);
-  };
+  // const handlePreview = async (file) => {
+  //   // if (!file.url && !file.preview) {
+  //   //   file.preview = await getBase64(file.originFileObj);
+  //   // }
+  //   // setPreviewImage(file.url || file.preview);
+  //   setPreviewOpen(true);
+  // };
 
   const handleChangeFile = ({ fileList: newFileList }) => setFileList(newFileList);
 
-  const onChange = (name, value) => {
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
+  // const onChange = (name, value) => {
+  //   setFormData((prev) => ({
+  //     ...prev,
+  //     [name]: value,
+  //   }));
+  // };
 
   let accessToken;
   if (store.currentUser) {
@@ -170,13 +170,14 @@ const AccountSetting = () => {
               className='avatar'
               listType="picture-circle"
               fileList={fileList}
-              onPreview={handlePreview}
+              // onPreview={handlePreview}
               onChange={handleChangeFile}
               beforeUpload={() => false}
             >
               {fileList.length >= 1 ? null : uploadButton}
             </Upload>
-            {previewImage && (
+            {/* {previewImage && 
+            (
               <Image
                 preview={{
                   visible: previewOpen,
@@ -184,7 +185,7 @@ const AccountSetting = () => {
                 }}
                 src={previewImage}
               />
-            )}
+            )} */}
           </Col>
 
           <Form.Item wrapperCol={{ offset: 6, span: 16 }}>
