@@ -7,12 +7,12 @@ import CarFrame2 from '../carFrame/carFrameStyle2';
 import IconLeft from '../../icons/categoryPage/IconLeft';
 import IconRight from '../../icons/categoryPage/IconRight';
 
-const WishListPage= () => {
+const WishListPage = () => {
   const [wishlist, setWishlist] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const carsPerPage = 9;
-    
+
   useEffect(() => {
     const fetchWishlist = async () => {
       try {
@@ -38,10 +38,10 @@ const WishListPage= () => {
   const handlePageChange = (newPage) => {
     if (newPage >= 1 && newPage <= totalPages) {
       setCurrentPage(newPage);
-      
+
     }
   };
-  
+
   if (!wishlist) {
     return <div>Loading</div>;
   }
@@ -53,10 +53,10 @@ const WishListPage= () => {
           <h1>My Wish List</h1>
         </div>
       </div>
-      
+
       <div className='wishlistIn'>
         <h3 className="title">
-           Bạn có <span>{wishlist.length}</span> xe yêu thích
+          Bạn có <span>{wishlist.length}</span> xe yêu thích
         </h3>
         <div className="listCar">
           {wishlist && wishlist.length > 0 ? (
@@ -82,10 +82,7 @@ const WishListPage= () => {
             <IconRight></IconRight>
           </button>
         </div>
-
       </div>
-
-
     </div>
   )
 }

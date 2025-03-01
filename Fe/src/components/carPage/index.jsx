@@ -10,11 +10,12 @@ import LikedIcon from "../../icons/carDetailPage/Liked";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import { message } from "antd";
+import { useNavigate } from "react-router-dom";
 //css
 import "./style.css";
-
-//Chưa thêm phần vote sao cho xe
 const CarDetailPage = () => {
+  const navigate = useNavigate();
   const [crrImg, setCrrImg] = useState(0); //hình ảnh to (ảnh hiện tại)
   const [btnLikeProduct, setBtnLikeProduct] = useState(false);
   const [userName, setUserName] = useState(null);
@@ -24,8 +25,53 @@ const CarDetailPage = () => {
   //dữ liệu xe
   const { idCar } = useParams();
   const [carData, setCarData] = useState(null);
-
   const [wishlist, setWishlist] = useState([]);
+  //
+  const crrUser = localStorage.getItem("currentUser");
+  const userObj = crrUser ? JSON.parse(crrUser) : null;
+  const accessToken = userObj?.accessToken || null;
+
+  const userId = userObj?._id || null;
+
+  if (!accessToken) {
+    console.error("AccessToken is missing!");
+    message.error("Người dùng chưa đăng nhập");
+    navigate("/login");
+  }
+  //Hàm gửi thư
+  const handleSendMail = async (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append("senderName", userName);
+    formData.append("senderEmail", email);
+    formData.append("senderPhone", phoneNumber);
+    formData.append("mailContent", comment);
+    console.log(formData);
+    try {
+      const response = await axios.post(
+        `http://localhost:8080/api/v1/mail/PostMail?senderId=${userId}&recipientId=${carData.idProvider._id}&carId=${carData._id}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      message.success(response.data.message);
+    } catch (error) {
+      console.error("Lỗi gửi thư:", error.message);
+      if (error.response && error.response.data.message) {
+        message.error(error.response.data.message);
+      } else {
+        message.error("Có lỗi xảy ra, vui lòng thử lại!");
+      }
+    }
+  };
+  //lấy thông tin xe
+
+  // const [wishlist, setWishlist] = useState([]);
+
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("currentUser"));
     const accessToken = user.accessToken;
@@ -57,8 +103,6 @@ const CarDetailPage = () => {
       }
     };
     fetchCarData();
-
-
   }, [idCar]);
 
   const listImgRv = carData?.carImg;
@@ -105,8 +149,6 @@ const CarDetailPage = () => {
     } catch (error) {
       console.error("Error updating wishlist:", error.message);
     }
-
-
   };
 
   if (!carData) {
@@ -175,7 +217,7 @@ const CarDetailPage = () => {
                   <div className="role">Người bán</div>
                 </div>
               </div>
-              <div className="line"></div>
+              {/* <div className="line"></div>
 
               <div className="item dealerPhoneNumber">
                 <div className="icon">
@@ -192,15 +234,17 @@ const CarDetailPage = () => {
                   <EmailIcon></EmailIcon>
                 </div>
                 <div className="email">{carData.idProvider.email}</div>
-              </div>
+              </div> */}
             </div>
           </div>
           <div className="section4 section">
             <h2>Để lại thông tin liên hệ</h2>
-            <form action="" className="contactForm">
+            <form action="" className="contactForm" onSubmit={handleSendMail}>
               <div className="userNameAndEmail">
                 <div className="userName item">
-                  <h3>Tên</h3>
+                  <h3>
+                    Tên <sup>*</sup>
+                  </h3>
                   <input
                     type="text"
                     placeholder="Tên"
@@ -209,7 +253,9 @@ const CarDetailPage = () => {
                   />
                 </div>
                 <div className="userEmail item">
-                  <h3>Email</h3>
+                  <h3>
+                    Email <sup>*</sup>
+                  </h3>
                   <input
                     type="text"
                     placeholder="Email"
@@ -219,9 +265,11 @@ const CarDetailPage = () => {
                 </div>
               </div>
               <div className="item">
-                <h3>Số điện thoại</h3>
+                <h3>
+                  Số điện thoại <sup>*</sup>
+                </h3>
                 <input
-                  type="number"
+                  type="tel"
                   placeholder="Số điện thoại"
                   value={phoneNumber}
                   onChange={(e) => setPhoneNumber(e.target.value)}
@@ -229,14 +277,15 @@ const CarDetailPage = () => {
               </div>
               <div className="item comment">
                 <h3>Bình luận</h3>
-                <input
+                <textarea
+                  className="carPageTextarea"
                   type="text"
                   placeholder="Để loại bình luận"
                   value={comment}
                   onChange={(e) => setComment(e.target.value)}
                 />
               </div>
-              <button>Liên hệ</button>
+              <button type="submit">Liên hệ</button>
             </form>
           </div>
         </div>
@@ -244,7 +293,12 @@ const CarDetailPage = () => {
           <div className="frameRight">
             <h3>Thông tin về xe</h3>
             <p>
-              Giá: <span>{carData.carPrice.toLocaleString()} vnđ</span>
+              Giá:{" "}
+              <span>
+                {carData?.carPrice
+                  ? carData.carPrice.toLocaleString() + " vnđ"
+                  : "Chưa có giá"}
+              </span>
             </p>
             <div className="line"></div>
             <div className="section section1">

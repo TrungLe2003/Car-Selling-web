@@ -2,6 +2,7 @@ import { React, useEffect, useState, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import "../userprofile/Account.css";
 import axios from "axios";
+// import { Button } from "antd";
 import { Store } from "../../../Store";
 
 const Account = () => {
@@ -65,6 +66,35 @@ const Account = () => {
           <p>Address: {userData.address} </p>
           <p>Phone: {userData.phoneNumber} </p>
         </div>
+        {/* <Button onClick={() => navigate(`/provider/${store.currentUser._id}`)}>
+          {" "}
+          PostingCar
+        </Button> */}
+        {/* <div className="provider">
+          <button className="btn-provider" onClick={() => navigate(`/provider/${store.currentUser._id}`)}>
+            {" "}
+            Quản lý tin đăng bán và đơn hàng
+          </button>
+        </div>
+        <div className="registerProvider">
+          <button className="btn-registerProvider" onClick={() => navigate(`/provider/${store.currentUser._id}`)}>
+            {" "}
+            Quản lý tin đăng bán và đơn hàng
+          </button>
+        </div> */}
+        {userData.role === 'PROVIDER' ? (
+          <div className="provider">
+            <button className="btn-provider" onClick={() => navigate(`/provider/${store.currentUser._id}`)}>
+              Quản lý tin đăng bán và đơn hàng
+            </button>
+          </div>
+        ) : (
+          <div className="registerProvider">
+            <button className="btn-registerProvider" onClick={() => navigate(`/provider/${store.currentUser._id}`)}>
+              Đăng ký trở thành nhà cung cấp
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
