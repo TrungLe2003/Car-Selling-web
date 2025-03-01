@@ -6,7 +6,8 @@ import { useParams } from 'react-router-dom';
 import UserSidebar from './userprofile/UserSidebar.jsx';
 import AccounSetting from './userprofile/AccountSetting.jsx';
 import Account from './userprofile/Account.jsx';
-import PostingCar from '../postingCarInfoPage/index.jsx'
+import MailPage from './addToProfilePage/UserMail.jsx'
+import ProviderPage from '../../components/providerPage/index.jsx'
 import { Button } from 'antd';
 
 const ProfilePage = () => {
@@ -31,6 +32,8 @@ const ProfilePage = () => {
                 <div className="right">
                     {activepage === 'account' && <Account />}
                     {activepage === 'accountsetting' && <AccounSetting />}
+                    {activepage === 'email' && <MailPage />}
+                    {/* {activepage === 'provider' && <ProviderPage />} */}
                 </div>
             </div>
         </div>

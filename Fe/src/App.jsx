@@ -151,7 +151,7 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
 
-          <Route path="/usermail/:userId" element={<MailPage />} />
+          {/* <Route path="/usermail/:userId" element={<MailPage />} /> */}
           {/* Thêm cái này vào phần profile user */}
           <Route
             path="/profile/:activepage/:userId"
