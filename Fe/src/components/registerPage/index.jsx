@@ -39,7 +39,7 @@ const RegisterPage = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:8080/api/v1/users/register",
+        "https://car-selling-web.onrender.com/api/v1/users/register",
         formData,
         {
           headers: {
