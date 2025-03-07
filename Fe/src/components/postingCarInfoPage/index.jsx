@@ -125,7 +125,7 @@ const PostingCarInfoPage = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:8080/api/v1/cars/create-car",
+        "https://car-selling-web.onrender.com/api/v1/cars/create-car",
         formData,
         {
           headers: {
