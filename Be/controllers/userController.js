@@ -5,8 +5,18 @@ import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 dotenv.config();
 const SECRET_KEY = process.env.SECRET_KEY;
-const getCloudinaryConfig = JSON.parse(process.env.CLOUD_DAINARY_CONFIG);
-cloudinary.config(getCloudinaryConfig);
+const cloudinaryConfig = process.env.CLOUD_DAINARY_CONFIG;
+if (!cloudinaryConfig) {
+  throw new Error("CLOUD_DAINARY_CONFIG is not defined in .env file");
+}
+
+try {
+  const getCloudinaryConfig = JSON.parse(cloudinaryConfig);
+  cloudinary.config(getCloudinaryConfig);
+} catch (error) {
+  console.error("Failed to parse CLOUD_DAINARY_CONFIG:", error);
+  process.exit(1); // Dừng ứng dụng nếu không thể phân tích cú pháp JSON
+}
 const storage = multer.memoryStorage();
 const upload = multer({
   storage: storage
