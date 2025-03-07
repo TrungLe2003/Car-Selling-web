@@ -43,7 +43,7 @@ const EditNews = () => {
     // console.log(content);
     const queryNews = async () => {
         try {
-            const queryNews = await axios.get(`http://localhost:8080/api/v1/news/${id}`);
+            const queryNews = await axios.get(`https://car-selling-web.onrender.com/api/v1/news/${id}`);
             const news = queryNews.data.data;
             setTitle(news.title);
             setIsCategory(news.isCategory);
@@ -79,7 +79,7 @@ const EditNews = () => {
         payloadFormData.append('isCategory', isCategory);
         payloadFormData.append('isStatus', isStatus);
         try {
-            const response = await axios.put(`http://localhost:8080/api/v1/news/edit-news/${id}`, payloadFormData,
+            const response = await axios.put(`https://car-selling-web.onrender.com/api/v1/news/edit-news/${id}`, payloadFormData,
             {
                 headers: {
                     'Authorization': `Bearer ${accessToken}`,
