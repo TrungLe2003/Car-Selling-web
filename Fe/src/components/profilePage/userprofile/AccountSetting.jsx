@@ -78,7 +78,7 @@ const AccountSetting = () => {
 
 
       await axios.put(
-        `http://localhost:8080/api/v1/users/modify/${store.currentUser._id}`, updatedData, {
+        `https://car-selling-web.onrender.com/api/v1/users/modify/${store.currentUser._id}`, updatedData, {
         headers: {
           'Authorization': `Bearer ${accessToken}`,
           "Content-type": "multipart/form-data",
