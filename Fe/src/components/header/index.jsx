@@ -30,7 +30,7 @@ const Header = () => {
     const fetchUserData = async () => {
       try {
         const userResponse = await axios.get(
-          `http://localhost:8080/api/v1/users/${store.currentUser._id}`
+          `https://car-selling-web.onrender.com/api/v1/users/${store.currentUser._id}`
         );
         // console.log(userResponse);
         setUserData(userResponse.data.data);
