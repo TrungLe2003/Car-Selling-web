@@ -32,7 +32,7 @@ const ListComments = () => {
     const [spamComments, setSpamComments] = useState();
     const queryCountComments = async () => {
         try {
-            const response = await axios.get('http://localhost:8080/api/v1/comments/countComments',
+            const response = await axios.get('https://car-selling-web.onrender.com/api/v1/comments/countComments',
                 {
                     headers: {
                         'Authorization': `Bearer ${accessToken}`,
@@ -57,7 +57,7 @@ const ListComments = () => {
     const [listComments, setListComments] = useState([]);
     const queryListComments = async () => {
         try {
-            const response = await axios.get(`http://localhost:8080/api/v1/comments?limit=${limit}&currentPage=${currentPage}&isStatus=${isStatus}`,
+            const response = await axios.get(`https://car-selling-web.onrender.com/api/v1/comments?limit=${limit}&currentPage=${currentPage}&isStatus=${isStatus}`,
                 {
                     headers: {
                         'Authorization': `Bearer ${accessToken}`,
@@ -99,7 +99,7 @@ const ListComments = () => {
     // xóa bình luận
     const handleDelete = async (id) => {
         try {
-            const response = await axios.delete(`http://localhost:8080/api/v1/comments/deleteCommentById/${id}`,
+            const response = await axios.delete(`https://car-selling-web.onrender.com/api/v1/comments/deleteCommentById/${id}`,
                 {
                     headers: {
                         'Authorization': `Bearer ${accessToken}`,
@@ -115,7 +115,7 @@ const ListComments = () => {
     // thay đổi trạng thái bình luận
     const handleChangeCommentStatus = async (id, newStatus) => {
         try {
-            const response = await axios.put(`http://localhost:8080/api/v1/comments/changeCommentStatus`,
+            const response = await axios.put(`https://car-selling-web.onrender.com/api/v1/comments/changeCommentStatus`,
                 {
                     commentId: id,
                     newStatus: newStatus
@@ -146,7 +146,7 @@ const ListComments = () => {
     // console.log(content);
     const handleEdit = async (id) => {
         try {
-            const response = await axios.put(`http://localhost:8080/api/v1/comments/edit-comment/${id}`,
+            const response = await axios.put(`https://car-selling-web.onrender.com/api/v1/comments/edit-comment/${id}`,
                 {
                     content: content
                 }, {
