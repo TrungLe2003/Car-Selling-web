@@ -19,7 +19,7 @@ const PageWithAllCar = () => {
     const fetchAllCarsData = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8080/api/v1/cars?limit=${carsPerPage}&page=${currentPage}`
+          `http://https://car-selling-web.onrender.com/api/v1/cars?limit=${carsPerPage}&page=${currentPage}`
         );
         setAllCarsData(response.data.data);
         setTotalPages(response.data.totalPages);
