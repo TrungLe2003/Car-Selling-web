@@ -85,7 +85,7 @@ const EditPostProviderModal = ({ openEditModal, car }) => {
 
     try {
       const response = await axios.put(
-        `http://localhost:8080/api/v1/cars/updatecar/${car._id}`,
+        `https://car-selling-web.onrender.com/api/v1/cars/updatecar/${car._id}`,
         updatedCar,
         {
           headers: {
