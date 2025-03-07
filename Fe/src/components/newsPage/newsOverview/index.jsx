@@ -11,7 +11,7 @@ const NewsOverview = () => {
     const [listExplore, setListExplore] = useState([]);
     const queryAllNews = async () => {
         try {
-            const response = await axios.get('http://localhost:8080/api/v1/news/the3LatestNewsPerCategory');
+            const response = await axios.get('https://car-selling-web.onrender.com/api/v1/news/the3LatestNewsPerCategory');
             setListCarNews(response.data.dataListCarNews);
             setListMarketNews(response.data.dataListMarketNews);
             setListExplore(response.data.dataListExplore);
