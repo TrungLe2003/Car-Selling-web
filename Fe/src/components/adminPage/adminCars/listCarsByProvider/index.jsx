@@ -33,7 +33,7 @@ const ListCarsByProvider = () => {
     const [pendingCars, setPendingCars] = useState();
     const queryCountCars = async () => {
         try {
-            const response = await axios.get(`http://localhost:8080/api/v1/cars/countCarsByProvider/${splitPathname[5]}`,
+            const response = await axios.get(`https://car-selling-web.onrender.com/api/v1/cars/countCarsByProvider/${splitPathname[5]}`,
                 {
                     headers: {
                         'Authorization': `Bearer ${accessToken}`,
@@ -59,7 +59,7 @@ const ListCarsByProvider = () => {
     const [usernameProvider, setUsernameProvider] = useState();
     const queryListCars = async () => {
         try {
-            const response = await axios.get(`http://localhost:8080/api/v1/cars/carByProvider?limit=${limit}&currentPage=${currentPage}&isStatus=${isStatus}&idProvider=${splitPathname[5]}`,
+            const response = await axios.get(`https://car-selling-web.onrender.com/api/v1/cars/carByProvider?limit=${limit}&currentPage=${currentPage}&isStatus=${isStatus}&idProvider=${splitPathname[5]}`,
                 {
                     headers: {
                         'Authorization': `Bearer ${accessToken}`,
@@ -102,7 +102,7 @@ const ListCarsByProvider = () => {
     // xóa xe
     const handleDelete = async (id) => {
         try {
-            const response = await axios.delete(`http://localhost:8080/api/v1/cars/deletecar/${id}`,
+            const response = await axios.delete(`https://car-selling-web.onrender.com/api/v1/cars/deletecar/${id}`,
                 {
                     headers: {
                         'Authorization': `Bearer ${accessToken}`,
@@ -118,7 +118,7 @@ const ListCarsByProvider = () => {
     // duyệt đăng bán xe
     const handleApproveCar = async (id, newStatus) => {
         try {
-            const response = await axios.put(`http://localhost:8080/api/v1/cars/changeStatusCar/${id}`,
+            const response = await axios.put(`https://car-selling-web.onrender.com/api/v1/cars/changeStatusCar/${id}`,
                 {
                     newStatus: newStatus,
                 }, {
