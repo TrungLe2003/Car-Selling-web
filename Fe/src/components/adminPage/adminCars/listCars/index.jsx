@@ -32,7 +32,7 @@ const ListCars = () => {
     const [pendingCars, setPendingCars] = useState();
     const queryCountCars = async () => {
         try {
-            const response = await axios.get('http://localhost:8080/api/v1/cars/countCars',
+            const response = await axios.get('https://car-selling-web.onrender.com/api/v1/cars/countCars',
                 {
                     headers: {
                         'Authorization': `Bearer ${accessToken}`,
@@ -57,7 +57,7 @@ const ListCars = () => {
     const [listCars, setListCars] = useState([]);
     const queryListCars = async () => {
         try {
-            const response = await axios.get(`http://localhost:8080/api/v1/cars/getAllCar?limit=${limit}&currentPage=${currentPage}&isStatus=${isStatus}`,
+            const response = await axios.get(`https://car-selling-web.onrender.com/api/v1/cars/getAllCar?limit=${limit}&currentPage=${currentPage}&isStatus=${isStatus}`,
                 {
                     headers: {
                         'Authorization': `Bearer ${accessToken}`,
@@ -99,7 +99,7 @@ const ListCars = () => {
     // xóa xe
     const handleDelete = async (id) => {
         try {
-            const response = await axios.delete(`http://localhost:8080/api/v1/cars/deletecar/${id}`,
+            const response = await axios.delete(`https://car-selling-web.onrender.com/api/v1/cars/deletecar/${id}`,
                 {
                     headers: {
                         'Authorization': `Bearer ${accessToken}`,
@@ -115,7 +115,7 @@ const ListCars = () => {
     // duyệt đăng bán xe
     const handleApproveCar = async (id, newStatus) => {
         try {
-            const response = await axios.put(`http://localhost:8080/api/v1/cars/changeStatusCar/${id}`,
+            const response = await axios.put(`https://car-selling-web.onrender.com/api/v1/cars/changeStatusCar/${id}`,
                 {
                     newStatus: newStatus,
                 },{
