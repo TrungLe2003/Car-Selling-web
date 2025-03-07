@@ -51,7 +51,7 @@ const CarDetailPage = () => {
     console.log(formData);
     try {
       const response = await axios.post(
-        `http://localhost:8080/api/v1/mail/PostMail?senderId=${userId}&recipientId=${carData.idProvider._id}&carId=${carData._id}`,
+        `https://car-selling-web.onrender.com/api/v1/mail/PostMail?senderId=${userId}&recipientId=${carData.idProvider._id}&carId=${carData._id}`,
         formData,
         {
           headers: {
@@ -83,11 +83,11 @@ const CarDetailPage = () => {
     const fetchCarData = async () => {
       try {
         const carResponse = await axios.get(
-          `http://localhost:8080/api/v1/cars/car/${idCar}`
+          `https://car-selling-web.onrender.com/api/v1/cars/car/${idCar}`
         );
         setCarData(carResponse.data.data);
 
-        const wishListResponse = await axios.get(`http://localhost:8080/api/v1/cars/wishlist/${user._id}?limit=100&page=1`, {
+        const wishListResponse = await axios.get(`https://car-selling-web.onrender.com/api/v1/cars/wishlist/${user._id}?limit=100&page=1`, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
@@ -131,7 +131,7 @@ const CarDetailPage = () => {
       }
 
       if (!btnLikeProduct) {
-        await axios.post(`http://localhost:8080/api/v1/cars/${idCar}/wishlist/${user._id}`, {
+        await axios.post(`https://car-selling-web.onrender.com/api/v1/cars/${idCar}/wishlist/${user._id}`, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
@@ -141,7 +141,7 @@ const CarDetailPage = () => {
 
         setBtnLikeProduct(true);
       } else {
-        await axios.delete(`http://localhost:8080/api/v1/cars/${idCar}/wishlist/${user._id}`, {
+        await axios.delete(`https://car-selling-web.onrender.com/api/v1/cars/${idCar}/wishlist/${user._id}`, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
