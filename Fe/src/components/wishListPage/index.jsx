@@ -20,7 +20,7 @@ const WishListPage = () => {
         if (!user) return;
 
         const accessToken = user.accessToken;
-        const response = await axios.get(`http://localhost:8080/api/v1/cars/wishlist/${user._id}?limit=${carsPerPage}&page=${currentPage}`, {
+        const response = await axios.get(`https://car-selling-web.onrender.com/api/v1/cars/wishlist/${user._id}?limit=${carsPerPage}&page=${currentPage}`, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
