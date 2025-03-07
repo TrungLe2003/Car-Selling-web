@@ -32,7 +32,7 @@ const EditUserInfo = () => {
     const [img, setImg] = useState('');
     const queryUserInfo = async () => {
         try {
-            const response = await axios.get(`http://localhost:8080/api/v1/users/${id}`,
+            const response = await axios.get(`https://car-selling-web.onrender.com/api/v1/users/${id}`,
                 {
                     headers: {
                         'Authorization': `Bearer ${accessToken}`,
@@ -73,7 +73,7 @@ const EditUserInfo = () => {
         payloadFormData.append('dateOfBirth', dateOfBirth);
         payloadFormData.append('avatar', avatar);
         try {
-            const response = await axios.put(`http://localhost:8080/api/v1/users/modify/${id}`, payloadFormData,
+            const response = await axios.put(`https://car-selling-web.onrender.com/api/v1/users/modify/${id}`, payloadFormData,
             {
                 headers: {
                     'Authorization': `Bearer ${accessToken}`,
