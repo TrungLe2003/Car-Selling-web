@@ -45,7 +45,7 @@ const EditCarInfo = () => {
     const [describe, setDescribe] = useState('');
     const queryCarInfo = async () => {
         try {
-            const response = await axios.get(`http://localhost:8080/api/v1/cars/car/${id}`,
+            const response = await axios.get(`https://car-selling-web.onrender.com/api/v1/cars/car/${id}`,
                 {
                     headers: {
                         'Authorization': `Bearer ${accessToken}`,
@@ -103,7 +103,7 @@ const EditCarInfo = () => {
         payloadFormData.append('power', power);
         payloadFormData.append('describe', describe);
         try {
-            const response = await axios.put(`http://localhost:8080/api/v1/cars/updatecar/${id}`, payloadFormData,
+            const response = await axios.put(`https://car-selling-web.onrender.com/api/v1/cars/updatecar/${id}`, payloadFormData,
             {
                 headers: {
                     'Authorization': `Bearer ${accessToken}`,
