@@ -63,7 +63,7 @@ const CreateNews = () => {
         payloadFormData.append('isCategory', isCategory);
         payloadFormData.append('isStatus', isStatus);
         try {
-            const response = await axios.post(`http://localhost:8080/api/v1/news/create-news`, payloadFormData,
+            const response = await axios.post(`https://car-selling-web.onrender.com/api/v1/news/create-news`, payloadFormData,
             {
                 headers: {
                     'Authorization': `Bearer ${accessToken}`,
