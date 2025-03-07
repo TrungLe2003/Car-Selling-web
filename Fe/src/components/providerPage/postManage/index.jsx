@@ -39,7 +39,7 @@ const PostManage = () => {
   const fetchApi = async () => {
     try {
       const responseCarData = await axios.get(
-        `http://localhost:8080/api/v1/cars/${idUser}`
+        `https://car-selling-web.onrender.com/api/v1/cars/${idUser}`
       );
       setProviderCar(responseCarData.data.data || []);
     } catch (error) {
@@ -52,7 +52,7 @@ const PostManage = () => {
   const fetchApiDeleteCar = async (idCar) => {
     try {
       const response = await axios.delete(
-        `http://localhost:8080/api/v1/cars/deletecar/${idCar}`,
+        `https://car-selling-web.onrender.com/api/v1/cars/deletecar/${idCar}`,
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
