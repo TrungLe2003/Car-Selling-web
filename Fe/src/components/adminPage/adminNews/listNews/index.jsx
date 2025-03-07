@@ -32,7 +32,7 @@ const ListNews = () => {
     const [draftNews, setDraftNews] = useState();
     const queryCountNews = async () => {
         try {
-            const response = await axios.get('http://localhost:8080/api/v1/news/countNews',
+            const response = await axios.get('https://car-selling-web.onrender.com/api/v1/news/countNews',
                 {
                     headers: {
                         'Authorization': `Bearer ${accessToken}`,
@@ -57,7 +57,7 @@ const ListNews = () => {
     const [listNews, setListNews] = useState([]);
     const queryListNews = async () => {
         try {
-            const response = await axios.get(`http://localhost:8080/api/v1/news?limit=${limit}&currentPage=${currentPage}&isStatus=${isStatus}`,
+            const response = await axios.get(`https://car-selling-web.onrender.com/api/v1/news?limit=${limit}&currentPage=${currentPage}&isStatus=${isStatus}`,
                 {
                     headers: {
                         'Authorization': `Bearer ${accessToken}`,
@@ -112,7 +112,7 @@ const ListNews = () => {
     // xóa tin
     const handleDelete = async (id) => {
         try {
-            const response = await axios.delete(`http://localhost:8080/api/v1/news/deleteNewsById/${id}`,
+            const response = await axios.delete(`https://car-selling-web.onrender.com/api/v1/news/deleteNewsById/${id}`,
             {
                 headers: {
                     'Authorization': `Bearer ${accessToken}`,
