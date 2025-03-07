@@ -33,7 +33,7 @@ const ListUsers = () => {
     const [customer, setCustomer] = useState();
     const queryCountUsers = async () => {
         try {
-            const response = await axios.get('http://localhost:8080/api/v1/users/countUsers',
+            const response = await axios.get('https://car-selling-web.onrender.com/api/v1/users/countUsers',
                 {
                     headers: {
                         'Authorization': `Bearer ${accessToken}`,
@@ -59,7 +59,7 @@ const ListUsers = () => {
     const [listUsers, setListUsers] = useState([]);
     const queryListUsers = async () => {
         try {
-            const response = await axios.get(`http://localhost:8080/api/v1/users?limit=${limit}&currentPage=${currentPage}&role=${role}`,
+            const response = await axios.get(`https://car-selling-web.onrender.com/api/v1/users?limit=${limit}&currentPage=${currentPage}&role=${role}`,
                 {
                     headers: {
                         'Authorization': `Bearer ${accessToken}`,
@@ -103,7 +103,7 @@ const ListUsers = () => {
     // xóa người dùng
     const handleDelete = async (id) => {
         try {
-            const response = await axios.delete(`http://localhost:8080/api/v1/users/deleteUserById/${id}`,
+            const response = await axios.delete(`https://car-selling-web.onrender.com/api/v1/users/deleteUserById/${id}`,
                 {
                     headers: {
                         'Authorization': `Bearer ${accessToken}`,
