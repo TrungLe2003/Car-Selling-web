@@ -61,7 +61,7 @@ import WishListPage from "./components/wishListPage/index";
 
 //
 import "./App.css";
-const socket = io("http://localhost:8080"); // Kết nối đến server
+const socket = io("https://car-selling-web.onrender.com"); // Kết nối đến server
 
 function App() {
   useEffect(() => {
