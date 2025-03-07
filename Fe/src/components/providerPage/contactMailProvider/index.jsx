@@ -29,7 +29,7 @@ const ContactMailManage = () => {
     const fetchListMailData = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8080/api/v1/mail/ProviderMail?providerId=${idUser}`,
+          `https://car-selling-web.onrender.com/api/v1/mail/ProviderMail?providerId=${idUser}`,
           {
             headers: {
               Authorization: `Bearer ${accessToken}`,
@@ -52,7 +52,7 @@ const ContactMailManage = () => {
     if (!mail.isRead) {
       try {
         await axios.put(
-          `http://localhost:8080/api/v1/mail/${mailId}/read`,
+          `https://car-selling-web.onrender.com/api/v1/mail/${mailId}/read`,
           {},
           {
             headers: {
@@ -84,7 +84,7 @@ const ContactMailManage = () => {
     }
     try {
       const response = await axios.put(
-        `http://localhost:8080/api/v1/mail/${selectedMail._id}/status`,
+        `https://car-selling-web.onrender.com/api/v1/mail/${selectedMail._id}/status`,
         { status: decision, reason },
         {
           headers: { Authorization: `Bearer ${accessToken}` },
