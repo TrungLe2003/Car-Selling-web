@@ -18,7 +18,7 @@ const NewsByCategory = () => {
     const [listNews, setListNews] = useState([]);
     const queryNewsByCategory = async () => {
         try {
-            const response = await axios.get(`http://localhost:8080/api/v1/news/publishedByCategory?limit=4&currentPage=${currentPage}&isCategory=${isCategory}`);
+            const response = await axios.get(`https://car-selling-web.onrender.com/api/v1/news/publishedByCategory?limit=4&currentPage=${currentPage}&isCategory=${isCategory}`);
             const data = response.data.data
             setListNews(data);
             setTotalPages(response.data.totalPages);
