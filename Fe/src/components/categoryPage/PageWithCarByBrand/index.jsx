@@ -15,7 +15,7 @@ const PageWithCarByBrand = () => {
     const fetchCarData = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8080/api/v1/cars/brand?brand=${brand}`
+          `https://car-selling-web.onrender.com/api/v1/cars/brand?brand=${brand}`
         );
         setCarDataByBrand(response.data.data);
       } catch (error) {
