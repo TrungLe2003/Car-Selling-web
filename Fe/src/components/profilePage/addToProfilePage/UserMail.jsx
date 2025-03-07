@@ -22,7 +22,7 @@ const MailPage = () => {
     const fetchUserMailData = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8080/api/v1/mail/SenderMail?userId=${userId}`
+          `https://car-selling-web.onrender.com/api/v1/mail/SenderMail?userId=${userId}`
         );
         setMails(response.data.data);
         console.log(mails);
