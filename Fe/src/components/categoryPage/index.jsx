@@ -48,7 +48,7 @@ const CategoryPage = () => {
     }).toString();
     try {
       const response = await axios.get(
-        `http://localhost:8080/api/v1/cars?${queryParams}`
+        `https://car-selling-web.onrender.com/api/v1/cars?${queryParams}`
       );
       setAllCarsData(response.data.data);
       setTotalPages(response.data.totalPages);
@@ -96,7 +96,7 @@ const CategoryPage = () => {
   const handleSearch = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8080/api/v1/cars/search?carName=${searchQuery}&limit=${carsPerPage}&page=${currentPage}`
+        `https://car-selling-web.onrender.com/api/v1/cars/search?carName=${searchQuery}&limit=${carsPerPage}&page=${currentPage}`
       );
       setAllCarsData(response.data.data);
       setTotalPages(response.data.totalPages); // Nếu API trả kết quả đầy đủ trong 1 trang
