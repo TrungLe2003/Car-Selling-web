@@ -28,12 +28,12 @@ const NewsDetailPage = () => {
     const [listComments, setListComments] = useState([]);
     const queryNews = async () => {
         try {
-            const queryNews = await axios.get(`http://localhost:8080/api/v1/news/${id}`);
+            const queryNews = await axios.get(`https://car-selling-web.onrender.com/api/v1/news/${id}`);
             const data = queryNews.data.data;
             if (data) {
                 axios.all([
-                    axios.get(`http://localhost:8080/api/v1/news/publishedByCategory?limit=6&isCategory=${data.isCategory}`),
-                    axios.get(`http://localhost:8080/api/v1/comments/commentByNewsId?isStatus=approved&newsId=${id}`),
+                    axios.get(`https://car-selling-web.onrender.com/api/v1/news/publishedByCategory?limit=6&isCategory=${data.isCategory}`),
+                    axios.get(`https://car-selling-web.onrender.com/api/v1/comments/commentByNewsId?isStatus=approved&newsId=${id}`),
                 ])
                 .then(axios.spread((response1, response2) => {
                     setListNews(response1.data.data);
@@ -57,7 +57,7 @@ const NewsDetailPage = () => {
         }
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:8080/api/v1/comments/create-comment', formData,
+            const response = await axios.post('https://car-selling-web.onrender.com/api/v1/comments/create-comment', formData,
                 {
                     headers: {
                         'Authorization': `Bearer ${accessToken}`,
